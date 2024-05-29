@@ -1,0 +1,29 @@
+.lqd-chat-item-desc {
+	@apply text-xs;
+}
+
+.lqd-chat-item-title {
+	@apply text-base font-medium;
+}
+
+.lqd-chat-item-avatar {
+	@apply ms-0 size-20 text-3xl border-0 mb-4 after:absolute after:end-3 after:w-2 after:h-3.5 after:bg-center after:bg-no-repeat after:transition-transform group-hover:after:translate-x-1;
+
+	&:after {
+		top: calc(theme('spacing.20') - (theme('spacing.3.5') / 2));
+		background-size: 8px;
+		background-image: url("data:image/svg+xml,%3Csvg width='8' height='14' viewBox='0 0 8 14' fill='none' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M6.3998 4.88L1.8098 0.289999C1.62244 0.103748 1.36899 -0.000793457 1.1048 -0.000793457C0.840616 -0.000793457 0.587165 0.103748 0.399802 0.289999C0.306074 0.382962 0.23168 0.493563 0.180911 0.615422C0.130142 0.737282 0.104004 0.867987 0.104004 0.999999C0.104004 1.13201 0.130142 1.26272 0.180911 1.38458C0.23168 1.50644 0.306074 1.61704 0.399802 1.71L4.9998 6.29C5.09353 6.38296 5.16793 6.49356 5.21869 6.61542C5.26946 6.73728 5.2956 6.86799 5.2956 7C5.2956 7.13201 5.26946 7.26272 5.21869 7.38458C5.16793 7.50644 5.09353 7.61704 4.9998 7.71L0.399802 12.29C0.211499 12.477 0.105184 12.7311 0.104246 12.9965C0.103308 13.2618 0.207825 13.5167 0.394803 13.705C0.581781 13.8933 0.835903 13.9996 1.10127 14.0006C1.36663 14.0015 1.6215 13.897 1.8098 13.71L6.3998 9.12C6.96161 8.5575 7.27716 7.795 7.27716 7C7.27716 6.205 6.96161 5.4425 6.3998 4.88Z' fill='%235F6486'/%3E%3C/svg%3E");
+	}
+}
+
+.lqd-chat-item-details {
+	@apply text-start justify-start;
+}
+
+.lqd-chat-item {
+	@apply p-8;
+
+	.lqd-fav-btn {
+		@apply start-auto end-4;
+	}
+}

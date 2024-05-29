@@ -1,0 +1,28 @@
+{
+    "extension_name": "AI Writer Templates",
+    "version": "1.0",
+    "controllers": [
+    ],
+    "route": null,
+    "stubs": [
+
+    ],
+    "migrations": {
+        "install": [
+            {
+                "condition": {
+                    "table": "openai"
+                },
+                "path": "install/install.sql"
+            }
+        ],
+        "uninstall": [
+            {
+                "condition": {
+                    "table": "openai"
+                },
+                "path": "uninstall/uninstall.sql"
+            }
+        ]
+    }
+}

@@ -1,0 +1,22 @@
+.lqd-input {
+
+	&.lqd-input-switcher {
+		@apply w-9 h-5 border-0 bg-heading-foreground/10 dark:bg-white/15 checked:bg-primary;
+	}
+}
+
+.lqd-users-search-input,
+.lqd-marketplace-search-input {
+	@apply bg-background border-background;
+}
+
+.theme-dark {
+
+	.form-check-input:not(:checked),
+	.form-control:not([type=search]),
+	.form-file-text,
+	.form-select,
+	.form-selectgroup-check {
+		@apply bg-input-background border-input-border;
+	}
+}

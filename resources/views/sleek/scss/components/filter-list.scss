@@ -1,0 +1,17 @@
+.lqd-filter-list {
+
+	.lqd-filter-btn {
+		@apply py-1;
+
+		&.active {
+			@apply bg-foreground text-background;
+		}
+	}
+}
+
+.lqd-docs-view-toggle {
+
+	.lqd-view-toggle-trigger {
+		@apply [&.active]:bg-foreground/15;
+	}
+}

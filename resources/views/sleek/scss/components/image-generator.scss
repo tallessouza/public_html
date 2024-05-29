@@ -1,0 +1,20 @@
+.lqd-card.lqd-image-generator {
+	@apply bg-card-background dark:bg-card-background;
+
+	.lqd-input {
+		@apply bg-white dark:bg-input-background dark:border-input-border;
+	}
+	.lqd-tabs-trigger {
+		@apply dark:bg-input-background [&.active]:bg-primary;
+	}
+	.lqd-generator-advanced-trigger {
+
+		> span {
+			@apply dark:bg-input-background dark:text-input-foreground;
+		}
+	}
+}
+
+.lqd-image-generator-random-prompt-trigger {
+	@apply text-primary underline;
+}

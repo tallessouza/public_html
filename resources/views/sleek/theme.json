@@ -1,0 +1,15 @@
+{
+	"name": "sleek",
+	"extends": "default",
+	"asset-path": "themes\/sleek",
+	"wideLayoutPaddingX": "px-4 lg:px-10",
+	"defaultVariations": {
+		"card": {
+			"variant": "shadow",
+			"roundness": "4xl"
+		},
+		"table": {
+			"variant": "shadow"
+		}
+	}
+}

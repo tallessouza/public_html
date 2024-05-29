@@ -1,0 +1,9 @@
+.chat-content {
+
+	> p {
+
+		> code:not([class*=language-]) {
+			@apply bg-background rounded px-1 py-0.5 text-primary;
+		}
+	}
+}

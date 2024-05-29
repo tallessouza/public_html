@@ -1,0 +1,107 @@
+{
+  "_fetch-0a44356a.js": {
+    "file": "assets/fetch-0a44356a.js"
+  },
+  "public/themes/neura/assets/img/bg/bg-2.jpeg": {
+    "file": "assets/bg-2-59f936fa.jpeg",
+    "src": "public/themes/neura/assets/img/bg/bg-2.jpeg"
+  },
+  "public/themes/neura/assets/img/bg/bg.svg": {
+    "file": "assets/bg-afefa1f8.svg",
+    "src": "public/themes/neura/assets/img/bg/bg.svg"
+  },
+  "public/themes/sleek/assets/img/bg/bg.png": {
+    "file": "assets/bg-45d19523.png",
+    "src": "public/themes/sleek/assets/img/bg/bg.png"
+  },
+  "resources/views/classic/js/app.js": {
+    "file": "assets/app-57f2f828.js",
+    "imports": [
+      "_fetch-0a44356a.js"
+    ],
+    "isEntry": true,
+    "src": "resources/views/classic/js/app.js"
+  },
+  "resources/views/classic/scss/dashboard.scss": {
+    "file": "assets/dashboard-d4a631ac.css",
+    "isEntry": true,
+    "src": "resources/views/classic/scss/dashboard.scss"
+  },
+  "resources/views/classic/scss/landing-page.scss": {
+    "file": "assets/landing-page-1ec3dc0c.css",
+    "isEntry": true,
+    "src": "resources/views/sleek/scss/landing-page.scss"
+  },
+  "resources/views/creative/js/app.js": {
+    "file": "assets/app-aadbf4ab.js",
+    "imports": [
+      "_fetch-0a44356a.js"
+    ],
+    "isEntry": true,
+    "src": "resources/views/creative/js/app.js"
+  },
+  "resources/views/creative/scss/dashboard.scss": {
+    "file": "assets/dashboard-6a38d16e.css",
+    "isEntry": true,
+    "src": "resources/views/creative/scss/dashboard.scss"
+  },
+  "resources/views/creative/scss/landing-page.scss": {
+    "file": "assets/landing-page-57de5608.css",
+    "isEntry": true,
+    "src": "resources/views/creative/scss/landing-page.scss"
+  },
+  "resources/views/default/js/app.js": {
+    "file": "assets/app-14080a5e.js",
+    "imports": [
+      "_fetch-0a44356a.js"
+    ],
+    "isEntry": true,
+    "src": "resources/views/default/js/app.js"
+  },
+  "resources/views/default/scss/dashboard.scss": {
+    "file": "assets/dashboard-6a38d16e.css",
+    "isEntry": true,
+    "src": "resources/views/creative/scss/dashboard.scss"
+  },
+  "resources/views/default/scss/landing-page.scss": {
+    "file": "assets/landing-page-1ec3dc0c.css",
+    "isEntry": true,
+    "src": "resources/views/sleek/scss/landing-page.scss"
+  },
+  "resources/views/neura/js/app.js": {
+    "file": "assets/app-abaa0f1c.js",
+    "imports": [
+      "_fetch-0a44356a.js"
+    ],
+    "isEntry": true,
+    "src": "resources/views/neura/js/app.js"
+  },
+  "resources/views/neura/scss/dashboard.scss": {
+    "file": "assets/dashboard-ecb636e5.css",
+    "isEntry": true,
+    "src": "resources/views/neura/scss/dashboard.scss"
+  },
+  "resources/views/neura/scss/landing-page.scss": {
+    "file": "assets/landing-page-1ec3dc0c.css",
+    "isEntry": true,
+    "src": "resources/views/sleek/scss/landing-page.scss"
+  },
+  "resources/views/sleek/js/app.js": {
+    "file": "assets/app-2d979979.js",
+    "imports": [
+      "_fetch-0a44356a.js"
+    ],
+    "isEntry": true,
+    "src": "resources/views/sleek/js/app.js"
+  },
+  "resources/views/sleek/scss/dashboard.scss": {
+    "file": "assets/dashboard-28149a3d.css",
+    "isEntry": true,
+    "src": "resources/views/sleek/scss/dashboard.scss"
+  },
+  "resources/views/sleek/scss/landing-page.scss": {
+    "file": "assets/landing-page-1ec3dc0c.css",
+    "isEntry": true,
+    "src": "resources/views/sleek/scss/landing-page.scss"
+  }
+}

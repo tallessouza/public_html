@@ -1,0 +1,33 @@
+// ::-webkit-scrollbar {
+// 	width: var(--scrollbar-width);
+// }
+
+// ::-webkit-scrollbar-track {
+// 	background: hsl(var(--scrollbar-track) / 100%);
+// }
+
+// ::-webkit-scrollbar-thumb {
+// 	background: hsl(var(--scrollbar-thumb) / 100%);
+// }
+
+// ::-webkit-scrollbar-thumb:hover {
+// 	background: hsl(var(--scrollbar-thumb-hover) / 100%);
+// }
+
+// * {
+// 	scrollbar-color: hsl(var(--scrollbar-thumb) / 100%) hsl(var(--scrollbar-track) / 100%);
+// 	scrollbar-width: var(--scrollbar-width);
+// }
+
+body {
+	overflow-y: auto;
+}
+
+hr {
+	@apply transition-colors my-2.5 mx-0 opacity-100;
+	border-color: hsl(var(--border));
+}
+
+// .border-bottom {
+// 	border-color: var(--border) !important;
+// }

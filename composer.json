@@ -1,0 +1,140 @@
+{
+    "name": "laravel/laravel",
+    "type": "project",
+    "description": "The Laravel Framework.",
+    "keywords": ["framework", "laravel"],
+    "license": "MIT",
+    "repositories": [
+        {
+            "type": "path",
+            "url": "./packages/pcinaglia/laraupdater",
+            "options": {
+                "symlink": true
+            }
+        },
+        {
+            "type": "path",
+            "url": "./packages/rachidlaasri/laravel-installer",
+            "options": {
+                "symlink": true
+            }
+        }
+    ],
+    "require": {
+        "php": "^8.1",
+        "ext-zip": "*",
+        "akaunting/laravel-setting": "^1.2",
+        "aws/aws-sdk-php": "^3.275",
+        "bacon/bacon-qr-code": "^3.0",
+        "barryvdh/laravel-dompdf": "^2.0",
+        "brick/math": "^0.11.0",
+        "coingate/coingate-php": "^4.1",
+        "copyleaks/php-plagiarism-checker": "^4.0",
+        "cryptomus/api-php-sdk": "^1.0",
+        "darkaonline/l5-swagger": "^8.5",
+        "datlechin/laravel-google-translate": "^0.0.2",
+        "doctrine/dbal": "^3.6",
+        "elseyyid/laravel-json-mysql-locations-manager": "^1.0",
+        "enshrined/svg-sanitize": "^0.16.0",
+        "firebase/php-jwt": "^6.10",
+        "gehrisandro/tailwind-merge-laravel": "^1.1",
+        "google/cloud-text-to-speech": "^1.6",
+        "guzzlehttp/guzzle": "^7.6",
+        "igaster/laravel-theme": "^2.0",
+        "illuminate/support": "*",
+        "intervention/image": "^3.5",
+        "iyzico/iyzipay-php": "^2.0",
+        "laravel/cashier": "^14.8",
+        "laravel/framework": "^10.0",
+        "laravel/passport": "^11.9",
+        "laravel/sanctum": "^3.2",
+        "laravel/socialite": "^5.6",
+        "laravel/tinker": "^2.8",
+        "league/flysystem-aws-s3-v3": "3.0",
+        "mcamara/laravel-localization": "^1.8",
+        "mews/purifier": "^3.4",
+        "nerdzlab/socialite-apple-sign-in": "^2.2",
+        "noweh/twitter-api-v2-php": "^3.4",
+        "openai-php/client": "^0.6.4",
+        "openai-php/laravel": "^0.6.3",
+        "orhanerday/open-ai": "^5.1",
+        "paddlehq/paddle-php-sdk": "^1.0",
+        "paquettg/php-html-parser": "^2.2",
+        "pcinaglia/laraupdater": "@dev",
+        "php-ffmpeg/php-ffmpeg": "^1.2",
+        "php-http/guzzle7-adapter": "^1.0",
+        "phpoffice/phpspreadsheet": "^2.0",
+        "phpoffice/phpword": "^1.1",
+        "pragmarx/google2fa-laravel": "^2.2",
+        "protobuf-php/protobuf": "^0.1.3",
+        "rachidlaasri/laravel-installer": "@dev",
+        "razorpay/razorpay": "^2.9",
+        "ryangjchandler/blade-tabler-icons": "^2.2",
+        "smalot/pdfparser": "^2.7",
+        "spatie/laravel-health": "^1.22",
+        "spatie/laravel-sitemap": "^7.2",
+        "spatie/pdf-to-text": "^1.52",
+        "srmklive/paypal": "~3.0",
+        "symfony/process": "^6.2",
+        "yajra/laravel-datatables-oracle": "^10.8",
+        "yoomoney/yookassa-sdk-php": "^3.1"
+    },
+    "require-dev": {
+        "barryvdh/laravel-debugbar": "^3.9",
+        "fakerphp/faker": "^1.9.1",
+        "laravel/breeze": "^1.19",
+        "laravel/pint": "^1.0",
+        "laravel/sail": "^1.18",
+        "mockery/mockery": "^1.4.4",
+        "nunomaduro/collision": "^7.0",
+        "phpunit/phpunit": "^10.0",
+        "spatie/laravel-ignition": "^2.0"
+    },
+    "autoload": {
+        "psr-4": {
+            "App\\": "app/",
+            "Database\\Factories\\": "database/factories/",
+            "Database\\Seeders\\": "database/seeders/"
+        },
+        "files": [
+            "app/Helpers/helpers.php",
+            "app/Services/AdsenseService.php"
+        ]
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "Tests\\": "tests/"
+        }
+    },
+    "scripts": {
+        "post-autoload-dump": [
+            "Illuminate\\Foundation\\ComposerScripts::postAutoloadDump",
+            "@php artisan package:discover --ansi"
+        ],
+        "post-update-cmd": [
+            "@php artisan vendor:publish --tag=laravel-assets --ansi --force"
+        ],
+        "post-root-package-install": [
+            "@php -r \"file_exists('.env') || copy('.env.example', '.env');\""
+        ],
+        "post-create-project-cmd": [
+            "@php artisan key:generate --ansi"
+        ]
+    },
+    "extra": {
+        "laravel": {
+            "dont-discover": []
+        }
+    },
+    "config": {
+        "optimize-autoloader": true,
+        "preferred-install": "dist",
+        "sort-packages": true,
+        "allow-plugins": {
+            "pestphp/pest-plugin": true,
+            "php-http/discovery": true
+        }
+    },
+    "minimum-stability": "stable",
+    "prefer-stable": true
+}

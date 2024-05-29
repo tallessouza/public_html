@@ -1,0 +1,18 @@
+{
+    "extension_name": "Photo studio",
+    "version": "2.2",
+    "controllers": [
+        "app/Http/Controllers/PhotoStudioController.php",
+        "app/Http/Requests/PhotoStudioRequest.php",
+        "app/Models/PhotoStudio.php",
+        "app/Services/Ai/PhotoStudioService.php"
+    ],
+    "route": "routes/photo_studio_route.php",
+    "stubs": [
+        "resources/views/default/panel/user/photo-studio/index.blade.php",
+        "resources/views/default/components/navbar/extapinavbars/clipdrop-setting-navbar.blade.php",
+        "resources/views/default/panel/admin/settings/clipdrop.blade.php",
+        "resources/views/default/components/navbar/extnavbars/photo-studio-navbar.blade.php",
+        "resources/views/default/panel/admin/settings/particles/photo-studio-general-setting.blade.php"
+    ]
+}

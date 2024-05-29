@@ -1,0 +1,9 @@
+.lqd-loading-skeleton {
+
+	&.lqd-is-loading {
+
+		[data-lqd-skeleton-el] {
+			@apply bg-background;
+		}
+	}
+}

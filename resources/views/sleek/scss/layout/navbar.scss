@@ -1,0 +1,29 @@
+:root {
+	--navbar-width: 15.25rem;
+}
+
+.lqd-navbar-expander {
+	background-color: hsl(var(--foreground) / 35%);
+	color: theme('colors.white');
+}
+
+.lqd-navbar-affiliation {
+	padding-inline-start: theme('spacing.4');
+	padding-inline-end: theme('spacing.4');
+}
+
+.theme-dark {
+
+	.lqd-navbar-link {
+
+		&:before {
+			display: none;
+		}
+	}
+}
+
+.navbar-shrinked {
+	--navbar-ps: theme('spacing.3');
+	--navbar-pe: theme('spacing.8');
+	--navbar-me: theme('spacing.5');
+}

@@ -1,0 +1,4 @@
+User-agent: *
+Disallow:
+
+Sitemap: https://54.207.234.11/sitemap.xml

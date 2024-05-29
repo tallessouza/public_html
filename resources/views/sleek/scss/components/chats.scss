@@ -1,0 +1,26 @@
+.lqd-chat-send-btn {
+	@include conic-gradient(from 185.98deg at bottom center,
+		#6FB3C9 20%,
+		#BA86FF 80%);
+}
+
+.lqd-chat-ai-bubble {
+	--clay: 249 100% 96%;
+}
+
+.lqd-chat-form {
+	@apply dark:bg-background/95 dark:backdrop-blur-lg shadow-none;
+}
+
+.chats-wrap {
+	@apply gap-6;
+
+	>.lqd-card {
+		@apply rounded-6xl;
+	}
+
+	.lqd-chat-form-inputs-container {
+		@apply bg-input-background border-border dark:border-input-border;
+	}
+}
+

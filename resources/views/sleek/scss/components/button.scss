@@ -1,0 +1,23 @@
+.lqd-btn-primary {
+	@apply bg-black text-white hover:bg-primary hover:text-primary-foreground dark:bg-primary dark:text-primary-foreground;
+}
+
+.lqd-btn-outline {
+	background-color: hsl(var(--background));
+
+	&:hover {
+		background-color: hsl(var(--primary));
+		border-color: hsl(var(--primary));
+		color: hsl(var(--primary-foreground));
+	}
+}
+
+.theme-dark {
+
+	.lqd-btn {
+
+		&.lqd-btn-ghost-shadow {
+			@apply bg-foreground/15 text-foreground hover:bg-primary hover:text-primary-foreground;
+		}
+	}
+}

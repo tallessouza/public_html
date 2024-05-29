@@ -1,0 +1,71 @@
+@mixin conic-gradient($position, $colors...) {
+	background: conic-gradient($position, $colors...);
+}
+
+:root {
+	--primary: 195 45% 61%;
+	--primary-foreground: 0 0% 255%;
+	--secondary: 266 100% 76%;
+	--secondary-foreground: 0 0% 100%;
+	--input-background: 0 0% 100%;
+	--input-border: 0 0% 100%;
+	--card-background: 223 78% 98% / 72%;
+	--card-border: 0 0% 0% / 10%;
+	--folder-background: var(--card-background);
+	--label: 0 0% 0%;
+	--clay: 0 0% 100%;
+
+	--background: 223 78% 98%;
+	--foreground: 232 17% 45%;
+
+	--border: 232 17% 45% / 10%;
+
+	--headings-font-weight: 500;
+
+	--h2-font-size: 1.3125rem; // 21px
+
+	--h3-font-size: 1.25rem; // 20px
+
+	--navbar-fs: theme('fontSize.2xs');
+	--navbar-ps: theme('spacing.9');
+	--navbar-pe: theme('spacing.20');
+	--navbar-rounded-se: 30px;
+	--navbar-rounded-ee: 30px;
+	--navbar-background: 0 0% 0%;
+	--navbar-foreground: 221 14% 49%;
+	--navbar-foreground-hover: 0 0% 100%;
+	--navbar-link-pe: 0px;
+	--navbar-link-ps: 0px;
+	--navbar-icon-foreground-hover: var(--primary);
+	--navbar-icon-foreground-active: var(--primary);
+	--navbar-border: 0 0% 0% / 0%;
+	--navbar-divider: 0 0% 100% / 16%;
+	--navbar-icon-size: 1.35rem;
+
+	--switcher-ball: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='-4 -4 8 8'%3e%3ccircle r='2' fill='%23ffffff'/%3e%3c/svg%3e");
+	--switcher-ball-active: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='-4 -4 8 8'%3e%3ccircle r='2' fill='%23ffffff'/%3e%3c/svg%3e");
+}
+
+.theme-dark {
+	--primary: 195 45% 61%;
+	--primary-foreground: 0 0% 255%;
+	--secondary: 266 100% 76%;
+	--secondary-foreground: 0 0% 100%;
+	--input-background: 248 11% 15%;
+	--input-border: 248 11% 15%;
+	--card-background: 252 14% 8%;
+	--folder-background: var(--card-background);
+	--label: 0 0% 100%;
+	--clay: 0 0% 0%;
+
+	--background: 0 0% 0%;
+	--foreground: 232 11% 66%;
+	--border: 0 0% 100% / 18%;
+	--navbar-foreground: 221 14% 49%;
+	--navbar-border: var(--navbar-background);
+	--navbar-background-hover: ;
+	--navbar-foreground-hover: 0 0% 100%;
+
+	--switcher-ball: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='-4 -4 8 8'%3e%3ccircle r='2' fill='%23ffffff'/%3e%3c/svg%3e");
+	--switcher-ball-active: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='-4 -4 8 8'%3e%3ccircle r='2' fill='%23000000'/%3e%3c/svg%3e");
+}
