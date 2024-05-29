@@ -645,7 +645,7 @@
 
                     <figure class="lqd-modal-fig relative aspect-square min-h-[1px] w-full rounded-lg bg-cover bg-center max-md:min-h-[350px] md:w-6/12">
                         <img
-                            class="lqd-modal-img mx-auto h-full w-auto"
+                            class="lqd-modal-img mx-auto w-auto"
                             :src="activeItem?.output"
                             :alt="activeItem?.input"
                         />
