@@ -40,7 +40,7 @@
             <ul class="lqd-navbar-ul">
 
                 <x-navbar.item>
-                    <x-navbar.link class:letter-icon="bg-[#7A8193] text-white" label="{{ __('Lendár[IA]') }}" href="dashboard.user.openai.chat.chat" slug="criador-de-agentes-ia-ISHyL" letter-icon />
+                    <x-navbar.link class:letter-icon="bg-[#7A8193] text-white" label="{{ __('Lendár[IA]') }}" href="dashboard.user.openai.chat.chat" slug="lendaria-WYXaq" letter-icon />
                 </x-navbar.item>
 
                 <!-- <x-navbar.item has-dropdown>
