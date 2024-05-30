@@ -38,47 +38,58 @@
         </div>
         <nav class="lqd-navbar-nav" id="navbar-menu">
             <ul class="lqd-navbar-ul">
+
+                <x-navbar.item>
+                    <x-navbar.link class:letter-icon="bg-[#7A8193] text-white" label="{{ __('Lendár[IA]') }}" href="dashboard.user.openai.chat.chat" slug="criador-de-agentes-ia-ISHyL" letter-icon />
+                </x-navbar.item>
+
+                <!-- <x-navbar.item has-dropdown>
+                    <x-navbar.link label="{{ __('IAS por Negócio') }}" dropdown-trigger icon="tabler-building-store" />
+                    <x-navbar.dropdown.dropdown>
+                        <x-navbar.item>
+                            <x-navbar.link label="Social Media" href="dashboard.user.openai.list" slug="filter=customer service" icon="tabler-users" />
+                        </x-navbar.item>
+                        <x-navbar.item>
+                            <x-navbar.link label="Copywriting" href="dashboard.user.openai.list" slug="filter=writer" icon="tabler-pencil" />
+                        </x-navbar.item>
+                        <x-navbar.item>
+                            <x-navbar.link label="Tráfego" href="dashboard.user.openai.list" slug="filter=advertising" icon="tabler-ad-circle" />
+                        </x-navbar.item>
+                        <x-navbar.item>
+                            <x-navbar.link label="Negócios" href="dashboard.user.openai.list" slug="filter=business" icon="tabler-building-store" />
+                        </x-navbar.item>
+                    </x-navbar.dropdown.dropdown>
+                </x-navbar.item> -->
                 <x-navbar.item has-dropdown>
-                    <x-navbar.label>
-                        {{ __('User') }}
-                    </x-navbar.label>
-                    <x-navbar.link label="{{ __('Minha Conta') }}" dropdown-trigger />
+                    <x-navbar.link label="{{ __('IAS por Negócio') }}" dropdown-trigger icon="tabler-message-circle" />
                     <x-navbar.dropdown.dropdown>
 
-                        <x-navbar.dropdown.item>
-                            <x-navbar.link label="{{ __('Dashboard') }}" href="dashboard.user.index" icon="tabler-layout-2" />
-                        </x-navbar.dropdown.item>
-
-                        <x-navbar.dropdown.item>
-                            <x-navbar.link label="{{ __('Documents') }}" href="dashboard.user.openai.documents.all" active-condition="{{ activeRoute('dashboard.user.openai.documents.*') }}" icon="tabler-archive" />
-                        </x-navbar.dropdown.item>
-
-                        <x-navbar.dropdown.item>
-                            <x-navbar.link label="{{ __('Brand Voice') }}" href="dashboard.user.brand.index" icon="tabler-brand-trello" />
-                        </x-navbar.dropdown.item>
+                        <x-navbar.item>
+                            <x-navbar.link label="Social Media" href="dashboard.user.openai.chat.list" slug="filter=Social%20Media" icon="tabler-users" />
+                        </x-navbar.item>
+                        <x-navbar.item>
+                            <x-navbar.link label="Copywriting" href="dashboard.user.openai.chat.list" slug="filter=Copywriting" icon="tabler-pencil" />
+                        </x-navbar.item>
+                        <x-navbar.item>
+                            <x-navbar.link label="Tráfego" href="dashboard.user.openai.chat.list" slug="filter=Tráfego" icon="tabler-ad-circle" />
+                        </x-navbar.item>
+                        <x-navbar.item>
+                            <x-navbar.link label="Negócios" href="dashboard.user.openai.chat.list" slug="filter=Negócios" icon="tabler-moneybag" />
+                        </x-navbar.item>
+                        <x-navbar.item>
+                            <x-navbar.link label="Vendas" href="dashboard.user.openai.chat.list" slug="filter=Vendas" icon="tabler-building-store" />
+                        </x-navbar.item>
+                        <!-- <x-navbar.item>
+                            <x-navbar.link label="{{ __('AI Chat') }}" href="dashboard.user.openai.chat.list" icon="tabler-message-dots" active-condition="{{ activeRoute('dashboard.user.openai.chat.*') }}" />
+                        </x-navbar.item> -->
                     </x-navbar.dropdown.dropdown>
                 </x-navbar.item>
                 <x-navbar.item has-dropdown>
-                    <x-navbar.link label="{{ __('IAS por Negócio') }}" dropdown-trigger />
+                    <x-navbar.link label="{{ __('IAs para Gerar') }}" dropdown-trigger icon="tabler-pencil" />
                     <x-navbar.dropdown.dropdown>
-                        <x-navbar.item>
-                            <x-navbar.link class:letter-icon="bg-[#7A8193] text-white" label="Social Media" href="dashboard.user.openai.list" slug="filter=customer service" letter-icon />
-                        </x-navbar.item>
-                        <x-navbar.item>
-                            <x-navbar.link class:letter-icon="bg-[#7A8193] text-white" label="Copywriting" href="dashboard.user.openai.list" slug="filter=writer" letter-icon />
-                        </x-navbar.item>
-                        <x-navbar.item>
-                            <x-navbar.link class:letter-icon="bg-[#7A8193] text-white" label="Tráfego" href="dashboard.user.openai.list" slug="filter=advertising" letter-icon />
-                        </x-navbar.item>
-                        <x-navbar.item>
-                            <x-navbar.link class:letter-icon="bg-[#7A8193] text-white" label="Negócios" href="dashboard.user.openai.list" slug="filter=business" letter-icon />
-                        </x-navbar.item>
-                    </x-navbar.dropdown.dropdown>
-                </x-navbar.item>
-
-                <x-navbar.item has-dropdown>
-                    <x-navbar.link label="{{ __('IAs para Gerar') }}" dropdown-trigger />
-                    <x-navbar.dropdown.dropdown>
+                        <x-navbar.dropdown.item>
+                            <x-navbar.link label="{{ __('Código') }}" href="dashboard.user.openai.chat.chat" slug="grimore-uIRhZ" icon="tabler-device-laptop" />
+                        </x-navbar.dropdown.item>
                         @if ($setting->feature_ai_advanced_editor)
                         <x-navbar.dropdown.item>
                             <x-navbar.link label="{{ __('AI Editor') }}" href="dashboard.user.generator.index" icon="tabler-notebook" />
@@ -190,7 +201,7 @@
                             <x-navbar.link label="{{ __('API Keys') }}" active-condition="{{ activeRoute('dashboard.user.apikeys.*') }}" href="dashboard.user.apikeys.index" icon="tabler-key" />
                         </x-navbar.dropdown.item>
                         @endif
-                        
+
                         @php
                         try {
                         $files = File::files(resource_path('views/default/components/navbar/extnavbars'));
@@ -206,7 +217,26 @@
                         @endforeach
                     </x-navbar.dropdown.dropdown>
                 </x-navbar.item>
+                <x-navbar.item has-dropdown>
+                    <!-- <x-navbar.label>
+                        {{ __('User') }}
+                    </x-navbar.label> -->
+                    <x-navbar.link label="{{ __('Minha Conta') }}" dropdown-trigger icon="tabler-users" />
+                    <x-navbar.dropdown.dropdown>
 
+                        <x-navbar.dropdown.item>
+                            <x-navbar.link label="{{ __('Dashboard') }}" href="dashboard.user.index" icon="tabler-layout-2" />
+                        </x-navbar.dropdown.item>
+
+                        <x-navbar.dropdown.item>
+                            <x-navbar.link label="{{ __('Documents') }}" href="dashboard.user.openai.documents.all" active-condition="{{ activeRoute('dashboard.user.openai.documents.*') }}" icon="tabler-archive" />
+                        </x-navbar.dropdown.item>
+
+                        <x-navbar.dropdown.item>
+                            <x-navbar.link label="{{ __('Brand Voice') }}" href="dashboard.user.brand.index" icon="tabler-brand-trello" />
+                        </x-navbar.dropdown.item>
+                    </x-navbar.dropdown.dropdown>
+                </x-navbar.item>
 
 
 
