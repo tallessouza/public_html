@@ -40,10 +40,10 @@
             <ul class="lqd-navbar-ul">
 
                 <x-navbar.item>
-                    <x-navbar.link class:letter-icon="bg-[#7A8193] text-white" label="{{ __('Lendár[IA]') }}" href="dashboard.user.openai.chat.chat" slug="lendaria-WYXaq" letter-icon />
+                    <x-navbar.link class:letter-icon="bg-[#7A8193] text-white" label="{{ __('Lendár[IA]') }}" href="dashboard.user.openai.chat.chat" slug="lendaria-4vgrI" letter-icon />
                 </x-navbar.item>
 
-                <!-- <x-navbar.item has-dropdown>
+                <x-navbar.item has-dropdown>
                     <x-navbar.link label="{{ __('IAS por Negócio') }}" dropdown-trigger icon="tabler-building-store" />
                     <x-navbar.dropdown.dropdown>
                         <x-navbar.item>
@@ -59,9 +59,9 @@
                             <x-navbar.link label="Negócios" href="dashboard.user.openai.list" slug="filter=business" icon="tabler-building-store" />
                         </x-navbar.item>
                     </x-navbar.dropdown.dropdown>
-                </x-navbar.item> -->
+                </x-navbar.item>
                 <x-navbar.item has-dropdown>
-                    <x-navbar.link label="{{ __('IAS por Negócio') }}" dropdown-trigger icon="tabler-message-circle" />
+                    <x-navbar.link label="{{ __('GPTs por Negócio') }}" dropdown-trigger icon="tabler-message-circle" />
                     <x-navbar.dropdown.dropdown>
 
                         <x-navbar.item>

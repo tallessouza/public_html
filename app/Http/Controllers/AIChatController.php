@@ -197,6 +197,7 @@ class AIChatController extends Controller
             'apiUrl',
             'lastThreeMessage',
             'chat_completions',
+            'slug'
         ));
     }
 
