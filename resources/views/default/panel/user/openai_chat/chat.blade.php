@@ -1,12 +1,14 @@
 @extends('panel.layout.app', ['disable_tblr' => true])
 @section('title',
-$category->slug == 'ai_vision'
+$slug == 'lendaria-4vgrI'
+? __('Lendár[IA]')
+: ($category->slug == 'ai_vision'
 ? __('Vision AI')
 : ($category->slug == 'ai_pdf'
 ? __('AI File Chat')
 : ($category->slug == 'ai_chat_image'
 ? __('Chat Image')
-: __('AI Chat'))))
+: __('AI Chat')))))
 @section('titlebar_subtitle')
 @if ($category->slug == 'ai_vision')
 {{ __('Seamlessly upload any image you want to explore and get insightful conversations.') }}
@@ -180,24 +182,4 @@ $category->slug == 'ai_vision'
 <script src="{{ custom_theme_url('/assets/libs/markdown-it.min.js') }}"></script>
 <script src="{{ custom_theme_url('/assets/libs/html2pdf/html2pdf.bundle.min.js') }}"></script>
 @include('panel.user.openai_chat.components.chat_js')
-<script>
-    document.addEventListener('DOMContentLoaded', function() {
-        var iframe = document.getElementById('customIframe');
-
-        iframe.onload = function() {
-            try {
-                var iframeDocument = iframe.contentDocument || iframe.contentWindow.document;
-                var iframeBody = iframeDocument.body;
-
-                iframeBody.style.backgroundColor = '#f0f0f0'; // Defina a cor de fundo desejada aqui
-
-                // Adicione outros estilos conforme necessário
-                // iframeBody.style.color = '#333';
-                // iframeBody.style.fontFamily = 'Arial, sans-serif';
-            } catch (e) {
-                console.error('Erro ao acessar o documento do iframe:', e);
-            }
-        };
-    });
-</script>
 @endpush
