@@ -142,7 +142,7 @@
                             </x-slot:modal>
                         </x-modal>
                     @else
-                        <x-button
+                        <!-- <x-button
                             variant="ghost-shadow"
                             href="{{ LaravelLocalization::localizeUrl(route('dashboard.user.openai.documents.all')) }}"
                         >
@@ -152,7 +152,7 @@
                     <x-button href="{{ $generator_link }}">
                         <x-tabler-plus class="size-4" />
                         {{ __('New') }}
-                    </x-button>
+                    </x-button> -->
                 </div>
             @endif
 
