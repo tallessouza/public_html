@@ -16,7 +16,7 @@
         <p class="mb-20 text-[20px]">{{ __('Thanks for purchasing MagicAI! You can now install your product in seconds and unlock the magic of AI. Let’s get you started!') }}</p>
         <p class="mb-20 text-[20px]">
             {{ __('Need help?') }}
-            <a
+            <!-- <a
                     class="inline-flex items-center gap-1"
                     href="https://codecanyon.net/item/magicai-openai-content-text-image-chat-code-generator-as-saas/45408109"
                     target="_blank"
@@ -51,7 +51,7 @@
                         />
                     </g>
                 </svg>
-            </a>
+            </a> -->
         </p>
     </div>
     <a

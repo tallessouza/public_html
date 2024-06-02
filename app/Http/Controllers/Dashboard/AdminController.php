@@ -898,7 +898,7 @@ class AdminController extends Controller
     public function howitWorksDefaults()
     {
         $values = json_decode('{"option": TRUE, "html": ""}');
-        $default_html = 'Want to see? <a class="text-[#FCA7FF]" href="https://codecanyon.net/item/magicai-openai-content-text-image-chat-code-generator-as-saas/45408109" target="_blank">'.__('Join').' Magic</a>';
+        // $default_html = 'Want to see? <a class="text-[#FCA7FF]" href="https://codecanyon.net/item/magicai-openai-content-text-image-chat-code-generator-as-saas/45408109" target="_blank">'.__('Join').' Magic</a>';
 
         //Check display bottom line
         $bottomline = CustomSettings::where('key', 'howitworks_bottomline')->first();
@@ -975,7 +975,7 @@ class AdminController extends Controller
             }
 
             if ($request->text != 'undefined' && $request->text != null) {
-                $default_html = 'Want to see? <a class="text-[#FCA7FF]" href="https://codecanyon.net/item/magicai-openai-content-text-image-chat-code-generator-as-saas/45408109" target="_blank">'.__('Join').' Magic</a>';
+                // $default_html = 'Want to see? <a class="text-[#FCA7FF]" href="https://codecanyon.net/item/magicai-openai-content-text-image-chat-code-generator-as-saas/45408109" target="_blank">'.__('Join').' Magic</a>';
                 $bottomline->value_html = $request->text ?? $default_html;
                 $save = 1;
             }
