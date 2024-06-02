@@ -1,6 +1,6 @@
 @extends('panel.layout.app', ['disable_tblr' => true])
 @section('title',
-$slug == 'lendaria-4vgrI'
+$slug == 'lendaria-KMEam'
 ? __('Lendár[IA]')
 : ($category->slug == 'ai_vision'
 ? __('Vision AI')
@@ -25,7 +25,7 @@ $slug == 'lendaria-4vgrI'
 <input id="openChatAreaContainerUrl" type="hidden" name="openChatAreaContainerUrl" value="@yield('openChatAreaContainerUrl', '/dashboard/user/openai/chat/open-chat-area-container')" />
 
 <div class="py-10">
-    @if ($slug == 'lendaria-4vgrI')
+    @if ($slug == 'lendaria-KMEam')
     <div class="h-[calc(100vh-10rem)] w-full">
         <iframe id="customIframe" src="http://lendario.pro/chatbot/EdLcAVaOns6rgnCX"  style="width: 100%; height: 100%; min-height: 700px; border-radius: 20px;" frameborder="0" allow="microphone"></iframe>
     </div>

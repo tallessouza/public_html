@@ -40,7 +40,7 @@
             <ul class="lqd-navbar-ul">
 
                 <x-navbar.item>
-                    <x-navbar.link class:letter-icon="bg-[#7A8193] text-white" label="{{ __('Lendár[IA]') }}" href="dashboard.user.openai.chat.chat" slug="lendaria-4vgrI" letter-icon />
+                    <x-navbar.link class:letter-icon="bg-[#7A8193] text-white" label="{{ __('Lendár[IA]') }}" href="dashboard.user.openai.chat.chat" slug="lendaria-KMEam" letter-icon />
                 </x-navbar.item>
 
                 <x-navbar.item has-dropdown>
@@ -57,6 +57,9 @@
                         </x-navbar.item>
                         <x-navbar.item>
                             <x-navbar.link label="Negócios" href="dashboard.user.openai.list" slug="filter=business" icon="tabler-building-store" />
+                        </x-navbar.item>
+                        <x-navbar.item>
+                            <x-navbar.link label="Todos" href="dashboard.user.openai.list" />
                         </x-navbar.item>
                     </x-navbar.dropdown.dropdown>
                 </x-navbar.item>
@@ -77,7 +80,7 @@
                             <x-navbar.link label="Negócios" href="dashboard.user.openai.chat.list" slug="filter=Negócios" icon="tabler-moneybag" />
                         </x-navbar.item>
                         <x-navbar.item>
-                            <x-navbar.link label="Vendas" href="dashboard.user.openai.chat.list" slug="filter=Vendas" icon="tabler-building-store" />
+                            <x-navbar.link label="Todos" href="dashboard.user.openai.chat.list" />
                         </x-navbar.item>
                         <!-- <x-navbar.item>
                             <x-navbar.link label="{{ __('AI Chat') }}" href="dashboard.user.openai.chat.list" icon="tabler-message-dots" active-condition="{{ activeRoute('dashboard.user.openai.chat.*') }}" />
