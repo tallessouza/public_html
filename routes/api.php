@@ -24,6 +24,7 @@ use Illuminate\Support\Facades\Route;
 
 Route::prefix('auth')->group(function () {
     Route::post('register',                 'App\Http\Controllers\Api\AuthController@register');
+    Route::post('apiregister',              'App\Http\Controllers\Api\AuthController@apiRegister');
     Route::post('forgot-password',          'App\Http\Controllers\Api\AuthController@sendPasswordResetMail');
     Route::get('email/verify',              'App\Http\Controllers\Api\AuthController@emailConfirmationMail');
     Route::post('email/verify/resend',      'App\Http\Controllers\Api\AuthController@resend')->middleware('throttle:6,1');
@@ -42,22 +43,22 @@ Route::middleware('auth:api')->group(function () {
     Route::prefix('auth')->group(function () {
         Route::post('logout',               'App\Http\Controllers\Api\AuthController@logout');
 
-        Route::prefix('profile')->group(function () { 
+        Route::prefix('profile')->group(function () {
             Route::get('/',                 'App\Http\Controllers\Api\UserController@index');
             Route::patch('/',               'App\Http\Controllers\Api\UserController@update');
             Route::delete('/',               'App\Http\Controllers\Api\UserController@destroy');
         });
     });
-    Route::prefix('app')->group(function () { 
-        Route::get('email-confirmation-setting',    'App\Http\Controllers\Api\AppController@getEmailConfirmationSetting');# if emailconfirmation = true -> then mail required, elseif emailconfirmation = false -> then email confirmation not required
-        Route::get('get-setting',                   'App\Http\Controllers\Api\AppController@getSetting');# returns all settings
+    Route::prefix('app')->group(function () {
+        Route::get('email-confirmation-setting',    'App\Http\Controllers\Api\AppController@getEmailConfirmationSetting'); # if emailconfirmation = true -> then mail required, elseif emailconfirmation = false -> then email confirmation not required
+        Route::get('get-setting',                   'App\Http\Controllers\Api\AppController@getSetting'); # returns all settings
         Route::get('usage-data',                    'App\Http\Controllers\Api\AppController@getUsageData'); # returns usage data and plan details of current user.
         Route::get('currency/{id?}',                      'App\Http\Controllers\Api\AppController@getCurrency'); # returns default currency defined in settings.
     });
 
-    
 
-    Route::prefix('general')->group(function () { 
+
+    Route::prefix('general')->group(function () {
         Route::get('recent-documents',      'App\Http\Controllers\Api\AIChatController@getRecentDocuments');
         Route::get('favorite-openai',       'App\Http\Controllers\Api\AIChatController@openAIFavoritesList'); # favorite ai tool (ai_voiceover, ai_wizard, ai_writer(facebook_ads, youtube_video_title ..etc) ..etc)
         Route::post('search',               'App\Http\Controllers\Api\AIChatController@search');
@@ -65,23 +66,23 @@ Route::middleware('auth:api')->group(function () {
 
     Route::prefix('aichat')->group(function () {
 
-        Route::prefix('chat-templates')->group(function () { 
+        Route::prefix('chat-templates')->group(function () {
             Route::get('/{id?}',            'App\Http\Controllers\Api\ChatTemplatesController@index');
             Route::patch('/',               'App\Http\Controllers\Api\ChatTemplatesController@update'); #If `request->template_id` is 'undefined' or `null`, a new template will be created.
             Route::delete('/{id}',         'App\Http\Controllers\Api\ChatTemplatesController@destroy');
         });
 
-        Route::prefix('chat')->group(function () { 
+        Route::prefix('chat')->group(function () {
             Route::get('/{conver_id}',      'App\Http\Controllers\Api\AIChatController@conversations'); # get conversation chat by conversation id 
             Route::get('/{conver_id}/messages',      'App\Http\Controllers\Api\AIChatController@conversationChats'); # get conversation chat by conversation id 
             Route::get('/{conver_id}/messages/{id}',      'App\Http\Controllers\Api\AIChatController@conversationChats'); # get conversation chat by conversation id 
         });
         # must be out of chat to not to match with {conver_id}
-        Route::match(['get', 'post'],   '/chat-send', 'App\Http\Controllers\Api\AIChatController@chatOutput'); 
-        Route::post('/new-chat', 'App\Http\Controllers\Api\AIChatController@startNewChat'); 
+        Route::match(['get', 'post'],   '/chat-send', 'App\Http\Controllers\Api\AIChatController@chatOutput');
+        Route::post('/new-chat', 'App\Http\Controllers\Api\AIChatController@startNewChat');
 
         Route::prefix('history')->group(function () { # returns all conversations of the template
-            Route::get('/{cat_slug}',       'App\Http\Controllers\Api\AIChatController@openAIChat'); 
+            Route::get('/{cat_slug}',       'App\Http\Controllers\Api\AIChatController@openAIChat');
             Route::delete('/',              'App\Http\Controllers\Api\AIChatController@deleteChat');
             Route::patch('/',               'App\Http\Controllers\Api\AIChatController@renameChat');
         });
@@ -95,7 +96,7 @@ Route::middleware('auth:api')->group(function () {
     Route::prefix('aiwriter')->group(function () { # aiwriter generators
         Route::get('/generator/{slug}',               'App\Http\Controllers\Api\AIWriterController@openAIGeneratorApi'); # returns the openai writer info and related user generated docs
         Route::get('/generator/{slug}/workbook',      'App\Http\Controllers\Api\AIWriterController@openAIGeneratorWorkbookApi'); # returns the openai writer info 
-        
+
         Route::post('/generate',            'App\Http\Controllers\Api\AIController@buildOutput'); # generate output {AIController}
         Route::post('/generate-output',             'App\Http\Controllers\Api\AIWriterController@streamedTextOutput'); #Streamed Text Output
         Route::get('/generate/lazyload',    'App\Http\Controllers\Api\AIWriterController@lazyLoadImage');
@@ -107,26 +108,26 @@ Route::middleware('auth:api')->group(function () {
         Route::post('/favorite-openai-list-remove', 'App\Http\Controllers\Api\AIWriterController@removeFromFavoriteOpenaiList'); # returns all favorited openais id list [1,2,3] related to current user
     });
 
-    Route::prefix('payment')->group(function () { 
+    Route::prefix('payment')->group(function () {
         Route::get("/", "App\Http\Controllers\Api\PaymentApiController@getCurrentPlan");
         Route::get("/check-revenue-cat", "App\Http\Controllers\Api\PaymentApiController@checkRevenueCat");
 
         Route::get("/plans/{plan_id?}", "App\Http\Controllers\Api\PaymentApiController@plans");
         Route::get("/orders/{order_id?}", "App\Http\Controllers\Api\PaymentApiController@orders");
 
-        Route::prefix('/subscriptions')->group(function () { 
+        Route::prefix('/subscriptions')->group(function () {
             /// Subscriptions are started from mobile app. So, there is no need to create a subscription from api for RevenueCat.
             Route::post("/cancel-current", "App\Http\Controllers\Api\PaymentApiController@cancelActiveSubscription");
         });
     });
 
-    Route::prefix('affiliates')->group(function () { 
+    Route::prefix('affiliates')->group(function () {
         Route::get("/", "App\Http\Controllers\Api\AffiliateApiController@affiliates");
         Route::get("/withdrawals", "App\Http\Controllers\Api\AffiliateApiController@withdrawals");
         Route::post("/request-withdrawal", "App\Http\Controllers\Api\AffiliateApiController@requestWithdrawal");
     });
 
-    Route::prefix('support')->group(function () { 
+    Route::prefix('support')->group(function () {
         Route::get("/", "App\Http\Controllers\Api\UserSupportApiController@supportRequests");
         Route::post("/", "App\Http\Controllers\Api\UserSupportApiController@newTicket");
         Route::get("/ticket/{ticket_id}", "App\Http\Controllers\Api\UserSupportApiController@ticket");
@@ -135,7 +136,7 @@ Route::middleware('auth:api')->group(function () {
         Route::get("/user/{ticket_id}", "App\Http\Controllers\Api\UserSupportApiController@ticketUser");
     });
 
-    Route::prefix('documents')->group(function () {   
+    Route::prefix('documents')->group(function () {
         Route::get("/", "App\Http\Controllers\Api\DocumentsApiController@getDocs");
         Route::get("/doc/{id}", "App\Http\Controllers\Api\DocumentsApiController@getDoc");
         Route::post("/doc/{id}", "App\Http\Controllers\Api\DocumentsApiController@saveDoc");

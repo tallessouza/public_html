@@ -14,6 +14,7 @@ use App\Models\Setting;
 use Illuminate\Support\Facades\Validator;
 use App\Jobs\SendPasswordResetEmail;
 use App\Jobs\SendConfirmationEmail;
+use App\Http\Controllers\Finance\PaymentProcessController;
 
 class AuthController extends Controller
 {
@@ -45,7 +46,7 @@ class AuthController extends Controller
      *          description="Validation error or user already exists",
      *      ),
      * )
-    */
+     */
     public function register(Request $request)
     {
         $validator = Validator::make($request->all(), [
@@ -54,7 +55,7 @@ class AuthController extends Controller
             'email' => ['required', 'string', 'email', 'max:255', 'unique:' . User::class],
             'password' => ['required', 'confirmed', Password::defaults()],
         ]);
-    
+
         if ($validator->fails()) {
             return response()->json(['error' => $validator->errors()], 422);
         }
@@ -113,6 +114,49 @@ class AuthController extends Controller
 
         return response()->json('OK', 200);
     }
+    public function apiregister(Request $request)
+    {
+        // Obter a chave de autorização do cabeçalho da requisição
+        $authorizationHeader = $request->header('Authorization');
+
+        // Comparar a chave de autorização com a variável de ambiente API_KEY
+        if ($authorizationHeader !== env('API_KEY')) {
+            return response()->json(['error' => 'Unauthorized'], 401);
+        }
+
+        $validator = Validator::make($request->all(), [
+            'name' => ['required', 'string', 'max:255'],
+            'surname' => ['required', 'string', 'max:255'],
+            'email' => ['required', 'string', 'email', 'max:255', 'unique:' . User::class],
+            'password' => ['required', 'confirmed', Password::defaults()],
+        ]);
+
+        if ($validator->fails()) {
+            return response()->json(['error' => $validator->errors()], 422);
+        }
+
+        $affCode = null;
+
+        $settings = Setting::first();
+        $user = User::create([
+            'name' => $request->name,
+            'surname' => $request->surname,
+            'email' => $request->email,
+            'email_confirmation_code' => Str::random(67),
+            'remaining_words' => explode(',', $settings->free_plan)[0],
+            'remaining_images' => explode(',', $settings->free_plan)[1] ?? 0,
+            'password' => Hash::make($request->password),
+            'email_verification_code' => Str::random(67),
+            'affiliate_id' => $affCode,
+            'affiliate_code' => Str::upper(Str::random(12)),
+        ]);
+
+        $request->merge(['userID' => $user->id, 'token' => 2]);
+        $paymentController = new PaymentProcessController();
+        $paymentController->assignTokenByAdmin($request);
+
+        return response()->json(['message' => 'Usuário criado com sucesso!', 'user' => $user], 201);
+    }
     /**
      * @OA\Post(
      *      path="/api/auth/logout",
@@ -130,7 +174,7 @@ class AuthController extends Controller
      *          description="Unauthenticated",
      *      ),
      * )
-    */
+     */
     public function logout(Request $request)
     {
         $request->user()->tokens()->each(function ($token, $key) {
@@ -163,7 +207,7 @@ class AuthController extends Controller
      *          description="Validation error or user not found",
      *      ),
      * )
-    */
+     */
     public function sendPasswordResetMail(Request $request)
     {
         $validator = Validator::make($request->all(), [
@@ -179,7 +223,7 @@ class AuthController extends Controller
         if ($user !== null) {
             $user->password_reset_code = Str::random(67);
             $user->save();
-            
+
             // Dispatch the job to send the password reset email asynchronously
             dispatch(new SendPasswordResetEmail($user));
 
@@ -214,7 +258,7 @@ class AuthController extends Controller
      *          description="Validation error or user not found",
      *      ),
      * )
-    */
+     */
     public function emailConfirmationMail(Request $request)
     {
         $validator = Validator::make($request->all(), [
@@ -271,7 +315,7 @@ class AuthController extends Controller
      *          ),
      *      ),
      * )
-    */
+     */
     public function resend(Request $request)
     {
         $request->validate([
@@ -287,7 +331,7 @@ class AuthController extends Controller
 
         return response()->json(['error' => __('Email not found or already verified')], 403);
     }
-   
+
     /**
      * Get actively supported login methods.
      *
@@ -310,7 +354,7 @@ class AuthController extends Controller
      *          ),
      *      ),
      * )
-    */
+     */
     public function getSupportedLoginMethods()
     {
         $setting = Setting::first();
