@@ -13,6 +13,7 @@ class CheckTemplateTypeAndPlan
 {
     public function handle(Request $request, Closure $next): Response
     {
+        $user = Auth::user();
         if ($request->user()->isAdmin()) {
             return $next($request);
         }
@@ -21,9 +22,11 @@ class CheckTemplateTypeAndPlan
 
         if ($check) {
             return $next($request);
+        } elseif ($user->remaining_words == -1 or $user->remaining_words > 0) {
+            return $next($request);
         }
 
-        return to_route('dashboard.user.payment.subscription')->with(['message' => trans('If you want to use premium service, update your plan.') , 'type' => 'error']);
+        return to_route('dashboard.user.payment.subscription')->with(['message' => trans('If you want to use premium service, update your plan.'), 'type' => 'error']);
     }
 
     public function check(Request $request): bool
@@ -37,7 +40,7 @@ class CheckTemplateTypeAndPlan
             ->where('active', 1)
             ->first();
 
-        if (! $openAi) {
+        if (!$openAi) {
             abort(404);
         }
 
@@ -58,18 +61,18 @@ class CheckTemplateTypeAndPlan
 
         $plan = $user->relationPlan;
 
-        if($plan) {
+        if ($plan) {
 
             $open_ai_items = $plan->getAttribute('open_ai_items') ?: [];
 
 
-            if( $plan->getAttribute('plan_type') == 'All' && in_array($slug, $open_ai_items)) {
+            if ($plan->getAttribute('plan_type') == 'All' && in_array($slug, $open_ai_items)) {
                 return true;
             }
 
             if ($plan->getAttribute('plan_type') == 'Premium' && in_array($slug, $open_ai_items)) {
                 // if ($openAi->getAttribute('premium') == 1) {
-                    return true;
+                return true;
                 // }
             }
 

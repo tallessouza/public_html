@@ -59,7 +59,7 @@
                             <x-navbar.link label="Negócios" href="dashboard.user.openai.list" slug="filter=business" icon="tabler-building-store" />
                         </x-navbar.item>
                         <x-navbar.item>
-                            <x-navbar.link label="Todos" href="dashboard.user.openai.list" />
+                            <x-navbar.link label="Todas" href="dashboard.user.openai.list" />
                         </x-navbar.item>
                     </x-navbar.dropdown.dropdown>
                 </x-navbar.item>
