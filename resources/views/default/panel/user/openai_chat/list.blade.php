@@ -19,7 +19,7 @@
             class="lqd-filter-list flex scroll-mt-6 flex-wrap items-center gap-x-4 gap-y-2 text-heading-foreground max-sm:gap-3"
             id="lqd-chats-filter-list"
         >
-            <li>
+            <!-- <li>
                 <x-button
                     class="lqd-filter-btn inline-flex rounded-full px-2.5 py-0.5 text-2xs leading-tight transition-colors hover:translate-y-0 hover:bg-foreground/5 [&.active]:bg-foreground/5"
                     tag="button"
@@ -32,7 +32,7 @@
                 >
                     {{ __('All') }}
                 </x-button>
-            </li>
+            </li> -->
             <li>
                 <x-button
                     class="lqd-filter-btn inline-flex rounded-full px-2.5 py-0.5 text-2xs leading-tight transition-colors hover:translate-y-0 hover:bg-foreground/5 [&.active]:bg-foreground/5"

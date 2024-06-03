@@ -179,7 +179,7 @@
         id="lqd-generators-filter-list"
     >
         <li>
-            <x-button
+            <!-- <x-button
                 class="lqd-filter-btn inline-flex rounded-full px-2.5 py-0.5 text-2xs leading-tight transition-colors hover:translate-y-0 hover:bg-foreground/5 [&.active]:bg-foreground/5"
                 tag="button"
                 type="button"
@@ -190,7 +190,7 @@
                 @click="$store.generatorsFilter.changeFilter('all')"
             >
                 {{ __('All') }}
-            </x-button>
+            </x-button> -->
         </li>
         <li>
             <x-button

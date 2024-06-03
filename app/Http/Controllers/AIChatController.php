@@ -36,13 +36,13 @@ class AIChatController extends Controller
     protected $client;
 
     protected $settings;
-	protected $settings_two;
+    protected $settings_two;
 
     public function __construct()
     {
         //Settings
         $this->settings = Setting::first();
-		$this->settings_two = SettingTwo::first();
+        $this->settings_two = SettingTwo::first();
         // Fetch the Site Settings object with openai_api_secret
         if ($this->settings?->user_api_option) {
             $apiKeys = explode(',', auth()->user()?->api_keys);
@@ -53,22 +53,26 @@ class AIChatController extends Controller
         config(['openai.api_key' => $apiKey]);
     }
 
-    public function openAIChatList()
+    public function openAIChatList(Request $request)
     {
         abort_if(Helper::setting('feature_ai_chat') == 0, 404);
 
-   	  $aiList = OpenaiGeneratorChatCategory::query()
-            ->whereNotIn('slug', [
-                'ai_vision', 'ai_webchat', 'ai_pdf'
-            ])
-            ->when(Auth::user()->isUser(), function ($query) {
-                $query->where(function ($query) {
-                    $query->whereNull('user_id')->orWhere('user_id', Auth::id());
-                });
-            })
-            ->get();
+        $filter = $request->query('filter', 'all');
+        $aiListQuery = OpenaiGeneratorChatCategory::query()
+            ->where('slug', '<>', 'ai_vision')
+            ->where('slug', '<>', 'ai_webchat')
+            ->where('slug', '<>', 'ai_pdf');
 
-        $categoryList = ChatCategory::where('user_id', 1)->orWhere('user_id', auth()->user()->id)->get();
+        if ($filter !== 'all') {
+            if ($filter === 'favorite') {
+                $aiListQuery = $aiListQuery->whereIn('id', auth()->user()->favorites->pluck('item_id'));
+            } else {
+                $aiListQuery = $aiListQuery->where('category', $filter);
+            }
+        }
+
+        $aiList = $aiListQuery->get();
+        $categoryList = ChatCategory::where('user_id', 1)->orWhere('name',  $filter)->get();
         $favData = Favourite::where('type', 'chat')
             ->where('user_id', auth()->user()->id)
             ->get();
@@ -139,28 +143,28 @@ class AIChatController extends Controller
         $settings = Setting::first();
         $settings2 = SettingTwo::first();
         $apiUrl = base64_encode('https://api.openai.com/v1/chat/completions');
-		if ($settings2->openai_default_stream_server == 'backend') {
-			$apikeyPart1 = base64_encode(rand(1, 100));
-			$apikeyPart2 = base64_encode(rand(1, 100));
-			$apikeyPart3 = base64_encode(rand(1, 100));
-		}else{
-			// Fetch the Site Settings object with openai_api_secret
-			if ($this->settings?->user_api_option) {
-				$apiKeys = explode(',', auth()->user()?->api_keys);
-			} else {
-				$apiKeys = explode(',', $this->settings?->openai_api_secret);
-			}
-			$apiKey = $apiKeys[array_rand($apiKeys)];
+        if ($settings2->openai_default_stream_server == 'backend') {
+            $apikeyPart1 = base64_encode(rand(1, 100));
+            $apikeyPart2 = base64_encode(rand(1, 100));
+            $apikeyPart3 = base64_encode(rand(1, 100));
+        } else {
+            // Fetch the Site Settings object with openai_api_secret
+            if ($this->settings?->user_api_option) {
+                $apiKeys = explode(',', auth()->user()?->api_keys);
+            } else {
+                $apiKeys = explode(',', $this->settings?->openai_api_secret);
+            }
+            $apiKey = $apiKeys[array_rand($apiKeys)];
 
-			$len = strlen($apiKey);
+            $len = strlen($apiKey);
 
-			$parts[] = substr($apiKey, 0, $l[] = rand(1, $len - 5));
-			$parts[] = substr($apiKey, $l[0], $l[] = rand(1, $len - $l[0] - 3));
-			$parts[] = substr($apiKey, array_sum($l));
-			$apikeyPart1 = base64_encode($parts[0]);
-			$apikeyPart2 = base64_encode($parts[1]);
-			$apikeyPart3 = base64_encode($parts[2]);
-		}
+            $parts[] = substr($apiKey, 0, $l[] = rand(1, $len - 5));
+            $parts[] = substr($apiKey, $l[0], $l[] = rand(1, $len - $l[0] - 3));
+            $parts[] = substr($apiKey, array_sum($l));
+            $apikeyPart1 = base64_encode($parts[0]);
+            $apikeyPart2 = base64_encode($parts[1]);
+            $apikeyPart3 = base64_encode($parts[2]);
+        }
 
         $apiSearch = base64_encode('https://google.serper.dev/search');
         $apiSearchId = base64_encode($settings2->serper_api_key);
@@ -258,7 +262,7 @@ class AIChatController extends Controller
         $chat->team_id = Auth::user()->team_id;
         $chat->chatbot_id = $category->chatbot_id;
         $chat->openai_chat_category_id = $category->id;
-        $chat->title = $category->name.' Chat';
+        $chat->title = $category->name . ' Chat';
         $chat->total_credits = 0;
         $chat->total_words = 0;
         $chat->save();
@@ -269,9 +273,9 @@ class AIChatController extends Controller
         $message->response = 'First Initiation';
         if ($category->slug != 'ai_vision' || $category->slug != 'ai_pdf') {
             if ($category->role == 'default') {
-                $output = __('Hi! I am').' '.$category->name.__(', and I\'m here to answer all your questions');
+                $output = __('Hi! I am') . ' ' . $category->name . __(', and I\'m here to answer all your questions');
             } else {
-                $output = __('Hi! I am').' '.$category->human_name.__(', and I\'m').' '.$category->role.'. '.$category->helps_with;
+                $output = __('Hi! I am') . ' ' . $category->human_name . __(', and I\'m') . ' ' . $category->role . '. ' . $category->helps_with;
             }
         } else {
             $output = null;
@@ -315,7 +319,7 @@ class AIChatController extends Controller
 
             if (($pos !== false) || (strlen($current_line) == 0)) {
             } else {
-                $response .= $current_line.' ';
+                $response .= $current_line . ' ';
             }
         }
 
@@ -329,7 +333,7 @@ class AIChatController extends Controller
         $response = '';
         $zip = new ZipArchive();
 
-        if (! $zip->open($path_to_file)) {
+        if (!$zip->open($path_to_file)) {
             return false;
         }
 
@@ -369,8 +373,8 @@ class AIChatController extends Controller
         }
         $doc = $request->file('doc');
         $doc_content = file_get_contents($doc->getRealPath());
-        $fileName = Str::random(12).'.'.$type;
-        Storage::disk('public')->put('temp.'.$type, $doc_content);
+        $fileName = Str::random(12) . '.' . $type;
+        Storage::disk('public')->put('temp.' . $type, $doc_content);
         Storage::disk('public')->put($fileName, $doc_content);
 
         $uploadedFile = new File(substr("/uploads/$fileName", 1));
@@ -383,7 +387,7 @@ class AIChatController extends Controller
                 unlink(substr("/uploads/$fileName", 1));
                 $resPath = Storage::disk('s3')->url($aws_path);
             } catch (\Exception $e) {
-                return response()->json(['status' => 'error', 'message' => 'AWS Error - '.$e->getMessage()]);
+                return response()->json(['status' => 'error', 'message' => 'AWS Error - ' . $e->getMessage()]);
             }
         }
 
@@ -392,21 +396,21 @@ class AIChatController extends Controller
             $text = $parser->parseFile('uploads/temp.pdf')->getText();
 
             $page = $text;
-            if (! mb_check_encoding($text, 'UTF-8')) {
+            if (!mb_check_encoding($text, 'UTF-8')) {
                 $page = mb_convert_encoding($text, 'UTF-8', mb_detect_encoding($text));
             } else {
                 $page = $text;
             }
         } elseif ($type == 'docx') {
-            $filePath = public_path('uploads/temp.'.$type);
+            $filePath = public_path('uploads/temp.' . $type);
             $page = $this->docx_to_text($filePath);
             Log::info($page);
         } elseif ($type == 'doc') {
-            $filePath = public_path('uploads/temp.'.$type);
+            $filePath = public_path('uploads/temp.' . $type);
             $page = $this->doc_to_text($filePath);
             Log::info($page);
         } elseif ($type == 'csv') {
-            $file = file_get_contents(public_path('uploads/temp.'.$type));
+            $file = file_get_contents(public_path('uploads/temp.' . $type));
             $rows = explode(PHP_EOL, $file);
 
             $header = str_getcsv(array_shift($rows)); // Get header row
@@ -480,7 +484,7 @@ class AIChatController extends Controller
         $chat->user_id = Auth::id();
         $chat->team_id = Auth::user()->team_id;
         $chat->openai_chat_category_id = $category->id;
-        $chat->title = $category->name.' Chat';
+        $chat->title = $category->name . ' Chat';
         $chat->total_credits = 0;
         $chat->total_words = 0;
         $chat->save();
@@ -497,9 +501,9 @@ class AIChatController extends Controller
             $message->response = 'First Initiation';
             if ($category->slug != 'ai_vision' || $category->slug != 'ai_pdf') {
                 if ($category->role == 'default') {
-                    $output = __('Hi! I am').' '.$category->name.__(', and I\'m here to answer all your questions');
+                    $output = __('Hi! I am') . ' ' . $category->name . __(', and I\'m here to answer all your questions');
                 } else {
-                    $output = __('Hi! I am').' '.$category->human_name.__(', and I\'m').' '.$category->role.'. '.$category->helps_with;
+                    $output = __('Hi! I am') . ' ' . $category->human_name . __(', and I\'m') . ' ' . $category->role . '. ' . $category->helps_with;
                 }
             } else {
                 $output = null;
@@ -566,26 +570,26 @@ class AIChatController extends Controller
 
     public function chatOutput(Request $request)
     {
-		$user = Auth::user();
-		$chat_id = $request->get('chat_id');
-		$chat = UserOpenaiChat::whereId($chat_id)->first();
-		
-		if ($user->remaining_words <= 0) {
-			if ($user->remaining_words != -1) {
-				$data = [
-					'errors' => [__('You have no credits left. Please consider upgrading your plan.')],
-				];
-				return response()->json($data, 419);
-			}
-		}
+        $user = Auth::user();
+        $chat_id = $request->get('chat_id');
+        $chat = UserOpenaiChat::whereId($chat_id)->first();
 
-		if ($request->isMethod('post')) {
-			$prompt = $request->get('prompt');
-			// if ($chat->category->prompt_prefix != null && !str_starts_with($chat->category->slug, 'ai_')) {
-			//     $prompt = "You will now play a character and respond as that character (You will never break character). Your name is". $chat->category->human_name. ". I want you to act as a". $chat->category->role . ". ". $chat->category->prompt_prefix . ' ' . $prompt;
-			// } 
-			$realtime = $request->get('realtime');
-			$total_used_tokens = 0;
+        if ($user->remaining_words <= 0) {
+            if ($user->remaining_words != -1) {
+                $data = [
+                    'errors' => [__('You have no credits left. Please consider upgrading your plan.')],
+                ];
+                return response()->json($data, 419);
+            }
+        }
+
+        if ($request->isMethod('post')) {
+            $prompt = $request->get('prompt');
+            // if ($chat->category->prompt_prefix != null && !str_starts_with($chat->category->slug, 'ai_')) {
+            //     $prompt = "You will now play a character and respond as that character (You will never break character). Your name is". $chat->category->human_name. ". I want you to act as a". $chat->category->role . ". ". $chat->category->prompt_prefix . ' ' . $prompt;
+            // } 
+            $realtime = $request->get('realtime');
+            $total_used_tokens = 0;
             $entry = new UserOpenaiChatMessage();
             $entry->user_id = $user->id;
             $entry->user_openai_chat_id = $chat->id;
@@ -603,140 +607,136 @@ class AIChatController extends Controller
             $message_id = $entry->id;
 
             return response()->json(compact('message_id'));
-		}
-		elseif ($request->isMethod('get')) {
-			$type = $request->get('type');
-			if ($chat->category->slug == 'ai_pdf') {
-				return self::pdfStream($request);
-			}
-			else if ($chat->category->slug == 'ai_webchat') {
-				return self::webChatStream($request);
-			}
-			else{
-				switch ($type) {
-					case 'chat':
-						return self::chatbotsStream($request);
-						break;
-					case 'vision':
-						return self::visionStream($request);
-						break;
-					default:
-						return self::chatbotsStream($request);
-						break;
-				}
-			}
-		}
-		else{
-			return response()->json(['message' => 'Method not allowed'], 405);
-		}
+        } elseif ($request->isMethod('get')) {
+            $type = $request->get('type');
+            if ($chat->category->slug == 'ai_pdf') {
+                return self::pdfStream($request);
+            } else if ($chat->category->slug == 'ai_webchat') {
+                return self::webChatStream($request);
+            } else {
+                switch ($type) {
+                    case 'chat':
+                        return self::chatbotsStream($request);
+                        break;
+                    case 'vision':
+                        return self::visionStream($request);
+                        break;
+                    default:
+                        return self::chatbotsStream($request);
+                        break;
+                }
+            }
+        } else {
+            return response()->json(['message' => 'Method not allowed'], 405);
+        }
     }
-	private function pdfStream(Request $request)
-	{
+    private function pdfStream(Request $request)
+    {
         $openaiApiKey = Helper::setOpenAiKey();
 
         if (setting('default_ai_engine', 'openai') == 'anthropic') {
             $openaiApiKey = Helper::setAnthropicKey();
         }
 
-		$chat_id = $request->get('chat_id');
-		$message_id = $request->get('message_id');
-		// $prompt = $request->get('prompt');
-		$message = UserOpenaiChatMessage::whereId($message_id)->first();
-		$prompt = $message->input;
+        $chat_id = $request->get('chat_id');
+        $message_id = $request->get('message_id');
+        // $prompt = $request->get('prompt');
+        $message = UserOpenaiChatMessage::whereId($message_id)->first();
+        $prompt = $message->input;
 
-		$chat_bot = $this->settings?->openai_default_model;
-		$chat_bot == null ? 'gpt-3.5-turbo': $chat_bot;       
-		$userId = Auth::user()->id;
-		$history = [];
+        $chat_bot = $this->settings?->openai_default_model;
+        $chat_bot == null ? 'gpt-3.5-turbo' : $chat_bot;
+        $userId = Auth::user()->id;
+        $history = [];
 
 
         if (setting('default_ai_engine', 'openai') == 'anthropic') {
             $chat_bot = setting('anthropic_default_model', 'claude-3-opus-20240229');
         }
-		
-		$chat = UserOpenaiChat::whereId($chat_id)->first();
-		# check if there completions for the template
-		$category = $chat->category;
-		if ($category->chat_completions) {
-			$chat_completions = json_decode($category->chat_completions, true);
-			foreach ($chat_completions as $item) {
-				$history[] = [
-					'role' => $item['role'],
-					'content' => $item['content'] ?? '',
-				];
-			}
-		} else {
-			$history[] = ['role' => 'system', 'content' => 'You are a helpful assistant.'];
-		}
 
-		# follow the context of the last 5 messages
-		$lastThreeMessageQuery = $chat->messages()
-		->whereNotNull('input')
-		->orderBy('created_at', 'desc')
-		->take(4)
-		->get()
-		->reverse();
+        $chat = UserOpenaiChat::whereId($chat_id)->first();
+        # check if there completions for the template
+        $category = $chat->category;
+        if ($category->chat_completions) {
+            $chat_completions = json_decode($category->chat_completions, true);
+            foreach ($chat_completions as $item) {
+                $history[] = [
+                    'role' => $item['role'],
+                    'content' => $item['content'] ?? '',
+                ];
+            }
+        } else {
+            $history[] = ['role' => 'system', 'content' => 'You are a helpful assistant.'];
+        }
 
-		$vectorService = new VectorService();
+        # follow the context of the last 5 messages
+        $lastThreeMessageQuery = $chat->messages()
+            ->whereNotNull('input')
+            ->orderBy('created_at', 'desc')
+            ->take(4)
+            ->get()
+            ->reverse();
 
-		$extra_prompt = $vectorService->getMostSimilarText($prompt, $chat_id, 5 , $chat->chatbot_id);
-		$count = count($lastThreeMessageQuery);
-		if ($count > 1) {
-			$lastThreeMessageQuery[$count - 1]->input = "'this file' means file content. Must not reference previous chats if user asking about pdf. Must reference file content if only user is asking about file content. Else just response as an assistant shortly and professionaly without must not referencing file content. \n\n\n\n\nUser qusetion: $prompt \n\n\n\n\n Document Content: \n $extra_prompt";
-			foreach ($lastThreeMessageQuery as $threeMessage) {
-				$history[] = ['role' => 'user', 'content' => $threeMessage->input ?? ''];
-				if ($threeMessage->output != null) {
-					$history[] = ['role' => 'assistant', 'content' => $threeMessage->output ?? ''];
-				}else{
-					$history[] = ['role' => 'assistant', 'content' => ''];
-				}
-			}
-		}else{
-			$history[] = ['role' => 'user', 'content' => "'this file' means file content. Must not reference previous chats if user asking about pdf. Must reference file content if only user is asking about file content. Else just response as an assistant shortly and professionaly without must not referencing file content. . User: $prompt \n\n\n\n\n Document Content: \n $extra_prompt"];
-		}
+        $vectorService = new VectorService();
 
-		return self::openaiChatStream($request, $openaiApiKey, $chat_bot, $history,$message_id);
-	}
-	private function chatbotsStream(Request $request)
-	{
+        $extra_prompt = $vectorService->getMostSimilarText($prompt, $chat_id, 5, $chat->chatbot_id);
+        $count = count($lastThreeMessageQuery);
+        if ($count > 1) {
+            $lastThreeMessageQuery[$count - 1]->input = "'this file' means file content. Must not reference previous chats if user asking about pdf. Must reference file content if only user is asking about file content. Else just response as an assistant shortly and professionaly without must not referencing file content. \n\n\n\n\nUser qusetion: $prompt \n\n\n\n\n Document Content: \n $extra_prompt";
+            foreach ($lastThreeMessageQuery as $threeMessage) {
+                $history[] = ['role' => 'user', 'content' => $threeMessage->input ?? ''];
+                if ($threeMessage->output != null) {
+                    $history[] = ['role' => 'assistant', 'content' => $threeMessage->output ?? ''];
+                } else {
+                    $history[] = ['role' => 'assistant', 'content' => ''];
+                }
+            }
+        } else {
+            $history[] = ['role' => 'user', 'content' => "'this file' means file content. Must not reference previous chats if user asking about pdf. Must reference file content if only user is asking about file content. Else just response as an assistant shortly and professionaly without must not referencing file content. . User: $prompt \n\n\n\n\n Document Content: \n $extra_prompt"];
+        }
+
+        return self::openaiChatStream($request, $openaiApiKey, $chat_bot, $history, $message_id);
+    }
+    private function chatbotsStream(Request $request)
+    {
         $openaiApiKey = Helper::setOpenAiKey();
 
         if (setting('default_ai_engine', 'openai') == 'anthropic') {
             $openaiApiKey = Helper::setAnthropicKey();
         }
 
-		$chat_id = $request->get('chat_id');
-		
-		$message_id = $request->get('message_id');
-		// $prompt = $request->get('prompt');
-		$message = UserOpenaiChatMessage::whereId($message_id)->first();
-		$prompt = $message->input;
+        $chat_id = $request->get('chat_id');
 
-		$realtime = $request->get('realtime');
-		$chat_bot = $this->settings?->openai_default_model;
-		$chat_bot == null ? 'gpt-3.5-turbo': $chat_bot;       
-		$userId = Auth::user()->id;
-		$history = [];
-		$realtimePrompt = $prompt;
-		
-		$chat = UserOpenaiChat::whereId($chat_id)->first();
-		# check if there completions for the template
-		$category = $chat->category;
-		if ($category->chat_completions) {
-			$chat_completions = json_decode($category->chat_completions, true);
-			foreach ($chat_completions as $item) {
-				$history[] = [
-					'role' => $item['role'],
-					'content' => $item['content']?? '',
-				];
-			}
-		} else {
-			$history[] = ['role' => 'system', 'content' => 'You are a helpful assistant.'];
-		}
+        $message_id = $request->get('message_id');
+        // $prompt = $request->get('prompt');
+        $message = UserOpenaiChatMessage::whereId($message_id)->first();
+        $prompt = $message->input;
+
+        $realtime = $request->get('realtime');
+        $chat_bot = $this->settings?->openai_default_model;
+        $chat_bot == null ? 'gpt-3.5-turbo' : $chat_bot;
+        $userId = Auth::user()->id;
+        $history = [];
+        $realtimePrompt = $prompt;
+
+        $chat = UserOpenaiChat::whereId($chat_id)->first();
+        # check if there completions for the template
+        $category = $chat->category;
+        if ($category->chat_completions) {
+            $chat_completions = json_decode($category->chat_completions, true);
+            foreach ($chat_completions as $item) {
+                $history[] = [
+                    'role' => $item['role'],
+                    'content' => $item['content'] ?? '',
+                ];
+            }
+        } else {
+            $history[] = ['role' => 'system', 'content' => 'You are a helpful assistant.'];
+        }
 
 
         if ($category && $category?->instructions) {
-            $history[] = ['role' => 'system', 'content' => $category->instructions ];
+            $history[] = ['role' => 'system', 'content' => $category->instructions];
         }
 
         $extra_prompt = null;
@@ -752,124 +752,124 @@ class AIChatController extends Controller
         }
 
         # follow the context of the last 5 messages
-		$lastThreeMessageQuery = $chat->messages()
-		->whereNotNull('input')
-		->orderBy('created_at', 'desc')
-		->take(4)
-		->get()
-		->reverse();
+        $lastThreeMessageQuery = $chat->messages()
+            ->whereNotNull('input')
+            ->orderBy('created_at', 'desc')
+            ->take(4)
+            ->get()
+            ->reverse();
 
-		$count = count($lastThreeMessageQuery);
-		if ($count > 1) {
-			foreach ($lastThreeMessageQuery as $threeMessage) {
-				$history[] = ['role' => 'user', 'content' => $threeMessage->input?? ''];
-				if ($threeMessage->output != null) {
-					$history[] = ['role' => 'assistant', 'content' => $threeMessage->output?? ''];
-				}else{
-					$history[] = ['role' => 'assistant', 'content' => ''];
-				}
-			}
-			if($realtime && $this->settings_two->serper_api_key != null){
-				$sclient = new Client();
-				$headers = [
-					'X-API-KEY' => $this->settings_two->serper_api_key,
-					'Content-Type' => 'application/json',
-				];
-				$body = [
-					'q' => $realtimePrompt,
-				];
-				$response = $sclient->post('https://google.serper.dev/search', [
-					'headers' => $headers,
-					'json' => $body,
-				]);
-				$toGPT = $response->getBody()->getContents();
-				try {
-					$toGPT = json_decode($toGPT);
-				} catch (\Throwable $th) {
-				}
+        $count = count($lastThreeMessageQuery);
+        if ($count > 1) {
+            foreach ($lastThreeMessageQuery as $threeMessage) {
+                $history[] = ['role' => 'user', 'content' => $threeMessage->input ?? ''];
+                if ($threeMessage->output != null) {
+                    $history[] = ['role' => 'assistant', 'content' => $threeMessage->output ?? ''];
+                } else {
+                    $history[] = ['role' => 'assistant', 'content' => ''];
+                }
+            }
+            if ($realtime && $this->settings_two->serper_api_key != null) {
+                $sclient = new Client();
+                $headers = [
+                    'X-API-KEY' => $this->settings_two->serper_api_key,
+                    'Content-Type' => 'application/json',
+                ];
+                $body = [
+                    'q' => $realtimePrompt,
+                ];
+                $response = $sclient->post('https://google.serper.dev/search', [
+                    'headers' => $headers,
+                    'json' => $body,
+                ]);
+                $toGPT = $response->getBody()->getContents();
+                try {
+                    $toGPT = json_decode($toGPT);
+                } catch (\Throwable $th) {
+                }
 
-				$final_prompt =
-					'Prompt: '.$realtimePrompt.
-					'\n\nWeb search json results: '
-					.json_encode($toGPT).
-					'\n\nInstructions: Based on the Prompt generate a proper response with help of Web search results(if the Web search results in the same context). Only if the prompt require links: (make curated list of links and descriptions using only the <a target="_blank">, write links with using <a target="_blank"> with mrgin Top of <a> tag is 5px and start order as number and write link first and then write description). Must not write links if its not necessary. Must not mention anything about the prompt text.';
-				$history[] = ['role' => 'user', 'content' => $final_prompt?? ''];
-			}else{
-				$history[] = ['role' => 'user', 'content' => $prompt?? ''];
-			}
-		}else{
-			if($realtime && $this->settings_two->serper_api_key != null){
-				$client = new Client();
-				$headers = [
-					'X-API-KEY' => $this->settings_two->serper_api_key,
-					'Content-Type' => 'application/json',
-				];
-				$body = [
-					'q' => $realtimePrompt,
-				];
-				$response = $client->post('https://google.serper.dev/search', [
-					'headers' => $headers,
-					'json' => $body,
-				]);
-				$toGPT = $response->getBody()->getContents();
-				try {
-					$toGPT = json_decode($toGPT);
-				} catch (\Throwable $th) {
-				}
+                $final_prompt =
+                    'Prompt: ' . $realtimePrompt .
+                    '\n\nWeb search json results: '
+                    . json_encode($toGPT) .
+                    '\n\nInstructions: Based on the Prompt generate a proper response with help of Web search results(if the Web search results in the same context). Only if the prompt require links: (make curated list of links and descriptions using only the <a target="_blank">, write links with using <a target="_blank"> with mrgin Top of <a> tag is 5px and start order as number and write link first and then write description). Must not write links if its not necessary. Must not mention anything about the prompt text.';
+                $history[] = ['role' => 'user', 'content' => $final_prompt ?? ''];
+            } else {
+                $history[] = ['role' => 'user', 'content' => $prompt ?? ''];
+            }
+        } else {
+            if ($realtime && $this->settings_two->serper_api_key != null) {
+                $client = new Client();
+                $headers = [
+                    'X-API-KEY' => $this->settings_two->serper_api_key,
+                    'Content-Type' => 'application/json',
+                ];
+                $body = [
+                    'q' => $realtimePrompt,
+                ];
+                $response = $client->post('https://google.serper.dev/search', [
+                    'headers' => $headers,
+                    'json' => $body,
+                ]);
+                $toGPT = $response->getBody()->getContents();
+                try {
+                    $toGPT = json_decode($toGPT);
+                } catch (\Throwable $th) {
+                }
 
-				$final_prompt =
-					'Prompt: '.$realtimePrompt.
-					'\n\nWeb search json results: '
-					.json_encode($toGPT).
-					'\n\nInstructions: Based on the Prompt generate a proper response with help of Web search results(if the Web search results in the same context). Only if the prompt require links: (make curated list of links and descriptions using only the <a target="_blank">, write links with using <a target="_blank"> with mrgin Top of <a> tag is 5px and start order as number and write link first and then write description). Must not write links if its not necessary. Must not mention anything about the prompt text.';
-				$history[] = ['role' => 'user', 'content' => $final_prompt?? ''];
-			}else{
-				$history[] = ['role' => 'user', 'content' => $prompt?? ''];
-			}
-		}
+                $final_prompt =
+                    'Prompt: ' . $realtimePrompt .
+                    '\n\nWeb search json results: '
+                    . json_encode($toGPT) .
+                    '\n\nInstructions: Based on the Prompt generate a proper response with help of Web search results(if the Web search results in the same context). Only if the prompt require links: (make curated list of links and descriptions using only the <a target="_blank">, write links with using <a target="_blank"> with mrgin Top of <a> tag is 5px and start order as number and write link first and then write description). Must not write links if its not necessary. Must not mention anything about the prompt text.';
+                $history[] = ['role' => 'user', 'content' => $final_prompt ?? ''];
+            } else {
+                $history[] = ['role' => 'user', 'content' => $prompt ?? ''];
+            }
+        }
 
-		return self::openaiChatStream($request, $openaiApiKey, $chat_bot, $history,$message_id, null, [], $category);
-	}
-	private function webChatStream(Request $request)
-	{
+        return self::openaiChatStream($request, $openaiApiKey, $chat_bot, $history, $message_id, null, [], $category);
+    }
+    private function webChatStream(Request $request)
+    {
         $openaiApiKey = Helper::setOpenAiKey();
 
         if (setting('default_ai_engine', 'openai') == 'anthropic') {
             $openaiApiKey = Helper::setAnthropicKey();
         }
 
-		$chat_id = $request->get('chat_id');
-		
-		$message_id = $request->get('message_id');
-		// $prompt = $request->get('prompt');
-		$message = UserOpenaiChatMessage::whereId($message_id)->first();
-		$prompt = $message->input;
+        $chat_id = $request->get('chat_id');
 
-		$realtime = $request->get('realtime');
-		$chat_bot = $this->settings?->openai_default_model;
-		$chat_bot == null ? 'gpt-3.5-turbo': $chat_bot;       
-		$userId = Auth::user()->id;
-		$history = [];
-		$realtimePrompt = $prompt;
-		
-		$chat = UserOpenaiChat::whereId($chat_id)->first();
-		# check if there completions for the template
-		$category = $chat->category;
-		if ($category->chat_completions) {
-			$chat_completions = json_decode($category->chat_completions, true);
-			foreach ($chat_completions as $item) {
-				$history[] = [
-					'role' => $item['role'],
-					'content' => $item['content']?? '',
-				];
-			}
-		} else {
-			$history[] = ['role' => 'system', 'content' => 'You are a helpful assistant.'];
-		}
+        $message_id = $request->get('message_id');
+        // $prompt = $request->get('prompt');
+        $message = UserOpenaiChatMessage::whereId($message_id)->first();
+        $prompt = $message->input;
+
+        $realtime = $request->get('realtime');
+        $chat_bot = $this->settings?->openai_default_model;
+        $chat_bot == null ? 'gpt-3.5-turbo' : $chat_bot;
+        $userId = Auth::user()->id;
+        $history = [];
+        $realtimePrompt = $prompt;
+
+        $chat = UserOpenaiChat::whereId($chat_id)->first();
+        # check if there completions for the template
+        $category = $chat->category;
+        if ($category->chat_completions) {
+            $chat_completions = json_decode($category->chat_completions, true);
+            foreach ($chat_completions as $item) {
+                $history[] = [
+                    'role' => $item['role'],
+                    'content' => $item['content'] ?? '',
+                ];
+            }
+        } else {
+            $history[] = ['role' => 'system', 'content' => 'You are a helpful assistant.'];
+        }
 
 
         if ($category && $category?->instructions) {
-            $history[] = ['role' => 'system', 'content' => $category->instructions ];
+            $history[] = ['role' => 'system', 'content' => $category->instructions];
         }
 
         $extra_prompt = null;
@@ -880,190 +880,189 @@ class AIChatController extends Controller
                 $history[] = ['role' => 'user', 'content' => "'this file' means file content. Must not reference previous chats if user asking about pdf. Must reference file content if only user is asking about file content. Else just response as an assistant shortly and professionaly without must not referencing file content. . User: $prompt \n\n\n\n\n Document Content: \n $extra_prompt"];
             }
         } catch (\Throwable $th) {
-
         }
 
         # follow the context of the last 5 messages
-		$lastThreeMessageQuery = $chat->messages()
-		->whereNotNull('input')
-		->orderBy('created_at', 'desc')
-		->take(4)
-		->get()
-		->reverse();
+        $lastThreeMessageQuery = $chat->messages()
+            ->whereNotNull('input')
+            ->orderBy('created_at', 'desc')
+            ->take(4)
+            ->get()
+            ->reverse();
 
-		$count = count($lastThreeMessageQuery);
-		if ($count > 1) {
-			foreach ($lastThreeMessageQuery as $threeMessage) {
-				$history[] = ['role' => 'user', 'content' => $threeMessage->input?? ''];
-				if ($threeMessage->output != null) {
-					$history[] = ['role' => 'assistant', 'content' => $threeMessage->output?? ''];
-				}else{
-					$history[] = ['role' => 'assistant', 'content' => ''];
-				}
-			}
-			if($realtime && $this->settings_two->serper_api_key != null){
-				$sclient = new Client();
-				$headers = [
-					'X-API-KEY' => $this->settings_two->serper_api_key,
-					'Content-Type' => 'application/json',
-				];
-				$body = [
-					'q' => $realtimePrompt,
-				];
-				$response = $sclient->post('https://google.serper.dev/search', [
-					'headers' => $headers,
-					'json' => $body,
-				]);
-				$toGPT = $response->getBody()->getContents();
-				try {
-					$toGPT = json_decode($toGPT);
-				} catch (\Throwable $th) {
-				}
+        $count = count($lastThreeMessageQuery);
+        if ($count > 1) {
+            foreach ($lastThreeMessageQuery as $threeMessage) {
+                $history[] = ['role' => 'user', 'content' => $threeMessage->input ?? ''];
+                if ($threeMessage->output != null) {
+                    $history[] = ['role' => 'assistant', 'content' => $threeMessage->output ?? ''];
+                } else {
+                    $history[] = ['role' => 'assistant', 'content' => ''];
+                }
+            }
+            if ($realtime && $this->settings_two->serper_api_key != null) {
+                $sclient = new Client();
+                $headers = [
+                    'X-API-KEY' => $this->settings_two->serper_api_key,
+                    'Content-Type' => 'application/json',
+                ];
+                $body = [
+                    'q' => $realtimePrompt,
+                ];
+                $response = $sclient->post('https://google.serper.dev/search', [
+                    'headers' => $headers,
+                    'json' => $body,
+                ]);
+                $toGPT = $response->getBody()->getContents();
+                try {
+                    $toGPT = json_decode($toGPT);
+                } catch (\Throwable $th) {
+                }
 
-				$final_prompt =
-					'Prompt: '.$realtimePrompt.
-					'\n\nWeb search json results: '
-					.json_encode($toGPT).
-					'\n\nInstructions: Based on the Prompt generate a proper response with help of Web search results(if the Web search results in the same context). Only if the prompt require links: (make curated list of links and descriptions using only the <a target="_blank">, write links with using <a target="_blank"> with mrgin Top of <a> tag is 5px and start order as number and write link first and then write description). Must not write links if its not necessary. Must not mention anything about the prompt text.';
-				$history[] = ['role' => 'user', 'content' => $final_prompt?? ''];
-			}else{
-				$history[] = ['role' => 'user', 'content' => $prompt?? ''];
-			}
-		}else{
-			if($realtime && $this->settings_two->serper_api_key != null){
-				$client = new Client();
-				$headers = [
-					'X-API-KEY' => $this->settings_two->serper_api_key,
-					'Content-Type' => 'application/json',
-				];
-				$body = [
-					'q' => $realtimePrompt,
-				];
-				$response = $client->post('https://google.serper.dev/search', [
-					'headers' => $headers,
-					'json' => $body,
-				]);
-				$toGPT = $response->getBody()->getContents();
-				try {
-					$toGPT = json_decode($toGPT);
-				} catch (\Throwable $th) {
-				}
+                $final_prompt =
+                    'Prompt: ' . $realtimePrompt .
+                    '\n\nWeb search json results: '
+                    . json_encode($toGPT) .
+                    '\n\nInstructions: Based on the Prompt generate a proper response with help of Web search results(if the Web search results in the same context). Only if the prompt require links: (make curated list of links and descriptions using only the <a target="_blank">, write links with using <a target="_blank"> with mrgin Top of <a> tag is 5px and start order as number and write link first and then write description). Must not write links if its not necessary. Must not mention anything about the prompt text.';
+                $history[] = ['role' => 'user', 'content' => $final_prompt ?? ''];
+            } else {
+                $history[] = ['role' => 'user', 'content' => $prompt ?? ''];
+            }
+        } else {
+            if ($realtime && $this->settings_two->serper_api_key != null) {
+                $client = new Client();
+                $headers = [
+                    'X-API-KEY' => $this->settings_two->serper_api_key,
+                    'Content-Type' => 'application/json',
+                ];
+                $body = [
+                    'q' => $realtimePrompt,
+                ];
+                $response = $client->post('https://google.serper.dev/search', [
+                    'headers' => $headers,
+                    'json' => $body,
+                ]);
+                $toGPT = $response->getBody()->getContents();
+                try {
+                    $toGPT = json_decode($toGPT);
+                } catch (\Throwable $th) {
+                }
 
-				$final_prompt =
-					'Prompt: '.$realtimePrompt.
-					'\n\nWeb search json results: '
-					.json_encode($toGPT).
-					'\n\nInstructions: Based on the Prompt generate a proper response with help of Web search results(if the Web search results in the same context). Only if the prompt require links: (make curated list of links and descriptions using only the <a target="_blank">, write links with using <a target="_blank"> with mrgin Top of <a> tag is 5px and start order as number and write link first and then write description). Must not write links if its not necessary. Must not mention anything about the prompt text.';
-				$history[] = ['role' => 'user', 'content' => $final_prompt?? ''];
-			}else{
-				$history[] = ['role' => 'user', 'content' => $prompt?? ''];
-			}
-		}
+                $final_prompt =
+                    'Prompt: ' . $realtimePrompt .
+                    '\n\nWeb search json results: '
+                    . json_encode($toGPT) .
+                    '\n\nInstructions: Based on the Prompt generate a proper response with help of Web search results(if the Web search results in the same context). Only if the prompt require links: (make curated list of links and descriptions using only the <a target="_blank">, write links with using <a target="_blank"> with mrgin Top of <a> tag is 5px and start order as number and write link first and then write description). Must not write links if its not necessary. Must not mention anything about the prompt text.';
+                $history[] = ['role' => 'user', 'content' => $final_prompt ?? ''];
+            } else {
+                $history[] = ['role' => 'user', 'content' => $prompt ?? ''];
+            }
+        }
 
 
-		return self::openaiChatStream($request, $openaiApiKey, $chat_bot, $history, $message_id, null, [], $category);
-	}
-	private function visionStream(Request $request)
-	{
-		$openaiKey = $this->settings->user_api_option ? explode(',', auth()->user()->api_keys) : explode(',', $this->settings->openai_api_secret);
-		$openaiApiKey = $openaiKey[array_rand($openaiKey)];
-		$chat_id = $request->get('chat_id');
-		
-		$message_id = $request->get('message_id');
-		// $prompt = $request->get('prompt');
-		$message = UserOpenaiChatMessage::whereId($message_id)->first();
-		$prompt = $message->input;
-		$realtime = $request->get('realtime');
-		$chat_bot = 'gpt-4-vision-preview';
-		$userId = Auth::user()->id;
-		$history = [];
-		$realtimePrompt = $prompt;
-		
-		$chat = UserOpenaiChat::whereId($chat_id)->first();
-		# add vision completions for the template
-		$history[] = [
-			'role' => 'system',
-			'content' => "You will now play a character and respond as that character (You will never break character). Your name is Vision AI. Must not introduce by yourself as well as greetings. Help also with asked questions based on previous responses and images if exists."
-		];
-		# follow the context of the last 5 messages
-		$lastThreeMessageQuery = $chat->messages()
-		->whereNotNull('input')
-		->orderBy('created_at', 'desc')
-		->take(4)
-		->get()
-		->reverse();
-		// $images = json_decode($request->get('images'), true);
-		$images = explode(',', $request->images);
-		$count = count($lastThreeMessageQuery);
-		if ($count > 1) {
-			foreach ($lastThreeMessageQuery as $threeMessage) {
-				$history[] = [
-					'role' => 'user', 
-					'content' => array_merge(
-						[
-							[
-								'type' => 'text',
-								'text' => $threeMessage->input,
-							],
-						],
-						collect($threeMessage->images)->map(function ($item) {
-							if($item !== "undefined" || $item !== null) {
-								if (Str::startsWith($item, 'http')) {
-									$imageData = file_get_contents($item);
-								} else {
-									$imageData = file_get_contents(substr($item, 1, strlen($item) - 1));
-								}
-								$base64Image = base64_encode($imageData);
-
-								return [
-									'type' => 'image_url',
-									'image_url' => [
-										'url' => 'data:image/png;base64,'.$base64Image,
-									],
-								];
-							}
-						})->toArray()
-					),
-				];
-				if ($threeMessage->response != null) {
-					$history[] = ['role' => 'assistant', 'content' => $threeMessage->response];
-				}
-			}
-		}
-		$history[] = 
-		[	
-			'role' => 'user',
-			'content' => array_merge(
-				[
-					[
-						'type' => 'text',
-						'text' => $prompt,
-					],
-				],
-				collect($images)->map(function ($item) {
-					if (Str::startsWith($item, 'http')) {
-						$imageData = file_get_contents($item);
-					} else {
-						$imageData = file_get_contents(substr($item, 1, strlen($item) - 1));
-					}
-					$base64Image = base64_encode($imageData);
-
-					return [
-						'type' => 'image_url',
-						'image_url' => [
-							'url' => 'data:image/png;base64,'.$base64Image,
-						],
-					];
-				})->toArray()
-			),
-		];
-
-		return self::openaiChatStream($request, $openaiApiKey, $chat_bot, $history,$message_id, 2000, $images);
-	}
-	private function openaiChatStream($request, $openaiApiKey, $chat_bot, $history,  $message_id , $ai_max_tokens = null, $images = [], $category = null)
+        return self::openaiChatStream($request, $openaiApiKey, $chat_bot, $history, $message_id, null, [], $category);
+    }
+    private function visionStream(Request $request)
     {
-        return response()->stream(function () use ($request, $openaiApiKey,$ai_max_tokens, $history, $chat_bot, $message_id ,$images, $category) {
-			if ($ai_max_tokens !== null) {
+        $openaiKey = $this->settings->user_api_option ? explode(',', auth()->user()->api_keys) : explode(',', $this->settings->openai_api_secret);
+        $openaiApiKey = $openaiKey[array_rand($openaiKey)];
+        $chat_id = $request->get('chat_id');
+
+        $message_id = $request->get('message_id');
+        // $prompt = $request->get('prompt');
+        $message = UserOpenaiChatMessage::whereId($message_id)->first();
+        $prompt = $message->input;
+        $realtime = $request->get('realtime');
+        $chat_bot = 'gpt-4-vision-preview';
+        $userId = Auth::user()->id;
+        $history = [];
+        $realtimePrompt = $prompt;
+
+        $chat = UserOpenaiChat::whereId($chat_id)->first();
+        # add vision completions for the template
+        $history[] = [
+            'role' => 'system',
+            'content' => "You will now play a character and respond as that character (You will never break character). Your name is Vision AI. Must not introduce by yourself as well as greetings. Help also with asked questions based on previous responses and images if exists."
+        ];
+        # follow the context of the last 5 messages
+        $lastThreeMessageQuery = $chat->messages()
+            ->whereNotNull('input')
+            ->orderBy('created_at', 'desc')
+            ->take(4)
+            ->get()
+            ->reverse();
+        // $images = json_decode($request->get('images'), true);
+        $images = explode(',', $request->images);
+        $count = count($lastThreeMessageQuery);
+        if ($count > 1) {
+            foreach ($lastThreeMessageQuery as $threeMessage) {
+                $history[] = [
+                    'role' => 'user',
+                    'content' => array_merge(
+                        [
+                            [
+                                'type' => 'text',
+                                'text' => $threeMessage->input,
+                            ],
+                        ],
+                        collect($threeMessage->images)->map(function ($item) {
+                            if ($item !== "undefined" || $item !== null) {
+                                if (Str::startsWith($item, 'http')) {
+                                    $imageData = file_get_contents($item);
+                                } else {
+                                    $imageData = file_get_contents(substr($item, 1, strlen($item) - 1));
+                                }
+                                $base64Image = base64_encode($imageData);
+
+                                return [
+                                    'type' => 'image_url',
+                                    'image_url' => [
+                                        'url' => 'data:image/png;base64,' . $base64Image,
+                                    ],
+                                ];
+                            }
+                        })->toArray()
+                    ),
+                ];
+                if ($threeMessage->response != null) {
+                    $history[] = ['role' => 'assistant', 'content' => $threeMessage->response];
+                }
+            }
+        }
+        $history[] =
+            [
+                'role' => 'user',
+                'content' => array_merge(
+                    [
+                        [
+                            'type' => 'text',
+                            'text' => $prompt,
+                        ],
+                    ],
+                    collect($images)->map(function ($item) {
+                        if (Str::startsWith($item, 'http')) {
+                            $imageData = file_get_contents($item);
+                        } else {
+                            $imageData = file_get_contents(substr($item, 1, strlen($item) - 1));
+                        }
+                        $base64Image = base64_encode($imageData);
+
+                        return [
+                            'type' => 'image_url',
+                            'image_url' => [
+                                'url' => 'data:image/png;base64,' . $base64Image,
+                            ],
+                        ];
+                    })->toArray()
+                ),
+            ];
+
+        return self::openaiChatStream($request, $openaiApiKey, $chat_bot, $history, $message_id, 2000, $images);
+    }
+    private function openaiChatStream($request, $openaiApiKey, $chat_bot, $history,  $message_id, $ai_max_tokens = null, $images = [], $category = null)
+    {
+        return response()->stream(function () use ($request, $openaiApiKey, $ai_max_tokens, $history, $chat_bot, $message_id, $images, $category) {
+            if ($ai_max_tokens !== null) {
 
                 $openaiUse = setting('default_ai_engine', 'openai') == 'openai';
 
@@ -1077,7 +1076,7 @@ class AIChatController extends Controller
                     $gclient = new Client();
                     $url = 'https://api.openai.com/v1/chat/completions';
                     $headers = [
-                        'Authorization' => 'Bearer '.$openaiApiKey,
+                        'Authorization' => 'Bearer ' . $openaiApiKey,
                     ];
 
                     $postData = [
@@ -1111,12 +1110,12 @@ class AIChatController extends Controller
                             $random_text = Str::random($needChars);
 
                             echo PHP_EOL;
-                            echo 'data: '.$messageFix.'/**'.$random_text."\n\n";
+                            echo 'data: ' . $messageFix . '/**' . $random_text . "\n\n";
                             flush();
                             usleep(1000);
                         }
                     }
-                }else {
+                } else {
                     $client = app(Anthropic::class);
 
                     $historyMessages = array_filter($history, function ($item) {
@@ -1145,7 +1144,7 @@ class AIChatController extends Controller
                             continue;
                         }
 
-                        if (! Str::contains($chunk, 'data: ')) {
+                        if (!Str::contains($chunk, 'data: ')) {
 
                             continue;
                         }
@@ -1177,8 +1176,7 @@ class AIChatController extends Controller
                         }
                     }
                 }
-
-			}else{
+            } else {
 
                 $openaiUse = setting('default_ai_engine', 'openai') == 'openai';
 
@@ -1251,7 +1249,7 @@ class AIChatController extends Controller
                             continue;
                         }
 
-                        if (! Str::contains($chunk, 'data: ')) {
+                        if (!Str::contains($chunk, 'data: ')) {
 
                             continue;
                         }
@@ -1283,47 +1281,46 @@ class AIChatController extends Controller
                         }
                     }
                 }
-			}
-			
-			$message = UserOpenaiChatMessage::whereId($message_id)->first();
-			$chat_id = $message->user_openai_chat_id;
-			$chat = UserOpenaiChat::whereId($chat_id)->first();
+            }
 
-			$message->response = $responsedText;
-			$message->output = $output;
-			$message->hash = Str::random(256);
-			$message->credits = $total_used_tokens;
-			$message->words = 0;
-			$message->images = implode(',', $images);
-			$message->pdfName = $request->pdfname;
-			$message->pdfPath = $request->pdfpath;
-			$message->save();
+            $message = UserOpenaiChatMessage::whereId($message_id)->first();
+            $chat_id = $message->user_openai_chat_id;
+            $chat = UserOpenaiChat::whereId($chat_id)->first();
 
-			$user = Auth::user();
+            $message->response = $responsedText;
+            $message->output = $output;
+            $message->hash = Str::random(256);
+            $message->credits = $total_used_tokens;
+            $message->words = 0;
+            $message->images = implode(',', $images);
+            $message->pdfName = $request->pdfname;
+            $message->pdfPath = $request->pdfpath;
+            $message->save();
 
-			if ($user->remaining_words != -1) {
-				$user->remaining_words -= $total_used_tokens;
-			}
+            $user = Auth::user();
 
-			if ($user->remaining_words < -1) {
-				$user->remaining_words = 0;
-			}
-			$user->save();
+            if ($user->remaining_words != -1) {
+                $user->remaining_words -= $total_used_tokens;
+            }
 
-			$chat->total_credits += $total_used_tokens;
-			$chat->save();
-			echo 'data: [DONE]';
-			echo "\n\n";
-			flush();
-			//ob_flush();
-			usleep(1000);
+            if ($user->remaining_words < -1) {
+                $user->remaining_words = 0;
+            }
+            $user->save();
+
+            $chat->total_credits += $total_used_tokens;
+            $chat->save();
+            echo 'data: [DONE]';
+            echo "\n\n";
+            flush();
+            //ob_flush();
+            usleep(1000);
         }, 200, [
             'Cache-Control' => 'no-cache',
             'X-Accel-Buffering' => 'no',
             'Content-Type' => 'text/event-stream',
         ]);
-
-	}
+    }
 
     public function chatbotOutput(Request $request)
     {
@@ -1370,7 +1367,7 @@ class AIChatController extends Controller
                 SettingTwo::query()->first()?->getAttribute('chatbot_template')
             );
 
-            if (count($lastThreeMessageQuery) > 1 && ! $realtime) {
+            if (count($lastThreeMessageQuery) > 1 && !$realtime) {
                 if ($extra_prompt != '') {
                     $lastThreeMessageQuery[count($lastThreeMessageQuery) - 1]->input = "'this file' means file content. Must not reference previous chats if user asking about pdf. Must reference file content if only user is asking about file content. Else just response as an assistant shortly and professionaly without must not referencing file content. \n\n\n\n\nUser qusetion: $prompt \n\n\n\n\n Document Content: \n $extra_prompt";
                 }
@@ -1403,9 +1400,9 @@ class AIChatController extends Controller
                         }
 
                         $final_prompt =
-                            'Prompt: '.$realtimePrompt.
+                            'Prompt: ' . $realtimePrompt .
                             '\n\nWeb search json results: '
-                            .json_encode($toGPT).
+                            . json_encode($toGPT) .
                             '\n\nInstructions: Based on the Prompt generate a proper response with help of Web search results(if the Web search results in the same context). Only if the prompt require links: (make curated list of links and descriptions using only the <a target="_blank">, write links with using <a target="_blank"> with mrgin Top of <a> tag is 5px and start order as number and write link first and then write description). Must not write links if its not necessary. Must not mention anything about the prompt text.';
                         // unset($history);
                         $history[] = ['role' => 'user', 'content' => $final_prompt];
@@ -1444,7 +1441,7 @@ class AIChatController extends Controller
                                 $random_text = Str::random($needChars);
 
                                 echo PHP_EOL;
-                                echo 'data: '.$messageFix.'/**'.$random_text."\n\n";
+                                echo 'data: ' . $messageFix . '/**' . $random_text . "\n\n";
                                 flush();
                                 usleep(5000);
                             }
@@ -1453,7 +1450,7 @@ class AIChatController extends Controller
                             }
                         }
                     } catch (\Exception $exception) {
-                        $messageError = 'Error from API call. Please try again. If error persists again please contact system administrator with this message '.$exception->getMessage();
+                        $messageError = 'Error from API call. Please try again. If error persists again please contact system administrator with this message ' . $exception->getMessage();
                         echo "data: $messageError";
                         echo "\n\n";
                         flush();
@@ -1479,7 +1476,7 @@ class AIChatController extends Controller
                             $url,
                             [
                                 'headers' => [
-                                    'Authorization' => 'Bearer '.$openaiApiKey,
+                                    'Authorization' => 'Bearer ' . $openaiApiKey,
                                 ],
                                 'json' => [
                                     'model' => 'gpt-4-vision-preview',
@@ -1504,7 +1501,7 @@ class AIChatController extends Controller
                                                     return [
                                                         'type' => 'image_url',
                                                         'image_url' => [
-                                                            'url' => 'data:image/png;base64,'.$base64Image,
+                                                            'url' => 'data:image/png;base64,' . $base64Image,
                                                         ],
                                                     ];
                                                 })->toArray()
@@ -1517,7 +1514,7 @@ class AIChatController extends Controller
                             ],
                         );
                     } catch (\Exception $exception) {
-                        $messageError = 'Error from API call. Please try again. If error persists again please contact system administrator with this message '.$exception->getMessage();
+                        $messageError = 'Error from API call. Please try again. If error persists again please contact system administrator with this message ' . $exception->getMessage();
                         echo "data: $messageError";
                         echo "\n\n";
                         //ob_flush();
@@ -1549,7 +1546,7 @@ class AIChatController extends Controller
                             $random_text = Str::random($needChars);
 
                             echo PHP_EOL;
-                            echo 'data: '.$messageFix.'/**'.$random_text."\n\n";
+                            echo 'data: ' . $messageFix . '/**' . $random_text . "\n\n";
                             //ob_flush();
                             flush();
                             usleep(5000);
@@ -1668,11 +1665,11 @@ class AIChatController extends Controller
         $file = $request->file('file');
         $path = 'upload/audio/';
 
-        $file_name = Str::random(4).'-'.Str::slug($user->fullName()).'-audio.'.$file->getClientOriginalExtension();
+        $file_name = Str::random(4) . '-' . Str::slug($user->fullName()) . '-audio.' . $file->getClientOriginalExtension();
 
         //Audio Extension Control
         $imageTypes = ['mp3', 'mp4', 'mpeg', 'mpga', 'm4a', 'wav', 'webm'];
-        if (! in_array(Str::lower($file->getClientOriginalExtension()), $imageTypes)) {
+        if (!in_array(Str::lower($file->getClientOriginalExtension()), $imageTypes)) {
             $data = [
                 'errors' => ['Invalid extension, accepted extensions are mp3, mp4, mpeg, mpga, m4a, wav, and webm.'],
             ];
@@ -1685,12 +1682,12 @@ class AIChatController extends Controller
             $file->move($path, $file_name);
 
             $response = OpenAI::audio()->transcribe([
-                'file' => fopen($path.$file_name, 'r'),
+                'file' => fopen($path . $file_name, 'r'),
                 'model' => 'whisper-1',
                 'response_format' => 'verbose_json',
             ]);
 
-            unlink($path.$file_name);
+            unlink($path . $file_name);
             $text = $response->text;
         } catch (\Exception $e) {
             $text = '';

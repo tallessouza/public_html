@@ -69,16 +69,31 @@ class UserController extends Controller
         return null;
     }
 
-    public function openAIList()
+    public function openAIList(Request $request)
     {
         abort_if(Helper::setting('feature_ai_writer') == 0, 404);
 
+        $filter = $request->query('filter', 'all');
+        $aiListQuery = OpenAIGenerator::query()->where('active', true);
+
+        if ($filter !== 'all') {
+            if ($filter === 'favorite') {
+                $aiListQuery = $aiListQuery->whereIn('id', auth()->user()->favorites->pluck('item_id'));
+            } else {
+                $aiListQuery = $aiListQuery->where('filters', $filter);
+            }
+        }
+
+        $aiList = $aiListQuery->get();
+        $favData = auth()->user()->favorites;
+
         return view('panel.user.openai.list', [
-            'list' => OpenAIGenerator::query()->where('active', true)->get(),
+            'list' => $aiList,
             'filters' => OpenaiGeneratorFilter::query()->where(function ($query) {
                 $query->where('user_id', auth()->user()->id)
                     ->orWhereNull('user_id');
             })->orderBy('name', 'desc')->get(),
+            'favData' => $favData,
         ]);
     }
 
