@@ -269,7 +269,7 @@ class TTSController extends Controller
         $audioName = $user->id.'-'.Str::random(20).'.mp3';
         Storage::disk('public')->put($audioName, $resAudio);
 
-		userCreditDecreaseForWord($user, $wordCount);
+		userCreditDecreaseForWord($user, $wordCount * env('TOKEN_VALUE'));
         if (isset($request->preview)) {
             return response()->json(['output' => '<div class="data-audio" data-audio="/uploads/'.$audioName.'"><div class="audio-preview"></div></div>']);
         }

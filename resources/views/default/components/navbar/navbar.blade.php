@@ -40,7 +40,7 @@
             <ul class="lqd-navbar-ul">
 
                 <x-navbar.item>
-                    <x-navbar.link class:letter-icon="bg-[#7A8193] text-white" label="{{ __('Lendár[IA]') }}" href="dashboard.user.openai.chat.chat" slug="lendaria-KMEam" letter-icon />
+                    <x-navbar.link label="{{ __('Lendár[IA]') }}" href="dashboard.user.openai.chat.chat" slug="lendaria-r7OZL" icon="tabler-yoga"/>
                 </x-navbar.item>
 
                 <x-navbar.item has-dropdown>
@@ -52,9 +52,9 @@
                         <x-navbar.item>
                             <x-navbar.link label="Copywriting" href="dashboard.user.openai.list" slug="filter=writer" icon="tabler-pencil" />
                         </x-navbar.item>
-                        <x-navbar.item>
+                        <!-- <x-navbar.item>
                             <x-navbar.link label="Tráfego" href="dashboard.user.openai.list" slug="filter=advertising" icon="tabler-ad-circle" />
-                        </x-navbar.item>
+                        </x-navbar.item> -->
                         <x-navbar.item>
                             <x-navbar.link label="Negócios" href="dashboard.user.openai.list" slug="filter=business" icon="tabler-building-store" />
                         </x-navbar.item>
@@ -73,9 +73,9 @@
                         <x-navbar.item>
                             <x-navbar.link label="Copywriting" href="dashboard.user.openai.chat.list" slug="filter=Copywriting" icon="tabler-pencil" />
                         </x-navbar.item>
-                        <x-navbar.item>
+                        <!-- <x-navbar.item>
                             <x-navbar.link label="Tráfego" href="dashboard.user.openai.chat.list" slug="filter=Tráfego" icon="tabler-ad-circle" />
-                        </x-navbar.item>
+                        </x-navbar.item> -->
                         <x-navbar.item>
                             <x-navbar.link label="Negócios" href="dashboard.user.openai.chat.list" slug="filter=Negócios" icon="tabler-moneybag" />
                         </x-navbar.item>
@@ -91,7 +91,7 @@
                     <x-navbar.link label="{{ __('IAs para Gerar') }}" dropdown-trigger icon="tabler-pencil" />
                     <x-navbar.dropdown.dropdown>
                         <x-navbar.dropdown.item>
-                            <x-navbar.link label="{{ __('Código') }}" href="dashboard.user.openai.chat.chat" slug="grimore-uIRhZ" icon="tabler-device-laptop" />
+                            <x-navbar.link label="{{ __('Código') }}" href="dashboard.user.openai.chat.chat" slug="grimore-kfPjo" icon="tabler-device-laptop" />
                         </x-navbar.dropdown.item>
                         @if ($setting->feature_ai_advanced_editor)
                         <x-navbar.dropdown.item>
@@ -270,11 +270,11 @@
                 </x-navbar.item>
 
                 <x-navbar.item>
-                    <x-navbar.link class:letter-icon="bg-[#7A8193] text-white" label="{{ __('Favorites') }}" href="dashboard.user.openai.list" slug="filter=favorite" letter-icon />
+                    <x-navbar.link label="{{ __('Favorites') }}" href="dashboard.user.openai.list" slug="filter=favorite" icon="tabler-star" />
                 </x-navbar.item>
 
                 <x-navbar.item>
-                    <x-navbar.link class:letter-icon="bg-[#658C8E] text-white" label="{{ __('Workbook') }}" href="dashboard.user.openai.documents.all" letter-icon />
+                    <x-navbar.link label="{{ __('Workbook') }}" href="dashboard.user.openai.documents.all" icon="tabler-folder"/>
                 </x-navbar.item>
 
                 {{-- Admin menu items --}}

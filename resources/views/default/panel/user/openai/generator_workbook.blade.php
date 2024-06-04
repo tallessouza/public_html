@@ -9,11 +9,12 @@
     $voice_tones = ['Professional', 'Funny', 'Casual', 'Excited', 'Witty', 'Sarcastic', 'Feminine', 'Masculine', 'Bold', 'Dramatic', 'Grumpy', 'Secretive', 'other'];
 
     $youtube_actions = [
-        'blog' => 'Prepare a Blog Post',
-        'short' => 'Explain the Main Idea',
-        'list' => 'Create a List',
-        'tldr' => 'Create TLDR',
-        'prons_cons' => 'Prepare Pros and Cons',
+        'blog' => 'Preparar um Post para Blog',
+        'short' => 'Explicar a Ideia Principal',
+        'list' => 'Criar uma Lista',
+        'tldr' => 'Criar um Resumo',
+        'prons_cons' => 'Criar Pros e Contras',
+        'transcribe' => 'Transcrever Vídeo',
     ];
 @endphp
 @extends('panel.layout.app', ['disable_tblr' => true])

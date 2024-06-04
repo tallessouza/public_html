@@ -1740,7 +1740,7 @@ class AIChatController extends Controller
 
         $total_used_tokens = $message->credits;
 
-        userCreditDecreaseForWord($user, $total_used_tokens);
+        userCreditDecreaseForWord($user,($total_used_tokens + countWords($request->input)) * env('TOKEN_VALUE'));
 
         return response()->json([]);
     }

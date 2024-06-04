@@ -118,7 +118,11 @@ class AuthController extends Controller
     {
         // Obter a chave de autorização do cabeçalho da requisição
         $authorizationHeader = $request->header('Authorization');
-
+        $planbyrole = [
+            "8020" => 15,
+            "comunidade" => 16,
+            "formacao" => 17
+        ];
         // Comparar a chave de autorização com a variável de ambiente API_KEY
         if ($authorizationHeader !== env('API_KEY')) {
             return response()->json(['error' => 'Unauthorized'], 401);
@@ -129,6 +133,7 @@ class AuthController extends Controller
             'surname' => ['required', 'string', 'max:255'],
             'email' => ['required', 'string', 'email', 'max:255', 'unique:' . User::class],
             'password' => ['required', 'confirmed', Password::defaults()],
+            'role' => ['required', 'string', 'max:255'],
         ]);
 
         if ($validator->fails()) {
@@ -151,7 +156,7 @@ class AuthController extends Controller
             'affiliate_code' => Str::upper(Str::random(12)),
         ]);
 
-        $request->merge(['userID' => $user->id, 'token' => 2]);
+        $request->merge(['userID' => $user->id, 'token' => $planbyrole[$request->role]]);
         $paymentController = new PaymentProcessController();
         $paymentController->assignTokenByAdmin($request);
 
