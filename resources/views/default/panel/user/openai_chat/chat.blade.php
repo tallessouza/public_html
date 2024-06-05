@@ -27,7 +27,7 @@ $slug == 'lendaria-KMEam'
 <div class="py-10">
     @if (strpos($slug, 'lendaria-') !== false)
     <div class="h-[calc(100vh-10rem)] w-full">
-        <iframe id="customIframe" src="http://lendario.pro/chatbot/EdLcAVaOns6rgnCX"  style="width: 100%; height: 100%; min-height: 700px; border-radius: 20px;" frameborder="0" allow="microphone"></iframe>
+        <iframe id="customIframe" src="http://lendario.pro/chatbot/8ezpIIUKB2ShNX8n"  style="width: 100%; height: 100%; min-height: 700px; border-radius: 20px;" frameborder="0" allow="microphone"></iframe>
     </div>
     @else
     <div class="chats-wrap relative grid h-[calc(100vh-7rem)] grid-flow-row md:h-[75vh] md:grid-flow-col md:[grid-template-columns:25%_75%]" id="user_chat_area" x-data="{ mobileOptionsShow: false, toggleMobileOptions() { this.mobileOptionsShow = !this.mobileOptionsShow }, mobileSidebarShow: false, toggleMobileSidebar() { this.mobileSidebarShow = !this.mobileSidebarShow } }">

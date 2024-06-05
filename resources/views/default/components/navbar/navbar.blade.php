@@ -56,7 +56,22 @@
                             <x-navbar.link label="Tráfego" href="dashboard.user.openai.list" slug="filter=advertising" icon="tabler-ad-circle" />
                         </x-navbar.item> -->
                         <x-navbar.item>
-                            <x-navbar.link label="Negócios" href="dashboard.user.openai.list" slug="filter=business" icon="tabler-building-store" />
+                            <x-navbar.link label="Branding" href="dashboard.user.openai.list" slug="filter=business" icon="tabler-building-store" />
+                        </x-navbar.item>
+                        <x-navbar.item>
+                            <x-navbar.link label="Marketing" href="dashboard.user.openai.list" slug="filter=writer" icon="tabler-target" />
+                        </x-navbar.item>
+                        <x-navbar.item>
+                            <x-navbar.link label="Conteúdo" href="dashboard.user.openai.list" slug="filter=writer" icon="tabler-movie" />
+                        </x-navbar.item>
+                        <x-navbar.item>
+                            <x-navbar.link label="Administrativo" href="dashboard.user.openai.list" slug="filter=writer" icon="tabler-device-laptop" />
+                        </x-navbar.item>
+                        <x-navbar.item>
+                            <x-navbar.link label="Produtos" href="dashboard.user.openai.list" slug="filter=writer" icon="tabler-brand-producthunt" />
+                        </x-navbar.item>
+                        <x-navbar.item>
+                            <x-navbar.link label="Vendas" href="dashboard.user.openai.list" slug="filter=writer" icon="tabler-moneybag" />
                         </x-navbar.item>
                         <x-navbar.item>
                             <x-navbar.link label="Todas" href="dashboard.user.openai.list" />
