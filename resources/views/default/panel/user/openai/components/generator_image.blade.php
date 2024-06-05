@@ -59,7 +59,7 @@
                 x-bind:data-active="activeGenerator === 'dall-e'"
                 @click="changeActiveGenerator('dall-e')"
             >
-                {{ __('DALL-E') }}
+                {{ __('Cri[IA]ção Básica') }}
             </x-button>
             @if (setting('stable_hidden', 0) != 1)
                 <x-button
@@ -73,7 +73,7 @@
                     x-bind:data-active="activeGenerator === 'stablediffusion'"
                     @click="changeActiveGenerator('stablediffusion')"
                 >
-                    {{ __('Stable Diffusion') }}
+                    {{ __('Cr[IA]ção Avançada') }}
                 </x-button>
             @endif
         </div>
