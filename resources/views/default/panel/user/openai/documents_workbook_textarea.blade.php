@@ -45,7 +45,7 @@
                 <x-forms.input
                     class="border-transparent font-serif text-2xl"
                     id="workbook_title"
-                    placeholder="{{ __('Untitled Document...') }}"
+                    placeholder="{{ __('Documento sem Título...') }}"
                     value="{{ $workbook->title }}"
                 />
                 <x-forms.input

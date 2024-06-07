@@ -112,7 +112,7 @@
                     <x-navbar.link label="{{ __('IAs para Gerar') }}" dropdown-trigger icon="tabler-pencil" />
                     <x-navbar.dropdown.dropdown>
                         <x-navbar.dropdown.item>
-                            <x-navbar.link label="{{ __('Código') }}" href="dashboard.user.openai.chat.chat" slug="grimore-kfPjo" icon="tabler-device-laptop" />
+                            <x-navbar.link label="{{ __('Código') }}" href="dashboard.user.openai.chat.chat" slug="grimore-6isY5" icon="tabler-device-laptop" />
                         </x-navbar.dropdown.item>
                         @if ($setting->feature_ai_advanced_editor)
                         <x-navbar.dropdown.item>
