@@ -23,7 +23,7 @@
                                             </div>
                                         </div> -->
                     <br>
-                    <p>{{ __('By purchasing you confirm our') }} <a
+                    <p>{{ __('Comprando você concorda com nossos') }} <a
                             href="{{ url('/') . '/terms' }}">{{ __('Terms and Conditions') }}</a> </p>
                 </div>
                 <div class="col-sm-4 col-lg-4">

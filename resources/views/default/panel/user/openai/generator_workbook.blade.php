@@ -13,9 +13,9 @@
         'short' => 'Explicar a Ideia Principal',
         'list' => 'Criar uma Lista',
         'tldr' => 'Criar um Resumo',
-        'prons_cons' => 'Criar Pros e Contras',
-        'transcribe' => 'Transcrever Vídeo',
+        'prons_cons' => 'Criar Pros e Contras'
     ];
+    //,    'transcribe' => 'Transcrever Vídeo',
 @endphp
 @extends('panel.layout.app', ['disable_tblr' => true])
 @section('title', __($openai->title))
@@ -121,7 +121,7 @@
                                     id="bulk"
                                     type="checkbox"
                                     name="bulk"
-                                    label="{{ __('Generate Bulk Posts') }}"
+                                    label="{{ __('Gerar Posts em Lote') }}"
                                     @change="bulkEnabled = $el.checked"
                                     switcher
                                 />

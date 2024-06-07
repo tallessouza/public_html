@@ -35,7 +35,7 @@
                                 </button>
                             </div>
                         </form>
-                        <p class="mt-3">{{ __('By purchasing you confirm our') }} <a
+                        <p class="mt-3">{{ __('Comprando você concorda com nossos') }} <a
                                 href="{{ url('/') . '/terms' }}">{{ __('Terms and Conditions') }}</a> </p>
                     </div>
                     <div class="col-sm-4 col-lg-4">

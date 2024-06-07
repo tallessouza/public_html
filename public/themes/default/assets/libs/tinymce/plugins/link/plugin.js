@@ -1073,7 +1073,7 @@
     const setupButtons = editor => {
       editor.ui.registry.addToggleButton('link', {
         icon: 'link',
-        tooltip: 'Insert/edit link',
+        tooltip: 'Inserir/editar link',
         onAction: openDialog(editor),
         onSetup: toggleActiveState(editor)
       });

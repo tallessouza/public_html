@@ -10,7 +10,7 @@
             <div class="row row-cards">
                 <div class="col-sm-8 col-lg-8">
                     <div id="payment-form"></div>
-                    <p>{{ __('By purchasing you confirm our') }} <a
+                    <p>{{ __('Comprando você concorda com nossos') }} <a
                             href="{{ url('/') . '/terms' }}">{{ __('Terms and Conditions') }}</a> </p>
                 </div>
                 <div class="col-sm-4 col-lg-4">

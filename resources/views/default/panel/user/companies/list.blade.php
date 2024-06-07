@@ -1,8 +1,7 @@
 @extends('panel.layout.app', ['disable_tblr' => true])
 @section('title', __('Brand Voice'))
 @section('titlebar_subtitle',
-    __('Generate AI content exclusive to your brand and eliminate the need for repetitive
-    introductions of your company.'))
+    __('Gere conteúdo exclusivo para sua marca e elimine a necessidade de introduções repetitivas da sua empresa.'))
 @section('titlebar_actions')
     <x-button href="{{ LaravelLocalization::localizeUrl(route('dashboard.user.brand.edit')) }}">
         <x-tabler-plus class="size-4" />

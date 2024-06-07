@@ -1,7 +1,7 @@
 function editWorkbook(workbook_slug) {
 	'use strict';
 
-	document.querySelector( '.workbook-form' )?.classList?.add('loading');
+	document.querySelector('.workbook-form')?.classList?.add('loading');
 	document.querySelector('#workbook_button').disabled = true;
 	Alpine.store('appLoadingIndicator').show();
 	tinyMCE.get('workbook_text').save();
@@ -18,13 +18,13 @@ function editWorkbook(workbook_slug) {
 		contentType: false,
 		processData: false,
 		success: function (data) {
-			toastr.success(magicai_localize?.workbook_saved ||'Workbook Saved Succesfully');
+			toastr.success(magicai_localize?.workbook_saved || 'Salvo com Sucesso');
 		},
 		error: function (data) {
-			toastr.error(magicai_localize?.workbook_error ||'Workbook  Error');
+			toastr.error(magicai_localize?.workbook_error || 'Erro ao Salvar');
 		},
 		complete: function () {
-			document.querySelector( '.workbook-form' )?.classList?.remove('loading');
+			document.querySelector('.workbook-form')?.classList?.remove('loading');
 			document.querySelector('#workbook_button').disabled = false;
 			Alpine.store('appLoadingIndicator').hide();
 		}
@@ -64,7 +64,7 @@ document.addEventListener('DOMContentLoaded', async function () {
 			const menuItems = {
 				'customwrite': {
 					icon: 'magicIcon',
-					text: 'What would you like to do?',
+					text: 'O que você gostaria de fazer?',
 					onAction: function (e) {
 						if (event?.type != 'keydown' || $(event?.srcElement).attr('id') != 'custom_prompt') {
 							e.preventDefault();
@@ -72,7 +72,7 @@ document.addEventListener('DOMContentLoaded', async function () {
 						}
 						console.log(event);
 						if (editor.selection.getContent().trim().length == 0) {
-							toastr.warning('Please select text');
+							toastr.warning('Por favor selecione o texto');
 							return;
 						}
 						Alpine.store('appLoadingIndicator').show();
@@ -97,17 +97,17 @@ document.addEventListener('DOMContentLoaded', async function () {
 				},
 				'rewrite': {
 					icon: 'magicIconRewrite',
-					text: 'Rewrite',
+					text: 'Reescrever com IA',
 					onAction: function () {
 						if (editor.selection.getContent().trim().length == 0) {
-							toastr.warning('Please select text');
+							toastr.warning('Por favor selecione o texto');
 							return;
 						}
 						Alpine.store('appLoadingIndicator').show();
 						let formData = new FormData();
-						formData.append( 'prompt', 'Rewrite below content professionally' );
-						formData.append( 'content', editor.selection.getContent() );
-						$.ajax( {
+						formData.append('prompt', 'Reescreva o conteúdo abaixo profissionalmente. Deve detectar o idioma do conteúdo e garantir que a resposta também esteja no mesmo idioma do conteúdo.');
+						formData.append('content', editor.selection.getContent());
+						$.ajax({
 							type: 'post',
 							url: '/dashboard/user/openai/update-writing',
 							data: formData,
@@ -125,15 +125,15 @@ document.addEventListener('DOMContentLoaded', async function () {
 				},
 				'summarize': {
 					icon: 'magicIconSummarize',
-					text: 'Summarize',
+					text: 'Resumir',
 					onAction: function () {
 						if (editor.selection.getContent().trim().length == 0) {
-							toastr.warning('Please select text');
+							toastr.warning('Por favor selecione o texto');
 							return;
 						}
 						Alpine.store('appLoadingIndicator').show();
 						let formData = new FormData();
-						formData.append('prompt', 'Summarize below content professionally. Keep origin language.');
+						formData.append( 'prompt', 'Resuma o conteúdo abaixo profissionalmente. Mantenha o idioma de origem.' );
 						formData.append('content', editor.selection.getContent());
 						$.ajax({
 							type: 'post',
@@ -153,15 +153,15 @@ document.addEventListener('DOMContentLoaded', async function () {
 				},
 				'makeitlonger': {
 					icon: 'magicIconMakeItLonger',
-					text: 'Make it Longer',
+					text: 'Aumentar texto',
 					onAction: function () {
 						if (editor.selection.getContent().trim().length == 0) {
-							toastr.warning('Please select text');
+							toastr.warning('Por favor selecione o texto');
 							return;
 						}
 						Alpine.store('appLoadingIndicator').show();
 						let formData = new FormData();
-						formData.append('prompt', 'Make below content longer');
+						formData.append( 'prompt', 'Torne o conteúdo abaixo mais longo' );
 						formData.append('content', editor.selection.getContent());
 						$.ajax({
 							type: 'post',
@@ -181,15 +181,15 @@ document.addEventListener('DOMContentLoaded', async function () {
 				},
 				'makeitshorter': {
 					icon: 'magicIconMakeItShorter',
-					text: 'Make it Shorter',
+					text: 'Diminuir texto',
 					onAction: function () {
 						if (editor.selection.getContent().trim().length == 0) {
-							toastr.warning('Please select text');
+							toastr.warning('Por favor selecione o texto');
 							return;
 						}
 						Alpine.store('appLoadingIndicator').show();
 						let formData = new FormData();
-						formData.append('prompt', 'Make below content shorter');
+						formData.append( 'prompt', 'Torne o conteúdo abaixo mais curto' );
 						formData.append('content', editor.selection.getContent());
 						$.ajax({
 							type: 'post',
@@ -209,15 +209,15 @@ document.addEventListener('DOMContentLoaded', async function () {
 				},
 				'improvewriting': {
 					icon: 'magicIconImprove',
-					text: 'Improve Writing',
+					text: 'Melhorar escrita',
 					onAction: function () {
 						if (editor.selection.getContent().trim().length == 0) {
-							toastr.warning('Please select text');
+							toastr.warning('Por favor selecione o texto');
 							return;
 						}
 						Alpine.store('appLoadingIndicator').show();
 						let formData = new FormData();
-						formData.append('prompt', 'Improve writing of  below content');
+						formData.append( 'prompt', 'Melhore o conteúdo do conteúdo abaixo.' );
 						formData.append('content', editor.selection.getContent());
 						$.ajax({
 							type: 'post',
@@ -237,15 +237,15 @@ document.addEventListener('DOMContentLoaded', async function () {
 				},
 				'translatetospanish': {
 					icon: 'magicIconTranslate',
-					text: 'Translate To Spanish',
+					text: 'Traduzir para o Português',
 					onAction: function () {
 						if (editor.selection.getContent().trim().length == 0) {
-							toastr.warning('Please select text');
+							toastr.warning('Por favor selecione o texto');
 							return;
 						}
 						Alpine.store('appLoadingIndicator').show();
 						let formData = new FormData();
-						formData.append('prompt', 'Translate below content to Spanish');
+						formData.append( 'prompt', 'Traduza o conteúdo abaixo para o Português do Brasil.' );
 						formData.append('content', editor.selection.getContent());
 						$.ajax({
 							type: 'post',
@@ -265,15 +265,15 @@ document.addEventListener('DOMContentLoaded', async function () {
 				},
 				'fixgrammaticalmistakes': {
 					icon: 'magicIconFixGrammer',
-					text: 'Fix grammatical mistakes',
+					text: 'Corrigir Gramática',
 					onAction: function () {
 						if (editor.selection.getContent().trim().length == 0) {
-							toastr.warning('Please select text');
+							toastr.warning('Por favor selecione o texto');
 							return;
 						}
 						Alpine.store('appLoadingIndicator').show();
 						let formData = new FormData();
-						formData.append('prompt', 'Fix grammatical mistakes in below content');
+						formData.append( 'prompt', 'Corrija erros gramaticais no conteúdo abaixo');
 						formData.append('content', editor.selection.getContent());
 						$.ajax({
 							type: 'post',
@@ -303,7 +303,7 @@ document.addEventListener('DOMContentLoaded', async function () {
 
 			editor.ui.registry.addButton('magicIconRewrite', {
 				icon: 'magicIconRewrite',
-				text: 'Rewrite',
+				text: 'Reescrever com IA',
 				onAction: menuItems.rewrite.onAction
 			});
 
@@ -343,7 +343,7 @@ document.addEventListener('DOMContentLoaded', async function () {
 	const value = editor.targetElm.value;
 
 	// targetElm is a textarea
-	if ( editor?.targetElm && !value.startsWith('<') ) {
+	if (editor?.targetElm && !value.startsWith('<')) {
 		tinyMCE.activeEditor.setContent(
 			md.render(
 				md.utils.unescapeAll(
@@ -368,7 +368,7 @@ document.addEventListener('DOMContentLoaded', async function () {
 		const codeOutput = document.querySelector('#code-output');
 		if (codeOutput && window.codeRaw) {
 			navigator.clipboard.writeText(window.codeRaw);
-			toastr.success(magicai_localize?.code_copied ||'Code copied to clipboard');
+			toastr.success( 'Código Copiado' );
 			return;
 		}
 		if (tinymce?.activeEditor) {
@@ -377,7 +377,7 @@ document.addEventListener('DOMContentLoaded', async function () {
 				format: 'html',
 			});
 			navigator.clipboard.writeText(content);
-			toastr.success(magicai_localize?.content_copied ||'Content copied to clipboard');
+				toastr.success( 'Conteúdo copiado para a área de transferência' );
 			return;
 		}
 	});
@@ -391,7 +391,7 @@ document.addEventListener('DOMContentLoaded', async function () {
 			format: 'html',
 		});
 
-		if ( docType === 'pdf' ) {
+		if (docType === 'pdf') {
 			return html2pdf()
 				.set({
 					filename: docName
@@ -403,9 +403,9 @@ document.addEventListener('DOMContentLoaded', async function () {
 
 		const html = `
 <html ${this.doctype === 'doc'
-		? 'xmlns:o="urn:schemas-microsoft-com:office:office" xmlns:w="urn:schemas-microsoft-com:office:word" xmlns="http://www.w3.org/TR/REC-html40"'
-		: ''
-}>
+				? 'xmlns:o="urn:schemas-microsoft-com:office:office" xmlns:w="urn:schemas-microsoft-com:office:word" xmlns="http://www.w3.org/TR/REC-html40"'
+				: ''
+			}>
 <head>
 	<meta charset="utf-8" />
 	<title>${docName}</title>
@@ -418,7 +418,7 @@ document.addEventListener('DOMContentLoaded', async function () {
 		const url = `${docType === 'doc'
 			? 'data:application/vnd.ms-word;charset=utf-8'
 			: 'data:text/plain;charset=utf-8'
-		},${encodeURIComponent(html)}`;
+			},${encodeURIComponent(html)}`;
 
 		const downloadLink = document.createElement('a');
 		document.body.appendChild(downloadLink);

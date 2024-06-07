@@ -5,7 +5,7 @@
     <div class="flex h-full flex-col p-7">
 
         <h2 class="mb-5 flex items-start leading-none text-heading-foreground">
-            @lang('Order Summary')
+            @lang('Resumo do Pedido')
         </h2>
         <p class="mb-0 mt-1 flex items-start leading-none text-heading-foreground">
             {{ __($plan->name) }} / {{ $plan->type == 'prepaid' ? __('One time') : __(formatCamelCase($plan->frequency)) }} @lang('Plan')

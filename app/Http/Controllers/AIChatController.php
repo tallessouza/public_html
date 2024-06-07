@@ -53,26 +53,22 @@ class AIChatController extends Controller
         config(['openai.api_key' => $apiKey]);
     }
 
-    public function openAIChatList(Request $request)
+    public function openAIChatList()
     {
         abort_if(Helper::setting('feature_ai_chat') == 0, 404);
 
-        $filter = $request->query('filter', 'all');
-        $aiListQuery = OpenaiGeneratorChatCategory::query()
-            ->where('slug', '<>', 'ai_vision')
-            ->where('slug', '<>', 'ai_webchat')
-            ->where('slug', '<>', 'ai_pdf');
+   	  $aiList = OpenaiGeneratorChatCategory::query()
+            ->whereNotIn('slug', [
+                'ai_vision', 'ai_webchat', 'ai_pdf'
+            ])
+            ->when(Auth::user()->isUser(), function ($query) {
+                $query->where(function ($query) {
+                    $query->whereNull('user_id')->orWhere('user_id', Auth::id());
+                });
+            })
+            ->get();
 
-        if ($filter !== 'all') {
-            if ($filter === 'favorite') {
-                $aiListQuery = $aiListQuery->whereIn('id', auth()->user()->favorites->pluck('item_id'));
-            } else {
-                $aiListQuery = $aiListQuery->where('category', $filter);
-            }
-        }
-
-        $aiList = $aiListQuery->get();
-        $categoryList = ChatCategory::where('user_id', 1)->orWhere('name',  $filter)->get();
+        $categoryList = ChatCategory::where('user_id', 1)->orWhere('user_id', auth()->user()->id)->get();
         $favData = Favourite::where('type', 'chat')
             ->where('user_id', auth()->user()->id)
             ->get();
@@ -1740,7 +1736,7 @@ class AIChatController extends Controller
 
         $total_used_tokens = $message->credits;
 
-        userCreditDecreaseForWord($user,($total_used_tokens + countWords($request->input)) * env('TOKEN_VALUE'));
+        userCreditDecreaseForWord($user, $total_used_tokens);
 
         return response()->json([]);
     }

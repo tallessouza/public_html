@@ -69,7 +69,7 @@ class StreamService
 			if($streamed_text) {
 				$total_used_tokens = countWords($streamed_text);
 				$user = Auth::user();
-				userCreditDecreaseForWord($user, $total_used_tokens * env('TOKEN_VALUE'));
+				userCreditDecreaseForWord($user, $total_used_tokens);
 				if ($message_id != '' && $message_id != null && $message_id != 0) {
 					$entry = UserOpenai::find($message_id);
 					if($entry != null){
@@ -88,7 +88,7 @@ class StreamService
 			if($streamed_text) {
 				$total_used_tokens = countWords($streamed_text);
 				$user = Auth::user();
-				userCreditDecreaseForWord($user, $total_used_tokens * env('TOKEN_VALUE'));
+				userCreditDecreaseForWord($user, $total_used_tokens);
 				if ($message_id != '' && $message_id != null && $message_id != 0) {
 					$main_message = UserOpenaiChatMessage::find($message_id);
 					if($main_message){
@@ -170,7 +170,7 @@ class StreamService
 			$main_message->words = $total_used_tokens;
 			$main_message->save();
 			$user = Auth::user();
-			userCreditDecreaseForWord($user, $total_used_tokens * env('TOKEN_VALUE'));
+			userCreditDecreaseForWord($user, $total_used_tokens);
 			$chat->total_credits += $total_used_tokens;
 			$chat->save();
         }, 200, [
@@ -245,7 +245,7 @@ class StreamService
 			$entry->response = $responsedText;
 			$entry->output = $output;
 			$entry->save();
-			userCreditDecreaseForWord($user, $total_used_tokens * env('TOKEN_VALUE'));
+			userCreditDecreaseForWord($user, $total_used_tokens);
         }, 200, [
             'Cache-Control' => 'no-cache',
             'X-Accel-Buffering' => 'no',
@@ -347,7 +347,7 @@ class StreamService
 			$main_message->words = $total_used_tokens;
 			$main_message->save();
 			$user = Auth::user();
-			userCreditDecreaseForWord($user, $total_used_tokens * env('TOKEN_VALUE'));
+			userCreditDecreaseForWord($user, $total_used_tokens);
 			$chat->total_credits += $total_used_tokens;
 			$chat->save();
         }, 200, [
@@ -433,7 +433,7 @@ class StreamService
 			$entry->response = $responsedText;
 			$entry->output = $output;
 			$entry->save();
-			userCreditDecreaseForWord($user, $total_used_tokens * env('TOKEN_VALUE'));
+			userCreditDecreaseForWord($user, $total_used_tokens);
         }, 200, [
             'Cache-Control' => 'no-cache',
             'X-Accel-Buffering' => 'no',
@@ -518,7 +518,7 @@ class StreamService
 			$main_message->words = $total_used_tokens;
 			$main_message->save();
 			$user = Auth::user();
-			userCreditDecreaseForWord($user, $total_used_tokens * env('TOKEN_VALUE'));
+			userCreditDecreaseForWord($user, $total_used_tokens);
 			$chat->total_credits += $total_used_tokens;
 			$chat->save();
 
@@ -613,7 +613,7 @@ class StreamService
             $entry->response = $responsedText;
             $entry->output = $output;
             $entry->save();
-            userCreditDecreaseForWord($user, $total_used_tokens * env('TOKEN_VALUE'));
+            userCreditDecreaseForWord($user, $total_used_tokens);
         }, 200, [
             'Cache-Control' => 'no-cache',
             'X-Accel-Buffering' => 'no',

@@ -446,12 +446,14 @@ function updateChatButtons() {
 		const stopBtn = document.getElementById('stop_button');
 		const promptInput = document.getElementById('prompt');
 		const realtime = document.getElementById('realtime');
+		const instructions = document.getElementById('instructions');
 		let controller = null; // Store the AbortController instance
 		let scrollLocked = true;
 		let nIntervId = null;
 		let chunk = [];
 		let streaming = true;
 
+		// console.log(instructions.value)
 		const generate = async ev => {
 			'use strict';
 			ev?.preventDefault();
@@ -469,7 +471,7 @@ function updateChatButtons() {
 				promptInputValue.length === 0 ||
 				promptInputValue.replace(/\s/g, '') === ''
 			) {
-				return toastr.error(magicai_localize?.please_fill_message ||'Please fill the message field');
+				return toastr.error(magicai_localize?.please_fill_message ||'Por favor digite uma mensagem');
 			}
 
 			const chatsContainer = $('.chats-container');
@@ -707,7 +709,8 @@ function updateChatButtons() {
 					chatsContainer[0].scrollTo(0,chatsContainer[0].scrollHeight);
 				}
 			}, 20);
-
+			let inputWithPrompt = "Responda em portugês"+instructions.value +"\n"+promptInputValue
+			console.log(inputWithPrompt)
 			if (stream_type == 'backend') {
 				const isChecked = realtime?.checked ? 1 : 0;
 				function implementChat(type, images) {
@@ -720,6 +723,7 @@ function updateChatButtons() {
 					formData.append('pdfname', pdfName == undefined ? '' : pdfName);
 					formData.append('pdfpath', pdfPath == undefined ? '' : pdfPath);
 					formData.append('realtime', isChecked ? 1 : 0);
+					formData.append('instructions', instructions.value);
 					var receivedMessageId = false;
 					fetchEventSource('/dashboard/user/generator/generate-stream', {
 						method: 'POST',

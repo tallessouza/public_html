@@ -47,13 +47,13 @@
                         {{ __('Overview') }}
                     </h2>
                     <x-badge class="px-5 py-2.5 text-2xs text-foreground max-md:hidden">
-                        @lang('Your Document Values')
+                        @lang('Valores dos Documentos')
                     </x-badge>
                 </x-slot:head>
 
                 <div class="mb-5 lg:w-1/2">
                     <p>
-                        @lang('Understand and manage your projects better. Dig deeper into relevant details.')
+                        @lang('Entenda e gerencie seus projetos da melhor forma. Mergulhe em detalhes relevantes.')
                     </p>
                 </div>
 
@@ -129,7 +129,7 @@
                         class="text-2xs underline max-md:hidden"
                         href="{{ route('dashboard.user.openai.documents.all') }}"
                     >
-                        @lang('See All Documents')
+                        @lang('Ver todos os Documentos')
                     </a>
                 </x-slot:head>
 
@@ -141,16 +141,16 @@
                         class="text-xs font-normal normal-case tracking-normal text-foreground [&_th]:font-normal [&_th]:first:ps-0 [&_th]:last:pe-0"
                     >
                         <th>
-                            @lang('Document Information')
+                            @lang('Informações do Documento')
                         </th>
                         <th>
-                            @lang('Category')
+                            @lang('Categoria')
                         </th>
                         <th>
-                            @lang('In')
+                            @lang('Em')
                         </th>
                         <th>
-                            @lang('Date')
+                            @lang('Data')
                         </th>
                     </x-slot:head>
                     <x-slot:body
@@ -274,7 +274,7 @@
                     class="text-2xs underline max-md:hidden"
                     href="{{ route('dashboard.user.openai.documents.all') }}"
                 >
-                    @lang('See All Documents')
+                    @lang('Ver todos os Documentos')
                 </a>
             </x-slot:head>
 
@@ -286,16 +286,16 @@
                     class="text-xs font-normal normal-case tracking-normal text-foreground [&_th]:font-normal [&_th]:first:ps-0 [&_th]:last:pe-0"
                 >
                     <th>
-                        @lang('Templates Information')
+                        @lang('Informações de Templates')
                     </th>
                     <th>
-                        @lang('Category')
+                        @lang('Categoria')
                     </th>
                     <th>
-                        @lang('In')
+                        @lang('Em')
                     </th>
                     <th>
-                        @lang('Date')
+                        @lang('Data')
                     </th>
                 </x-slot:head>
                 <x-slot:body

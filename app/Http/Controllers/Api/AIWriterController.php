@@ -418,7 +418,7 @@ class AIWriterController extends Controller
 
             $user = Auth::user();
 
-            userCreditDecreaseForWord($user, ($total_used_tokens + countWords($prompt)) * env('TOKEN_VALUE'));
+            userCreditDecreaseForWord($user, $total_used_tokens);
 
             // echo 'data: {"status": "DONE"}';
             echo "\n\n";
@@ -582,7 +582,7 @@ class AIWriterController extends Controller
 
         $user = Auth::user();
 
-        userCreditDecreaseForWord($user, ($total_user_tokens) * env('TOKEN_VALUE'));
+        userCreditDecreaseForWord($user, $total_user_tokens);
 
         return response()->json(['status' => 'Data saved successfully.']);
     }

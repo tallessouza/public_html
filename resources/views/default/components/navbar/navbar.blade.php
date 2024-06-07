@@ -40,38 +40,38 @@
             <ul class="lqd-navbar-ul">
 
                 <x-navbar.item>
-                    <x-navbar.link label="{{ __('Lendár[IA]') }}" href="dashboard.user.openai.chat.chat" slug="lendaria-r7OZL" icon="tabler-yoga"/>
+                    <x-navbar.link label="{{ __('Lendár[IA]') }}" href="dashboard.user.openai.chat.chat" slug="lendaria-BJE0O" icon="tabler-yoga" />
                 </x-navbar.item>
 
                 <x-navbar.item has-dropdown>
-                    <x-navbar.link label="{{ __('IAS por Negócio') }}" dropdown-trigger icon="tabler-building-store" />
+                    <x-navbar.link label="{{ __('IAs por Negócio') }}" dropdown-trigger icon="tabler-building-store" />
                     <x-navbar.dropdown.dropdown>
                         <x-navbar.item>
-                            <x-navbar.link label="Social Media" href="dashboard.user.openai.list" slug="filter=customer service" icon="tabler-users" />
+                            <x-navbar.link label="Social Media" href="dashboard.user.openai.list" slug="filter=Social Media" icon="tabler-users" />
                         </x-navbar.item>
                         <x-navbar.item>
-                            <x-navbar.link label="Copywriting" href="dashboard.user.openai.list" slug="filter=writer" icon="tabler-pencil" />
+                            <x-navbar.link label="Copywriting" href="dashboard.user.openai.list" slug="filter=Copywriting" icon="tabler-pencil" />
                         </x-navbar.item>
                         <!-- <x-navbar.item>
                             <x-navbar.link label="Tráfego" href="dashboard.user.openai.list" slug="filter=advertising" icon="tabler-ad-circle" />
                         </x-navbar.item> -->
                         <x-navbar.item>
-                            <x-navbar.link label="Branding" href="dashboard.user.openai.list" slug="filter=business" icon="tabler-building-store" />
+                            <x-navbar.link label="Branding" href="dashboard.user.openai.list" slug="filter=Branding" icon="tabler-building-store" />
                         </x-navbar.item>
                         <x-navbar.item>
-                            <x-navbar.link label="Marketing" href="dashboard.user.openai.list" slug="filter=writer" icon="tabler-target" />
+                            <x-navbar.link label="Marketing" href="dashboard.user.openai.list" slug="filter=Marketing" icon="tabler-target" />
                         </x-navbar.item>
                         <x-navbar.item>
-                            <x-navbar.link label="Conteúdo" href="dashboard.user.openai.list" slug="filter=writer" icon="tabler-movie" />
+                            <x-navbar.link label="Conteúdo" href="dashboard.user.openai.list" slug="filter=Conteúdo" icon="tabler-movie" />
                         </x-navbar.item>
                         <x-navbar.item>
-                            <x-navbar.link label="Administrativo" href="dashboard.user.openai.list" slug="filter=writer" icon="tabler-device-laptop" />
+                            <x-navbar.link label="Administrativo" href="dashboard.user.openai.list" slug="filter=Administrativo" icon="tabler-device-laptop" />
                         </x-navbar.item>
                         <x-navbar.item>
-                            <x-navbar.link label="Produtos" href="dashboard.user.openai.list" slug="filter=writer" icon="tabler-brand-producthunt" />
+                            <x-navbar.link label="Produtos" href="dashboard.user.openai.list" slug="filter=Produtos" icon="tabler-brand-producthunt" />
                         </x-navbar.item>
                         <x-navbar.item>
-                            <x-navbar.link label="Vendas" href="dashboard.user.openai.list" slug="filter=writer" icon="tabler-moneybag" />
+                            <x-navbar.link label="Vendas" href="dashboard.user.openai.list" slug="filter=Vendas" icon="tabler-moneybag" />
                         </x-navbar.item>
                         <x-navbar.item>
                             <x-navbar.link label="Todas" href="dashboard.user.openai.list" />
@@ -79,20 +79,26 @@
                     </x-navbar.dropdown.dropdown>
                 </x-navbar.item>
                 <x-navbar.item has-dropdown>
-                    <x-navbar.link label="{{ __('GPTs por Negócio') }}" dropdown-trigger icon="tabler-message-circle" />
+                    <x-navbar.link label="{{ __('GPTs') }}" dropdown-trigger icon="tabler-message-circle" />
                     <x-navbar.dropdown.dropdown>
 
                         <x-navbar.item>
-                            <x-navbar.link label="Social Media" href="dashboard.user.openai.chat.list" slug="filter=Social%20Media" icon="tabler-users" />
+                            <x-navbar.link label="Assistentes" href="dashboard.user.openai.chat.list" slug="filter=Assistentes" icon="tabler-users" />
                         </x-navbar.item>
                         <x-navbar.item>
-                            <x-navbar.link label="Copywriting" href="dashboard.user.openai.chat.list" slug="filter=Copywriting" icon="tabler-pencil" />
+                            <x-navbar.link label="Clones Conselheiros" href="dashboard.user.openai.chat.list" slug="filter=Clones Conselheiros" icon="tabler-old" />
                         </x-navbar.item>
                         <!-- <x-navbar.item>
                             <x-navbar.link label="Tráfego" href="dashboard.user.openai.chat.list" slug="filter=Tráfego" icon="tabler-ad-circle" />
                         </x-navbar.item> -->
                         <x-navbar.item>
-                            <x-navbar.link label="Negócios" href="dashboard.user.openai.chat.list" slug="filter=Negócios" icon="tabler-moneybag" />
+                            <x-navbar.link label="Código" href="dashboard.user.openai.chat.list" slug="filter=Código" icon="tabler-device-laptop" />
+                        </x-navbar.item>
+                        <x-navbar.item>
+                            <x-navbar.link label="Escrita" href="dashboard.user.openai.chat.list" slug="filter=Escrita" icon="tabler-pencil" />
+                        </x-navbar.item>
+                        <x-navbar.item>
+                            <x-navbar.link label="Tratamento de Dados" href="dashboard.user.openai.chat.list" slug="filter=Tratamento de Dados" icon="tabler-file-spreadsheet" />
                         </x-navbar.item>
                         <x-navbar.item>
                             <x-navbar.link label="Todos" href="dashboard.user.openai.chat.list" />
@@ -285,11 +291,11 @@
                 </x-navbar.item>
 
                 <x-navbar.item>
-                    <x-navbar.link label="{{ __('Favorites') }}" href="dashboard.user.openai.list" slug="filter=favorite" icon="tabler-star" />
+                    <x-navbar.link label="{{ __('Favorites') }}" href="dashboard.user.openai.list" slug="filter=Favoritos" icon="tabler-star" />
                 </x-navbar.item>
 
                 <x-navbar.item>
-                    <x-navbar.link label="{{ __('Workbook') }}" href="dashboard.user.openai.documents.all" icon="tabler-folder"/>
+                    <x-navbar.link label="{{ __('Workbook') }}" href="dashboard.user.openai.documents.all" icon="tabler-folder" />
                 </x-navbar.item>
 
                 {{-- Admin menu items --}}

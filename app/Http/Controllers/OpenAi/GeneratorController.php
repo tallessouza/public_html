@@ -39,13 +39,21 @@ class GeneratorController extends Controller
 		# If the template type is chat, then we will build a chat streamed output or other ai template streamed output
 		switch ($template_type) {
 			case 'chatbot':
+				// Log::info('Chatbot');
+
 			case 'vision':
+				// Log::info('Vision');
 				return $this->buildChatStreamedOutput($request);
+
 				break;
 			case 'writer':
+				// Log::info('Writer');
+
 				return $this->buildOtherStreamedOutput($request);
 				break;
 			default:
+			// Log::info('Default');
+				
 				return $this->buildOtherStreamedOutput($request);
 				break;
 		}
@@ -59,6 +67,8 @@ class GeneratorController extends Controller
 		$images = $request->get('images', []);
 		$pdfname = $request->get('pdfname', null);
 		$pdfpath = $request->get('pdfpath', null);
+		$instructions = $request->get('instructions', null);
+		// Log::info($instructions);
 
 		$user = Auth::user();
 
@@ -110,7 +120,7 @@ class GeneratorController extends Controller
 				];
 			}
 		} else {
-			$history[] = ['role' => 'system', 'content' => 'You are a helpful assistant.'];
+			$history[] = ['role' => 'system', 'content' => $instructions];
 		}
 
 		# if file attached, get the content of the file
@@ -136,7 +146,7 @@ class GeneratorController extends Controller
 		}else{
 			# if instructions exists, add it to the history
 			if ($category && $category?->instructions) {
-				$history[] = ['role' => 'system', 'content' => $category->instructions ];
+				$history[] = ['role' => 'system', 'content' => $instructions ];
 			}
 		}
 		# follow the context of the last 3 messages
@@ -244,6 +254,8 @@ class GeneratorController extends Controller
 			];
 			$contain_images = true;
 		}
+
+
 		return $this->streamService->ChatStream($chat_bot, $history, $message, $chat_type, $contain_images);
 	}
 

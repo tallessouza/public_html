@@ -111,7 +111,7 @@
                             <p>{{ __('Note that, we do not collect or store any personal data. All information above are sent to iyzico directly.') }}
                             </p>
                             <p></p>
-                            <p class="mt-3">{{ __('By purchasing you confirm our') }} <a
+                            <p class="mt-3">{{ __('Comprando você concorda com nossos') }} <a
                                     href="{{ url('/') . '/terms' }}"
                                     target="_blank">{{ __('Terms and Conditions') }}</a> </p>
                         </div>

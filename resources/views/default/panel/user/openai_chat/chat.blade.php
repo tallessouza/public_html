@@ -170,6 +170,7 @@ $slug == 'lendaria-KMEam'
 <input id="guest_event_id" type="hidden" value="{{ $apikeyPart1 }}">
 <input id="guest_look_id" type="hidden" value="{{ $apikeyPart2 }}">
 <input id="guest_product_id" type="hidden" value="{{ $apikeyPart3 }}">
+<input id="instructions" type="hidden" value="{{ $category->instructions}}">
 @if ($category->prompt_prefix != null)
 <input id="prompt_prefix" type="hidden" value="{{ $category->prompt_prefix }} you will now play a character and respond as that character (You will never break character). Your name is {{ $category->human_name }} but do not introduce by yourself as well as greetings.">
 @else

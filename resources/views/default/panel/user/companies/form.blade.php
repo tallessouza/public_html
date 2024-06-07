@@ -5,8 +5,7 @@
 @extends('panel.layout.settings')
 @section('title', __('Brand Voice'))
 @section('titlebar_subtitle',
-    __('Generate AI content exclusive to your brand and eliminate the need for repetitive
-    introductions of your company.'))
+    __('Gere conteúdo exclusivo para sua marca e elimine a necessidade de introduções repetitivas da sua empresa.'))
 @section('titlebar_actions')
     <div class="flex space-x-1 lg:justify-end">
         <x-button

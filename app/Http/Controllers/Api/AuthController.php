@@ -119,7 +119,7 @@ class AuthController extends Controller
         // Obter a chave de autorização do cabeçalho da requisição
         $authorizationHeader = $request->header('Authorization');
         $planbyrole = [
-            "8020" => 15,
+            "8020" => 18,
             "comunidade" => 16,
             "formacao" => 17
         ];

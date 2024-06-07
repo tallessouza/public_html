@@ -71,7 +71,7 @@
                     </form>
 
                     <p></p>
-                    <p>{{ __('By purchasing you confirm our') }} <a href="{{ url('/') . '/terms' }}">{{ __('Terms and Conditions') }}</a> </p>
+                    <p>{{ __('Comprando você concorda com nossos') }} <a href="{{ url('/') . '/terms' }}">{{ __('Terms and Conditions') }}</a> </p>
                 </div>
                 <div class="col-sm-4 col-lg-4">
                     @include('panel.user.finance.partials.plan_card')

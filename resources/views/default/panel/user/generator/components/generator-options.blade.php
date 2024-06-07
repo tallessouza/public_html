@@ -13,9 +13,10 @@
         'short' => 'Explicar a Ideia Principal',
         'list' => 'Criar uma Lista',
         'tldr' => 'Criar um resumo TLDR',
-        'prons_cons' => 'Criar Pros e Contras',
-        'transcribe' => 'Transcrever Vídeo',
+        'prons_cons' => 'Criar Pros e Contras'
     ];
+    //,    'transcribe' => 'Transcrever Vídeo',
+    
 @endphp
 
 <div
@@ -95,7 +96,7 @@
                 id="bulk"
                 type="checkbox"
                 name="bulk"
-                label="{{ __('Generate Bulk Posts') }}"
+                label="{{ __('Gerar Posts em Lote') }}"
                 @change="bulkEnabled = $el.checked"
                 switcher
             />

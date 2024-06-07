@@ -396,15 +396,13 @@ class AIController extends Controller
 			if ($youtube_action == 'blog') {
 				$prompt = "You are blog writer. Turn the given transcript text into a blog post in and translate to {$language} language. Group the content and create a subheading (witth HTML-h2) for each group. Maximum $maximum_length words. Creativity is $creativity between 0 and 1. Generate $number_of_results different articles. Tone of voice must be $tone_of_voice. Content:";
 			} elseif ($youtube_action == 'short') {
-				$prompt = "You are transcript editor. Make sense of the given content and Explicar a Ideia Principal. Your result must be in {$language} language. Creativity is $creativity between 0 and 1. Generate $number_of_results different articles. Tone of voice must be $tone_of_voice. Content:";
+				$prompt = "You are transcript editor. Make sense of the given content and explain the main idea. Your result must be in {$language} language. Creativity is $creativity between 0 and 1. Generate $number_of_results different articles. Tone of voice must be $tone_of_voice. Content:";
 			} elseif ($youtube_action == 'list') {
 				$prompt = "You are transcript editor. Make sense of the given content and make a list main ideas. Your result must be in {$language} language. Creativity is $creativity between 0 and 1. Generate $number_of_results different articles. Tone of voice must be $tone_of_voice. Content:";
 			} elseif ($youtube_action == 'tldr') {
 				$prompt = "You are transcript editor. Make short TLDR. Your result must be in {$language} language. Creativity is $creativity between 0 and 1. Generate $number_of_results different articles. Tone of voice must be $tone_of_voice. Content:";
 			} elseif ($youtube_action == 'prons_cons') {
 				$prompt = "You are transcript editor. Make short pros and cons. Your result must be in {$language} language. Creativity is $creativity between 0 and 1. Generate $number_of_results different articles. Tone of voice must be $tone_of_voice. Content:";
-			} elseif ($youtube_action == 'transcribe') {
-				$prompt = "You are transcript editor. Review and correct the transcription provided, making it clearer and more coherent. Keeping ALL information present. Your result must be in {$language} language. Creativity is 0. Generate full transcription. Content:";
 			}
 
 			$api_url = 'https://magicai-yt-video-post-api.vercel.app/api/transcript'; // Endpoint URL
@@ -695,7 +693,7 @@ class AIController extends Controller
 
             $user = Auth::user();
 
-            userCreditDecreaseForWord($user, ($total_used_tokens + countWords($prompt)) * env('TOKEN_VALUE'));
+            userCreditDecreaseForWord($user, $total_used_tokens);
 
             echo 'data: [DONE]';
             echo "\n\n";
@@ -785,7 +783,7 @@ class AIController extends Controller
 
         $user = Auth::user();
 
-        userCreditDecreaseForWord($user, ($total_used_tokens + countWords($prompt)) * env('TOKEN_VALUE'));
+        userCreditDecreaseForWord($user, $total_used_tokens);
 
         return $this->finalizeOutput($post, $entry);
     }
@@ -1571,7 +1569,7 @@ class AIController extends Controller
 
         $team = $user->getAttribute('team');
 
-        userCreditDecreaseForWord($user, countWords($text) * env('TOKEN_VALUE'));
+        userCreditDecreaseForWord($user, countWords($text));
 
         //Workbook add-on
         $workbook = $entry;
@@ -1634,7 +1632,7 @@ class AIController extends Controller
         $entry->response = $response;
         $entry->output = $response;
         $entry->save();
-        userCreditDecreaseForWord($user, ($total_user_tokens) * env('TOKEN_VALUE'));
+        userCreditDecreaseForWord($user, $total_user_tokens);
     }
 
     public function lazyLoadImage(Request $request)
@@ -1706,7 +1704,7 @@ class AIController extends Controller
 
         $content = $completion->choices[0]->message->content;
 
-        userCreditDecreaseForWord($user, countWords($content) * env('TOKEN_VALUE'));
+        userCreditDecreaseForWord($user, countWords($content));
 
         return response()->json(['result' => $completion->choices[0]->message->content]);
     }

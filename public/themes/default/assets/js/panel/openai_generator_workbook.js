@@ -112,7 +112,7 @@ const generate = async ( message_no, creativity, maximum_length, number_of_resul
 		const messages = [];
 		messages.push({
 			role: 'system',
-			content: 'You are a helpful assistant.'
+			content: 'Você é um assistente atencioso e prestativo.'
 		});
 		messages.push({
 			role: 'user',
@@ -182,10 +182,10 @@ const generate = async ( message_no, creativity, maximum_length, number_of_resul
 		} catch (error) {
 			switch(error.status) {
 			case 429:
-				toastr.error(magicai_localize?.api_connection_error || 'Api Connection Error. You hit the rate limites of openai requests. Please check your Openai API Key');
+				toastr.error(magicai_localize?.api_connection_error || 'Erro de conexão com a API');
 				break;
 			default:
-				toastr.error(magicai_localize?.api_connection_error_admin || 'Api Connection Error. Please contact system administrator via Support Ticket. Error is: API Connection failed due to API keys');
+				toastr.error(magicai_localize?.api_connection_error_admin || 'Erro de conexão com a API');
 			}
 
 			submitBtn.classList.remove( 'lqd-form-submitting' );
@@ -260,7 +260,7 @@ const tinymceOptions = {
 		const menuItems = {
 			'customwrite': {
 				icon: 'magicIcon',
-				text: 'What would you like to do?',
+				text: 'O que você gostaria de fazer?',
 				onAction: function ( e ) {
 					if ( event?.type != 'keydown' || $( event?.srcElement ).attr( 'id' ) != 'custom_prompt' ) {
 						e.preventDefault();
@@ -268,7 +268,7 @@ const tinymceOptions = {
 					}
 					console.log( event );
 					if(editor.selection.getContent().trim().length == 0) {
-						toastr.warning('Please select text');
+						toastr.warning('Por favor selecione o texto');
 						return;
 					}
 					Alpine.store('appLoadingIndicator').show();
@@ -293,15 +293,15 @@ const tinymceOptions = {
 			},
 			'rewrite': {
 				icon: 'magicIconRewrite',
-				text: 'Rewrite',
+				text: 'Reescrever com IA',
 				onAction: function () {
 					if(editor.selection.getContent().trim().length == 0) {
-						toastr.warning('Please select text');
+						toastr.warning('Por favor selecione o texto');
 						return;
 					}
 					Alpine.store('appLoadingIndicator').show();
 					let formData = new FormData();
-					formData.append( 'prompt', 'Rewrite below content professionally. Must detect the content language and ensure that the response is also in same content language.' );
+					formData.append( 'prompt', 'Reescreva o conteúdo abaixo profissionalmente. Deve detectar o idioma do conteúdo e garantir que a resposta também esteja no mesmo idioma do conteúdo.' );
 					formData.append( 'content', editor.selection.getContent() );
 					$.ajax( {
 						type: 'post',
@@ -321,15 +321,15 @@ const tinymceOptions = {
 			},
 			'summarize': {
 				icon: 'magicIconSummarize',
-				text: 'Summarize',
+				text: 'Resumir',
 				onAction: function () {
 					if(editor.selection.getContent().trim().length == 0) {
-						toastr.warning('Please select text');
+						toastr.warning('Por favor selecione o texto');
 						return;
 					}
 					Alpine.store('appLoadingIndicator').show();
 					let formData = new FormData();
-					formData.append( 'prompt', 'Summarize below content professionally. Keep origin language.' );
+					formData.append( 'prompt', 'Resuma o conteúdo abaixo profissionalmente. Mantenha o idioma de origem.' );
 					formData.append( 'content', editor.selection.getContent() );
 					$.ajax( {
 						type: 'post',
@@ -349,15 +349,15 @@ const tinymceOptions = {
 			},
 			'makeitlonger': {
 				icon: 'magicIconMakeItLonger',
-				text: 'Make it Longer',
+				text: 'Aumentar texto',
 				onAction: function () {
 					if(editor.selection.getContent().trim().length == 0) {
-						toastr.warning('Please select text');
+						toastr.warning('Por favor selecione o texto');
 						return;
 					}
 					Alpine.store('appLoadingIndicator').show();
 					let formData = new FormData();
-					formData.append( 'prompt', 'Make below content longer' );
+					formData.append( 'prompt', 'Torne o conteúdo abaixo mais longo' );
 					formData.append( 'content', editor.selection.getContent() );
 					$.ajax( {
 						type: 'post',
@@ -377,15 +377,15 @@ const tinymceOptions = {
 			},
 			'makeitshorter': {
 				icon: 'magicIconMakeItShorter',
-				text: 'Make it Shorter',
+				text: 'Diminuir texto',
 				onAction: function () {
 					if(editor.selection.getContent().trim().length == 0) {
-						toastr.warning('Please select text');
+						toastr.warning('Por favor selecione o texto');
 						return;
 					}
 					Alpine.store('appLoadingIndicator').show();
 					let formData = new FormData();
-					formData.append( 'prompt', 'Make below content shorter' );
+					formData.append( 'prompt', 'Torne o conteúdo abaixo mais curto' );
 					formData.append( 'content', editor.selection.getContent() );
 					$.ajax( {
 						type: 'post',
@@ -405,15 +405,15 @@ const tinymceOptions = {
 			},
 			'improvewriting': {
 				icon: 'magicIconImprove',
-				text: 'Improve Writing',
+				text: 'Melhorar escrita',
 				onAction: function () {
 					if(editor.selection.getContent().trim().length == 0) {
-						toastr.warning('Please select text');
+						toastr.warning('Por favor selecione o texto');
 						return;
 					}
 					Alpine.store('appLoadingIndicator').show();
 					let formData = new FormData();
-					formData.append( 'prompt', 'Improve writing of  below content' );
+					formData.append( 'prompt', 'Melhore o conteúdo do conteúdo abaixo.' );
 					formData.append( 'content', editor.selection.getContent() );
 					$.ajax( {
 						type: 'post',
@@ -433,15 +433,15 @@ const tinymceOptions = {
 			},
 			'translatetospanish': {
 				icon: 'magicIconTranslate',
-				text: 'Translate To Spanish',
+				text: 'Traduzir para o Português',
 				onAction: function () {
 					if(editor.selection.getContent().trim().length == 0) {
-						toastr.warning('Please select text');
+						toastr.warning('Por favor selecione o texto');
 						return;
 					}
 					Alpine.store('appLoadingIndicator').show();
 					let formData = new FormData();
-					formData.append( 'prompt', 'Translate below content to Spanish' );
+					formData.append( 'prompt', 'Traduza o conteúdo abaixo para o Português do Brasil.' );
 					formData.append( 'content', editor.selection.getContent() );
 					$.ajax( {
 						type: 'post',
@@ -461,15 +461,15 @@ const tinymceOptions = {
 			},
 			'fixgrammaticalmistakes': {
 				icon: 'magicIconFixGrammer',
-				text: 'Fix grammatical mistakes',
+				text: 'Corrigir Gramática',
 				onAction: function () {
 					if(editor.selection.getContent().trim().length == 0) {
-						toastr.warning('Please select text');
+						toastr.warning('Por favor selecione o texto');
 						return;
 					}
 					Alpine.store('appLoadingIndicator').show();
 					let formData = new FormData();
-					formData.append( 'prompt', 'Fix grammatical mistakes in below content' );
+					formData.append( 'prompt', 'Corrija erros gramaticais no conteúdo abaixo');
 					formData.append( 'content', editor.selection.getContent() );
 					$.ajax( {
 						type: 'post',
@@ -499,7 +499,7 @@ const tinymceOptions = {
 
 		editor.ui.registry.addButton( 'magicIconRewrite', {
 			icon: 'magicIconRewrite',
-			text: 'Rewrite',
+			text: 'Reescrever com IA',
 			onAction: menuItems.rewrite.onAction
 		} );
 
@@ -552,14 +552,14 @@ const tinymceOptions = {
 			const codeOutput = document.querySelector( '#code-output' );
 			if ( codeOutput && window.codeRaw ) {
 				navigator.clipboard.writeText( window.codeRaw );
-				toastr.success( 'Code copied to clipboard' );
+				toastr.success( 'Código Copiado' );
 				return;
 			}
 			if ( tinymce?.activeEditor ) {
 				tinymce.activeEditor.execCommand( 'selectAll', true );
 				const content = tinymce.activeEditor.selection.getContent( { format: 'html' } );
 				navigator.clipboard.writeText( content );
-				toastr.success( 'Content copied to clipboard' );
+				toastr.success( 'Conteúdo copiado para a área de transferência' );
 				return;
 			}
 		} );
@@ -643,7 +643,7 @@ function editWorkbook( workbook_slug ) {
 		contentType: false,
 		processData: false,
 		success: function ( data ) {
-			toastr.success( 'Workbook Saved Succesfully' );
+			toastr.success( 'Salvo com Sucesso' );
 		},
 		error: function ( data ) {
 			var err = data.responseJSON.errors;

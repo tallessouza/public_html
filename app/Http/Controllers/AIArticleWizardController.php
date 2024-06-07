@@ -217,7 +217,7 @@ class AIArticleWizardController extends Controller
 
             $user = Auth::user();
 
-            userCreditDecreaseForWord($user, $total_used_tokens * env('TOKEN_VALUE'));
+            userCreditDecreaseForWord($user, $total_used_tokens);
 
             return response()->json(['result' => $completion['choices'][0]['message']['content']])->header('Content-Type', 'application/json');
         } catch (Exception $e) {
@@ -253,7 +253,7 @@ class AIArticleWizardController extends Controller
             $total_used_tokens = countWords($completion['choices'][0]['message']['content']);
             $user = Auth::user();
 
-            userCreditDecreaseForWord($user, $total_used_tokens * env('TOKEN_VALUE'));
+            userCreditDecreaseForWord($user, $total_used_tokens);
 
             return response()->json(['result' => $completion['choices'][0]['message']['content']])->header('Content-Type', 'application/json');
         } catch (Exception $e) {
@@ -291,7 +291,7 @@ class AIArticleWizardController extends Controller
 
             $total_used_tokens = countWords($completion['choices'][0]['message']['content']);
 
-            userCreditDecreaseForWord($user, $total_used_tokens * env('TOKEN_VALUE'));
+            userCreditDecreaseForWord($user, $total_used_tokens);
 
             return response()->json(['result' => $completion['choices'][0]['message']['content'], 'words' => $user->remaining_words, 'images' => $user->remaining_images])->header('Content-Type', 'application/json');
         } catch (Exception $e) {
@@ -949,7 +949,7 @@ class AIArticleWizardController extends Controller
                 $total_used_tokens = $decodedData->tokens;
                 $user = Auth::user();
 
-                userCreditDecreaseForWord($user, $total_used_tokens * env('TOKEN_VALUE'));
+                userCreditDecreaseForWord($user, $total_used_tokens);
             }
 
             if ($decodedData->type == 'RESULT') {
@@ -974,7 +974,7 @@ class AIArticleWizardController extends Controller
 
                 if ($user->remaining_words != -1) {
 
-                    userCreditDecreaseForWord($user, countWords($decodedData->result) * env('TOKEN_VALUE'));
+                    userCreditDecreaseForWord($user, countWords($decodedData->result));
 
                 }
 

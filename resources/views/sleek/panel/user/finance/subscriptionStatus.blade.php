@@ -129,9 +129,9 @@
                 class="text-heading-foreground underline"
                 href="{{ LaravelLocalization::localizeUrl(route('dashboard.user.payment.subscription')) }}"
             >
-                @lang('Upgrade your plan')
+                @lang('Faça um upgrade no seu plano')
             </a>
-            @lang('to be able to generate more content.')
+            @lang('para gerar mais conteúdo.')
         </p>
 
         <div class="flex w-full flex-wrap items-center justify-center gap-4 text-center">
