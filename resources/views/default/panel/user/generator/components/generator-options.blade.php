@@ -13,9 +13,9 @@
         'short' => 'Explicar a Ideia Principal',
         'list' => 'Criar uma Lista',
         'tldr' => 'Criar um resumo TLDR',
-        'prons_cons' => 'Criar Pros e Contras'
+        'prons_cons' => 'Criar Pros e Contras',
+        'transcribe' => 'Transcrever Vídeo',
     ];
-    //,    'transcribe' => 'Transcrever Vídeo',
     
 @endphp
 

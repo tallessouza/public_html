@@ -96,7 +96,7 @@
                                 </div>
 
                                 <div class="row">
-                                    <h4>Change Password</h4>
+                                    <h4>Alterar Senha</h4>
                                     <x-alert class="!mt-2 mb-3">
                                         <p>
                                             {{ __('Please leave empty if you don’t want to change your password.') }}

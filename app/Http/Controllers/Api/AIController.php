@@ -602,7 +602,7 @@ class AIController extends Controller
             if ($image_generator != self::STABLEDIFFUSION) {
                 //send prompt to openai
                 if ($prompt == null) {
-                    return response()->json(['status' => 'error', 'message' => 'You must provide a prompt']);
+                    return response()->json(['status' => 'error', 'message' => 'Você precisa fornecer um prompt']);
                 }
                 $response = FacadesOpenAI::images()->create([
                     'prompt' => $prompt,
@@ -622,7 +622,7 @@ class AIController extends Controller
                 $stablediffusionKeys = explode(',', $settings->stable_diffusion_api_key);
                 $stablediffusionKey = $stablediffusionKeys[array_rand($stablediffusionKeys)];
                 if ($prompt == null) {
-                    return response()->json(['status' => 'error', 'message' => 'You must provide a prompt']);
+                    return response()->json(['status' => 'error', 'message' => 'Você precisa fornecer um prompt']);
                 }
                 if ($stablediffusionKey == '') {
                     return response()->json(['status' => 'error', 'message' => 'You must provide a StableDiffusion API Key.']);

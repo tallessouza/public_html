@@ -13,9 +13,9 @@
         'short' => 'Explicar a Ideia Principal',
         'list' => 'Criar uma Lista',
         'tldr' => 'Criar um Resumo',
-        'prons_cons' => 'Criar Pros e Contras'
+        'prons_cons' => 'Criar Pros e Contras',
+        'transcribe' => 'Transcrever Vídeo',
     ];
-    //,    'transcribe' => 'Transcrever Vídeo',
 @endphp
 @extends('panel.layout.app', ['disable_tblr' => true])
 @section('title', __($openai->title))
@@ -423,7 +423,8 @@
     <script src="{{ custom_theme_url('/assets/libs/turndown.js') }}"></script>
     <script src="{{ custom_theme_url('/assets/libs/tinymce/tinymce.min.js') }}"></script>
     <script src="{{ custom_theme_url('/assets/js/panel/tinymce-theme-handler.js') }}"></script>
-    <script src="{{ custom_theme_url('/assets/js/panel/openai_generator_workbook.js') }}"></script>
+    <script src="{{ custom_theme_url('/assets/js/panel/openai_generator_workbook.js?v=' . time()) }}"></script>
+    
 
     @if ($openai->type == 'code')
         <link
@@ -538,7 +539,7 @@
                         const number_of_results = data.number_of_results;
                         const prompt = data.inputPrompt;
                         const openai_id = '{{ $openai->id }}';
-                        generate(message_no, creativity, maximum_length, number_of_results, prompt, openai_id);
+                        generate(message_no, creativity, maximum_length, number_of_results, prompt, openai_id);                   
                     @endif
                 },
                 error: function(data) {

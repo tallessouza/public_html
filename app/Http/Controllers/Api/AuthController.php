@@ -121,7 +121,8 @@ class AuthController extends Controller
         $planbyrole = [
             "8020" => 18,
             "comunidade" => 16,
-            "formacao" => 17
+            "formacao" => 17,
+            "vitalicio" => 19
         ];
         // Comparar a chave de autorização com a variável de ambiente API_KEY
         if ($authorizationHeader !== env('API_KEY')) {

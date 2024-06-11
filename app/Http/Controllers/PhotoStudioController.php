@@ -71,14 +71,14 @@ class PhotoStudioController extends Controller
             return response()->json([
                 'type' => $photo ? 'success' : 'error',
                 'photo' => $photo,
-                'message' => $photo ? 'Photo generated successfully' : 'Failed to generate photo',
+                'message' => $photo ? 'Imagem gerada com sucesso' : 'Failed to generate photo',
             ]);
         }
 
         if ($photo) {
             return redirect()->route('dashboard.user.photo-studio.index')->with([
                 'type' => 'success',
-                'message' => 'Photo generated successfully',
+                'message' => 'Imagem gerada com sucesso',
                 'photo' => $photo,
             ]);
         }

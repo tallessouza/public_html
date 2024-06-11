@@ -651,7 +651,7 @@ class AIArticleWizardController extends Controller
 			}
 			for ($i = 0; $i < $count; $i++) {
 				if ($prompt == null) {
-					return response()->json(['status' => 'error', 'message' => 'You must provide a prompt']);
+					return response()->json(['status' => 'error', 'message' => 'Você precisa fornecer um prompt']);
 				}
 				$quality = 'standard';
 				$response = OpenAI::images()->create([
@@ -731,7 +731,7 @@ class AIArticleWizardController extends Controller
 		$stablediffusionKey = $stablediffusionKeys[array_rand($stablediffusionKeys)];
 		for ($i = 0; $i < $count; $i++) {
 			if ($prompt == null) {
-				return response()->json(['status' => 'error', 'message' => 'You must provide a prompt']);
+				return response()->json(['status' => 'error', 'message' => 'Você precisa fornecer um prompt']);
 			}
 			if ($stablediffusionKey == '') {
 				return response()->json(['status' => 'error', 'message' => 'You must provide a StableDiffusion API Key.']);

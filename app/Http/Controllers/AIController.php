@@ -403,6 +403,8 @@ class AIController extends Controller
 				$prompt = "You are transcript editor. Make short TLDR. Your result must be in {$language} language. Creativity is $creativity between 0 and 1. Generate $number_of_results different articles. Tone of voice must be $tone_of_voice. Content:";
 			} elseif ($youtube_action == 'prons_cons') {
 				$prompt = "You are transcript editor. Make short pros and cons. Your result must be in {$language} language. Creativity is $creativity between 0 and 1. Generate $number_of_results different articles. Tone of voice must be $tone_of_voice. Content:";
+			} elseif ($youtube_action == 'transcribe') {
+				$prompt = "Aqui está sua transcrição: \n";
 			}
 
 			$api_url = 'https://magicai-yt-video-post-api.vercel.app/api/transcript'; // Endpoint URL
@@ -724,7 +726,7 @@ class AIController extends Controller
         $entry->slug = str()->random(7).str($user->fullName())->slug().'-workbook';
         $entry->user_id = Auth::id();
         $entry->openai_id = $post->id;
-        $entry->input = $prompt;
+        $entry->input = substr($prompt,0,9999);
         $entry->response = null;
         $entry->output = null;
         $entry->hash = str()->random(256);

@@ -1,8 +1,8 @@
 @extends('panel.authentication.layout.app')
-@section('title', __('Reset Password'))
+@section('title', __('Alterar Senha'))
 
 @section('form')
-    <h1 class="mb-[25px]">{{ __('Change Password') }}</h1>
+    <h1 class="mb-[25px]">{{ __('Trocar Senha') }}</h1>
     <form
         class="flex flex-col gap-6"
         id="password_reset_form"

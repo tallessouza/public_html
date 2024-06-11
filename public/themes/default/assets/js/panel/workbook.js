@@ -325,12 +325,12 @@ document.addEventListener('DOMContentLoaded', async function () {
 
 					$('.tox-collection').css('width', 'clamp(200px, 320px, 90vw)');
 
-					$($('.tox-collection__item-label')[0]).html('<input id="custom_prompt" type="text" style="width: 100%!important" placeholder="What would you like to do?">');
+					$($('.tox-collection__item-label')[0]).html('<input id="custom_prompt" type="text" style="width: 100%!important" placeholder="O que você gostaria de fazer?">');
 
 					$($('.tox-collection__group')[0].querySelector('#custom_label')).remove();
 					$($('.tox-collection__group')[1].querySelector('#quick_label')).remove();
-					$($('.tox-collection__group')[0]).prepend('<p class="tox-custom-label" id="custom_label">CUSTOM ACTION</p>');
-					$($('.tox-collection__group')[1]).prepend('<p class="tox-custom-label" id="quick_label">QUICK ACTIONS</p>');
+					$($('.tox-collection__group')[0]).prepend('<p class="tox-custom-label" id="custom_label">AÇÃO PERSONALIZADA</p>');
+					$($('.tox-collection__group')[1]).prepend('<p class="tox-custom-label" id="quick_label">AÇÕES RÁPIDAS</p>');
 				}, 0);
 			});
 

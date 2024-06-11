@@ -4614,7 +4614,7 @@
 
                     //show successful message
                     @if ($openai->type == 'image')
-                        toastr.success(`Image Generated Successfully in ${res.image_storage}`);
+                        toastr.success(`Imagem gerada com sucesso`);
                     @elseif ($openai->type == 'video')
                         resultVideoId = res.id;
                     @else
