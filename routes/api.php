@@ -33,7 +33,10 @@ Route::prefix('auth')->group(function () {
     Route::post('google-login',             'App\Http\Controllers\Api\SocialLoginController@google');
     Route::post('apple-login',             'App\Http\Controllers\Api\SocialLoginController@apple');
 });
-
+Route::prefix('words')->group(function () {
+    Route::get('remaining', 'App\Http\Controllers\Api\WordController@getRemainingWords');
+    Route::post('decrease', 'App\Http\Controllers\Api\WordController@decreaseWords');
+});
 Route::middleware('auth:api')->get('/user', function (Request $request) {
     return $request->user();
 });

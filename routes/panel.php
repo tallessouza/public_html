@@ -41,7 +41,7 @@ use App\Services\DeFi\DeFi;
 use Illuminate\Support\Facades\Artisan;
 use Illuminate\Support\Facades\Route;
 use Mcamara\LaravelLocalization\Facades\LaravelLocalization;
-
+use App\Http\Controllers\WhatsappController;
 Route::group(['prefix' => LaravelLocalization::setLocale(), 'middleware' => ['localeSessionRedirect', 'localizationRedirect', 'localeViewPath']], function () {
 
 	Route::prefix('dashboard')
@@ -56,6 +56,8 @@ Route::group(['prefix' => LaravelLocalization::setLocale(), 'middleware' => ['lo
 		//User Area
 		Route::prefix('user')->name('user.')->group(function () {
 			Route::get('/', [UserController::class, 'index'])->name('index');
+			Route::get('/whatsapp', [WhatsappController::class, 'index'])->name('whatsapp');
+			Route::post('/whatsapp/logout', [WhatsappController::class, 'logout'])->name('whatsapp.logout');
 
             Route::group([
                 'controller' => Google2FAController::class,
