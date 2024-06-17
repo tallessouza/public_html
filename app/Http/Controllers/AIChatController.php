@@ -68,7 +68,7 @@ class AIChatController extends Controller
             })
             ->get();
 
-        $categoryList = ChatCategory::where('user_id', 1)->orWhere('user_id', auth()->user()->id)->get();
+        $categoryList = ChatCategory::get();
         $favData = Favourite::where('type', 'chat')
             ->where('user_id', auth()->user()->id)
             ->get();

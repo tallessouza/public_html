@@ -97,9 +97,9 @@
                         <x-navbar.item>
                             <x-navbar.link label="Escrita" href="dashboard.user.openai.chat.list" slug="filter=Escrita" icon="tabler-pencil" />
                         </x-navbar.item>
-                        <x-navbar.item>
+                        <!-- <x-navbar.item>
                             <x-navbar.link label="Tratamento de Dados" href="dashboard.user.openai.chat.list" slug="filter=Tratamento de Dados" icon="tabler-file-spreadsheet" />
-                        </x-navbar.item>
+                        </x-navbar.item> -->
                         <x-navbar.item>
                             <x-navbar.link label="Todos" href="dashboard.user.openai.chat.list" />
                         </x-navbar.item>

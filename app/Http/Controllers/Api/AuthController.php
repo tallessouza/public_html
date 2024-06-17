@@ -132,7 +132,7 @@ class AuthController extends Controller
         $validator = Validator::make($request->all(), [
             'name' => ['required', 'string', 'max:255'],
             'surname' => ['required', 'string', 'max:255'],
-            'email' => ['required', 'string', 'email', 'max:255', 'unique:' . User::class],
+            'email' => ['required', 'string', 'email', 'max:255'],
             'password' => ['required', 'confirmed', Password::defaults()],
             'role' => ['required', 'string', 'max:255'],
         ]);
@@ -141,27 +141,38 @@ class AuthController extends Controller
             return response()->json(['error' => $validator->errors()], 422);
         }
 
-        $affCode = null;
+        $user = User::where('email', $request->email)->first();
 
-        $settings = Setting::first();
-        $user = User::create([
-            'name' => $request->name,
-            'surname' => $request->surname,
-            'email' => $request->email,
-            'email_confirmation_code' => Str::random(67),
-            'remaining_words' => explode(',', $settings->free_plan)[0],
-            'remaining_images' => explode(',', $settings->free_plan)[1] ?? 0,
-            'password' => Hash::make($request->password),
-            'email_verification_code' => Str::random(67),
-            'affiliate_id' => $affCode,
-            'affiliate_code' => Str::upper(Str::random(12)),
-        ]);
+        if ($user) {
+            // Usuário já existe, apenas atribuir tokens
+            $request->merge(['userID' => $user->id, 'token' => $planbyrole[$request->role]]);
+            $paymentController = new PaymentProcessController();
+            $paymentController->assignTokenByAdmin($request);
 
-        $request->merge(['userID' => $user->id, 'token' => $planbyrole[$request->role]]);
-        $paymentController = new PaymentProcessController();
-        $paymentController->assignTokenByAdmin($request);
+            return response()->json(['message' => 'Tokens atribuídos com sucesso!', 'user' => $user], 200);
+        } else {
+            // Criar novo usuário
+            $affCode = null;
+            $settings = Setting::first();
+            $user = User::create([
+                'name' => $request->name,
+                'surname' => $request->surname,
+                'email' => $request->email,
+                'email_confirmation_code' => Str::random(67),
+                'remaining_words' => explode(',', $settings->free_plan)[0],
+                'remaining_images' => explode(',', $settings->free_plan)[1] ?? 0,
+                'password' => Hash::make($request->password),
+                'email_verification_code' => Str::random(67),
+                'affiliate_id' => $affCode,
+                'affiliate_code' => Str::upper(Str::random(12)),
+            ]);
 
-        return response()->json(['message' => 'Usuário criado com sucesso!', 'user' => $user], 201);
+            $request->merge(['userID' => $user->id, 'token' => $planbyrole[$request->role]]);
+            $paymentController = new PaymentProcessController();
+            $paymentController->assignTokenByAdmin($request);
+
+            return response()->json(['message' => 'Usuário criado com sucesso!', 'user' => $user], 201);
+        }
     }
     /**
      * @OA\Post(
