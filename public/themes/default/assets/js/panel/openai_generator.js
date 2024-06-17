@@ -7,7 +7,7 @@ $( '#file' ).on( 'change', function () {
 	}
 	var ext = $( '#file' ).val().split( '.' ).pop().toLowerCase();
 	if ( $.inArray( ext, [ 'mp3', 'mp4', 'mpeg', 'mpga', 'm4a', 'wav', 'webm' ] ) == -1 ) {
-		toastr.error(magicai_localize?.invalid_extension ||'Invalid extension. Accepted extensions are mp3, mp4, mpeg, mpga, m4a, wav, and webm')
+		toastr.error(magicai_localize?.invalid_extension ||'Extensão inválida. Extensões aceitas são mp3, mp4, mpeg, mpga, m4a, wav, e webm')
 		document.getElementById( "file" ).value = null;
 	}
 } );

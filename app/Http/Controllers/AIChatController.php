@@ -1667,7 +1667,7 @@ class AIChatController extends Controller
         $imageTypes = ['mp3', 'mp4', 'mpeg', 'mpga', 'm4a', 'wav', 'webm'];
         if (!in_array(Str::lower($file->getClientOriginalExtension()), $imageTypes)) {
             $data = [
-                'errors' => ['Invalid extension, accepted extensions are mp3, mp4, mpeg, mpga, m4a, wav, and webm.'],
+                'errors' => ['Extensão inválida, utilize arquivos mp3, mp4, mpeg, mpga, m4a, wav, e webm.'],
             ];
 
             return response()->json('', 419);

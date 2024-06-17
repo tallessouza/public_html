@@ -17,7 +17,7 @@
 @endsection
 
 @push('script')
-    <script src="{{ custom_theme_url('/assets/js/panel/openai_generator.js') }}"></script>
+    <script src="{{ custom_theme_url('/assets/js/panel/openai_generator.js?v=') }}"></script>
     <script src="{{ custom_theme_url('/assets/libs/fslightbox/fslightbox.js') }}"></script>
     <script src="{{ custom_theme_url('/assets/libs/wavesurfer/wavesurfer.js') }}"></script>
     <script src="{{ custom_theme_url('/assets/js/panel/voiceover.js') }}"></script>
