@@ -1,7 +1,7 @@
 @if (isset($user))
-    <option value="{{$user->country}}" selected>{{$user->country?? 'Select Country'}}</option>
+    <option value="{{$user->country}}" selected>{{$user->country?? 'Selecionar País'}}</option>
 @else
-    <option value="" selected>{{'Select Country'}}</option>
+    <option value="" selected>{{'Selecionar País'}}</option>
 @endif
 
 <option value="Afghanistan">{{__('Afghanistan')}}</option>

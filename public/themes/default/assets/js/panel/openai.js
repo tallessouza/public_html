@@ -236,7 +236,7 @@ function templateChatSave( template_id ) {
 		contentType: false,
 		processData: false,
 		success: function ( data ) {
-			toastr.success(magicai_localize?.chat_template_saved ||'Chat Template Saved Succesfully');
+			toastr.success(magicai_localize?.chat_template_saved ||'Chat Template Salvo com Sucesso');
 			location.href = '/dashboard/admin/openai/chat';
 			document.getElementById( 'custom_template_button' ).disabled = false;
 			document.getElementById( 'custom_template_button' ).innerHTML = 'Save';

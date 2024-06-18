@@ -129,8 +129,8 @@
 
         <x-forms.input
             id="c_logo"
-            label="{{ __('Brand Voice') }}"
-            tooltip="{{ __('Describe the primary demographic or audience your company is targeting.') }}"
+            label="{{ __('Logo da Marca') }}"
+            tooltip="{{ __('Defina a imagem que representa sua marca.') }}"
             type="file"
             name="c_logo"
             value="{{ $item?->logo }}"
@@ -508,7 +508,7 @@
                 contentType: false,
                 processData: false,
                 success: function(data) {
-                    toastr.success('Template Saved Succesfully.');
+                    toastr.success('Template Salvo com Sucesso.');
                     document.getElementById("custom_company_button").disabled = false;
                     document.getElementById("custom_company_button").innerHTML = "Save";
                     setTimeout(function() {

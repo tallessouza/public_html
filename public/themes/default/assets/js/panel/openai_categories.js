@@ -18,7 +18,7 @@ function categorySave( item_id ) {
         contentType: false,
         processData: false,
         success: function ( data ) {
-            toastr.success(magicai_localize?.template_saved ||'Template Saved Succesfully')
+            toastr.success(magicai_localize?.template_saved ||'Template Salvo com Sucesso')
             location.href = '/dashboard/admin/openai/categories';
             document.getElementById( "custom_template_button" ).disabled = false;
             document.getElementById( "custom_template_button" ).innerHTML = "Save";

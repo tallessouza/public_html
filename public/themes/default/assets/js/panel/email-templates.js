@@ -26,7 +26,7 @@ function templateSave( template_id ) {
 		contentType: false,
 		processData: false,
 		success: function ( data ) {
-			toastr.success(magicai_localize?.template_saved ||'Template Saved Succesfully')
+			toastr.success(magicai_localize?.template_saved ||'Template Salvo com Sucesso')
 			document.getElementById( "email_templates_button" ).disabled = false;
 			document.getElementById( "email_templates_button" ).innerHTML = "Save";
 		},
