@@ -25,11 +25,12 @@ class WhatsappController extends Controller
         $qrCodeBase64 = '';
         $invalidphone = false;
         $serverError = false;
+        $connected = false;
 
         // Verificar o estado da instância
         if (!$this->whatsappService->checkInstanceState()) {
             $serverError = true;
-            return view('default.panel.user.whatsapp.index', compact('qrCodeBase64', 'invalidphone', 'serverError'));
+            return view('default.panel.user.whatsapp.index', compact('qrCodeBase64', 'invalidphone', 'serverError', 'connected'));
         }
 
         if ($validphone) {
@@ -48,6 +49,7 @@ class WhatsappController extends Controller
 
                         if ($connectData && isset($connectData['instance']) && $connectData['instance']['state'] === 'open') {
                             // Instância já está conectada, não precisa de QR code
+                            $connected = true;
                             $qrCodeBase64 = '';
                         } else {
                             // Instância não está conectada, obter o QR code
@@ -76,7 +78,7 @@ class WhatsappController extends Controller
             $invalidphone = true;
         }
 
-        return view('default.panel.user.whatsapp.index', compact('qrCodeBase64', 'invalidphone', 'serverError'));
+        return view('default.panel.user.whatsapp.index', compact('qrCodeBase64', 'invalidphone', 'serverError', 'connected'));
     }
 
     public function logout()
@@ -97,5 +99,40 @@ class WhatsappController extends Controller
         }
 
         return redirect()->route('dashboard.user.whatsapp');
+    }
+
+    public function regenerate()
+    {
+        $user = Auth::user();
+        $phone = $user->phone;
+
+        // Remover o caractere '+' do número de telefone
+        $phoneWithoutPlus = str_replace('+', '', $phone);
+
+        try {
+            $this->whatsappService->logoutInstance($phoneWithoutPlus);
+        } catch (\Exception $e) {
+            // Captura qualquer exceção e define a variável de erro do servidor
+        }
+
+        return redirect()->route('dashboard.user.whatsapp');
+    }
+
+    public function checkConnection()
+    {
+        $user = Auth::user();
+        $phone = $user->phone;
+        $phoneWithoutPlus = str_replace('+', '', $phone);
+
+        try {
+            $connectData = $this->whatsappService->connectInstance($phoneWithoutPlus);
+            if ($connectData && isset($connectData['instance']) && $connectData['instance']['state'] === 'open') {
+                return response()->json(['connected' => true]);
+            }
+        } catch (\Exception $e) {
+            return response()->json(['connected' => false]);
+        }
+
+        return response()->json(['connected' => false]);
     }
 }

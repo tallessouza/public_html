@@ -96,7 +96,8 @@
             Para utilizar a transcrição de áudios, seu número do Whatsapp deve estar configurado no seu perfil.
         </p>
         <p class="mb-3">
-            O número deve estar com todos os dígitos corretos e ter uma conta ativa no Whatsapp.
+            O número deve estar no padrão DDI (+55), DDD (21), número (988888888) e ter uma conta ativa no Whatsapp.
+            Exemplo: +5521988888888
         </p>
         <p class="mb-3">
             Clique no botão abaixo para configurá-lo.
@@ -118,12 +119,22 @@
             <figure>
                 <img id="qrCodeImage" class="rounded-xl shadow-xl" src="{{ $qrCodeBase64 }}" alt="QR Code" />
             </figure>
-            <p class="mb-3 mt-4 text-center">
+            <p id="qrCodeMessage" class="mb-3 mt-4 text-center">
                 Leia o QR Code para ativar o serviço.
             </p>
         </div>
-        @else
-        <div class="py-10">
+        <div class="flex justify-center">
+            <form id="regenerateForm" method="POST" action="{{ route('dashboard.user.whatsapp.regenerate') }}">
+                @csrf
+                <x-button class="mt-4 flex max-xl:hidden" type="submit">
+                    <span class="max-lg:hidden">
+                        {{ __('Gerar novamente') }}
+                    </span>
+                </x-button>
+            </form>
+        </div>
+        @endif
+        <div id="successMessage" class="py-10" style="display: {{ $connected ? 'block' : 'none' }};">
             <div class="container-xl">
                 <div class="success-animation mb-3">
                     <svg class="checkmark" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 52 52">
@@ -140,7 +151,7 @@
             </div>
         </div>
         <div class="flex justify-center">
-            <form method="POST" action="{{ route('dashboard.user.whatsapp.logout') }}">
+            <form id="disconnectForm" method="POST" action="{{ route('dashboard.user.whatsapp.logout') }}" style="display: {{ $connected ? 'block' : 'none' }};">
                 @csrf
                 <x-button class="mt-4 flex max-xl:hidden" type="submit">
                     <span class="max-lg:hidden">
@@ -149,9 +160,34 @@
                 </x-button>
             </form>
         </div>
-        @endif
     </div>
 </div>
 @endif
+
+<script>
+    function checkConnection() {
+        fetch('{{ route('dashboard.user.whatsapp.checkConnection') }}')
+            .then(response => response.json())
+            .then(data => {
+                if (data.connected) {
+                    document.getElementById('qrCodeImage').style.display = 'none';
+                    document.getElementById('qrCodeMessage').style.display = 'none';
+                    document.getElementById('regenerateForm').style.display = 'none';
+                    document.getElementById('successMessage').style.display = 'block';
+                    document.getElementById('disconnectForm').style.display = 'block';
+                } else {
+                    setTimeout(checkConnection, 5000); // Verifica novamente após 5 segundos
+                }
+            })
+            .catch(error => {
+                console.error('Erro ao verificar a conexão:', error);
+                setTimeout(checkConnection, 5000); // Verifica novamente após 5 segundos
+            });
+    }
+
+    document.addEventListener('DOMContentLoaded', function() {
+        checkConnection();
+    });
+</script>
 
 @endsection

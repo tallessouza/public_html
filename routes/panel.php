@@ -58,7 +58,9 @@ Route::group(['prefix' => LaravelLocalization::setLocale(), 'middleware' => ['lo
 			Route::get('/', [UserController::class, 'index'])->name('index');
 			Route::get('/whatsapp', [WhatsappController::class, 'index'])->name('whatsapp');
 			Route::post('/whatsapp/logout', [WhatsappController::class, 'logout'])->name('whatsapp.logout');
-
+			Route::post('/regenerate', [WhatsappController::class, 'regenerate'])->name('whatsapp.regenerate');
+			Route::get('/check-connection', [WhatsappController::class, 'checkConnection'])->name('whatsapp.checkConnection');
+			# premium support
             Route::group([
                 'controller' => Google2FAController::class,
                 'prefix' => '2fa',
