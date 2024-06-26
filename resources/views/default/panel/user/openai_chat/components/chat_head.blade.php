@@ -49,7 +49,7 @@
                     label="{{ __('Use Real-Time Data') }}"
                     type="checkbox"
                     name="realtime"
-                    onchange="const checked = document.querySelector('#realtime').checked; if ( checked ) { toastr.success('Real-Time data activated') } else { toastr.warning('Real-Time data deactivated') }"
+                    onchange="const checked = document.querySelector('#realtime').checked; if ( checked ) { toastr.success('Dados em tempo real ativado') } else { toastr.warning('Dados em tempo real desativado') }"
                     switcher
                 >
                     <span

@@ -18,7 +18,7 @@ class hasTokens
             return $next($request);
         }
 
-        return back()->with(['message' => 'Insufficient credits to create.' , 'type' => 'error']);
+        return back()->with(['message' => 'Sem créditos para criar.' , 'type' => 'error']);
     }
 
     public function checkCredit(Request $request): bool

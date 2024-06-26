@@ -115,7 +115,7 @@
                     @endif
                 </strong>
                 <br>
-                {{ __('Tokens') }}
+                {{ __('Palavras') }}
             </h3>
             <div
                 class="relative [&_.apexcharts-legend-text]:!m-0 [&_.apexcharts-legend-text]:!pe-2 [&_.apexcharts-legend-text]:ps-2 [&_.apexcharts-legend-text]:!text-foreground"

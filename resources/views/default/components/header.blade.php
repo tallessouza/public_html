@@ -7,6 +7,9 @@
 @endphp
 
 <header class="lqd-header relative flex h-[--header-height] border-b border-header-border bg-header-background text-xs font-medium transition-colors max-lg:h-[65px]">
+<input id="usermail" type="hidden" value="{{ Auth::user()->email}}">
+<input id="created_at" type="hidden" value="{{ Auth::user()->created_at}}">
+    
     <div @class([
         'lqd-header-container flex w-full grow gap-2 px-4 max-lg:w-full max-lg:max-w-none',
         'container' => !$attributes->get('layout-wide'),

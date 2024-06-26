@@ -122,52 +122,87 @@ class AuthController extends Controller
             "8020" => 18,
             "comunidade" => 16,
             "formacao" => 17,
-            "vitalicio" => 19
+            "vitalicio" => 19,
+            "nps" => 20,
+            "518" => 21
         ];
+
+        // Verificar se é um webhook de FORM_RESPONSE
+        $isFormResponse = $request->input('eventType') === 'FORM_RESPONSE';
+
         // Comparar a chave de autorização com a variável de ambiente API_KEY
-        if ($authorizationHeader !== env('API_KEY')) {
+        if (!$isFormResponse && $authorizationHeader !== env('API_KEY')) {
             return response()->json(['error' => 'Unauthorized'], 401);
         }
 
-        $validator = Validator::make($request->all(), [
-            'name' => ['required', 'string', 'max:255'],
-            'surname' => ['required', 'string', 'max:255'],
-            'email' => ['required', 'string', 'email', 'max:255'],
-            'password' => ['required', 'confirmed', Password::defaults()],
-            'role' => ['required', 'string', 'max:255'],
-        ]);
+        if ($isFormResponse) {
+            // Bypassar validações e atribuir o atributo nps
+            $email = $this->getEmailFromWebhook($request->input('data.fields'));
 
-        if ($validator->fails()) {
-            return response()->json(['error' => $validator->errors()], 422);
+            if (!$email) {
+                return response()->json(['error' => 'Email não encontrado no webhook'], 422);
+            }
+
+            $role = 'nps';
+        } else {
+            // Validações normais para requisições não-webhook
+            $validator = Validator::make($request->all(), [
+                'name' => ['required', 'string', 'max:255'],
+                'surname' => ['required', 'string', 'max:255'],
+                'email' => ['required', 'string', 'email', 'max:255'],
+                'password' => ['required', 'confirmed', Password::defaults()],
+                'role' => ['required', 'string', 'max:255'],
+            ]);
+
+            if ($validator->fails()) {
+                return response()->json(['error' => $validator->errors()], 422);
+            }
+
+            $email = $request->email;
+            $role = $request->role;
         }
 
-        $user = User::where('email', $request->email)->first();
+        return $this->handleUserRegistration($email, $role, $planbyrole, $request);
+    }
+
+    private function getEmailFromWebhook($fields)
+    {
+        foreach ($fields as $field) {
+            if ($field['label'] === 'email') {
+                return $field['value'];
+            }
+        }
+        return null;
+    }
+
+    private function handleUserRegistration($email, $role, $planbyrole, $request)
+    {
+        $user = User::where('email', $email)->first();
 
         if ($user) {
             // Usuário já existe, apenas atribuir tokens
-            $request->merge(['userID' => $user->id, 'token' => $planbyrole[$request->role]]);
+            $request->merge(['userID' => $user->id, 'token' => $planbyrole[$role]]);
             $paymentController = new PaymentProcessController();
             $paymentController->assignTokenByAdmin($request);
 
             return response()->json(['message' => 'Tokens atribuídos com sucesso!', 'user' => $user], 200);
         } else {
             // Criar novo usuário
-            $affCode = null;
             $settings = Setting::first();
             $user = User::create([
-                'name' => $request->name,
-                'surname' => $request->surname,
-                'email' => $request->email,
+                'name' => $request->name ?? 'N/A',
+                'surname' => $request->surname ?? 'N/A',
+                'email' => $email,
                 'email_confirmation_code' => Str::random(67),
                 'remaining_words' => explode(',', $settings->free_plan)[0],
                 'remaining_images' => explode(',', $settings->free_plan)[1] ?? 0,
-                'password' => Hash::make($request->password),
+                'password' => Hash::make($request->password ?? Str::random(12)), // Senha aleatória
                 'email_verification_code' => Str::random(67),
-                'affiliate_id' => $affCode,
+                'affiliate_id' => null,
                 'affiliate_code' => Str::upper(Str::random(12)),
             ]);
 
-            $request->merge(['userID' => $user->id, 'token' => $planbyrole[$request->role]]);
+            $request->merge(['userID' => $user->id, 'token' => $planbyrole[$role]]);
             $paymentController = new PaymentProcessController();
             $paymentController->assignTokenByAdmin($request);
 
