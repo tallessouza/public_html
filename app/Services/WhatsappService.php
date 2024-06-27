@@ -105,7 +105,25 @@ class WhatsappService
 
         return null;
     }
+    public function configureRabbitMQ($instanceName)
+    {
+        $response = Http::withHeaders([
+            'Content-Type' => 'application/json',
+            'apikey' => $this->apiKey
+        ])->post("{$this->baseUrl}/rabbitmq/set/{$instanceName}", [
+            'enabled' => true,
+            'events' => [
+                'MESSAGES_UPSERT'
+            ]
+        ]);
 
+        if (!$response->successful()) {
+            // \Log::error("Falha ao configurar RabbitMQ para a instância {$instanceName}");
+            return false;
+        }
+
+        return true;
+    }
     public function logoutInstance($instanceName)
     {
         $response = Http::withHeaders([

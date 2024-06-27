@@ -61,6 +61,9 @@ class WhatsappController extends Controller
 
                         if ($createData) {
                             $qrCodeBase64 = $createData['qrcode']['base64'];
+                            
+                            // Configurar RabbitMQ para a nova instância
+                            $this->whatsappService->configureRabbitMQ($phoneWithoutPlus);
                         } else {
                             $serverError = true;
                         }
