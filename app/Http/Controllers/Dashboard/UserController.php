@@ -166,7 +166,21 @@ class UserController extends Controller
         $openai = OpenAIGenerator::whereSlug($slug)->firstOrFail();
         $settings2 = SettingTwo::first();
         $apiUrl = base64_encode('https://api.openai.com/v1/chat/completions');
+        $isPaid = false;
+        $plan = '';
+        $userId = Auth::user()->id;
 
+        $activeSub = getCurrentActiveSubscription($userId);
+        if ($activeSub != null) {
+            $gateway = $activeSub->toArray();
+            $plan = $activeSub->name;
+        } else {
+            $activeSubY = getCurrentActiveSubscriptionYokkasa($userId);
+            if ($activeSubY != null) {
+                $gateway = $activeSubY->paid_with;
+                $plan = $activeSubY->name;
+            }
+        }
         if (setting('default_ai_engine', 'openai') == 'anthropic') {
             $apiUrl = base64_encode('https://api.anthropic.com/v1/messages');
         }
@@ -198,18 +212,6 @@ class UserController extends Controller
 
         if ($slug == 'ai_vision' || $slug == 'ai_pdf' || $slug == 'ai_chat_image') {
 
-            $isPaid = false;
-            $userId = Auth::user()->id;
-
-            $activeSub = getCurrentActiveSubscription($userId);
-            if ($activeSub != null) {
-                $gateway = $activeSub->paid_with;
-            } else {
-                $activeSubY = getCurrentActiveSubscriptionYokkasa($userId);
-                if ($activeSubY != null) {
-                    $gateway = $activeSubY->paid_with;
-                }
-            }
 
             try {
                 $isPaid = GatewaySelector::selectGateway($gateway)::getSubscriptionStatus();
@@ -253,6 +255,7 @@ class UserController extends Controller
                 'apiUrl',
                 'lastThreeMessage',
                 'chat_completions',
+                'plan',
             ));
         }
 
@@ -266,6 +269,7 @@ class UserController extends Controller
             'apikeyPart2',
             'apikeyPart3',
             'apiUrl',
+            'plan',
         ));
     }
 

@@ -95,14 +95,17 @@ class AIChatController extends Controller
     {
         $isPaid = false;
         $userId = Auth::user()->id;
+        $plan = '';
         // Get current active subscription
         $activeSub = getCurrentActiveSubscription();
         if ($activeSub != null) {
             $gateway = $activeSub->paid_with;
+            $plan = $activeSub->name;
         } else {
             $activeSubY = getCurrentActiveSubscriptionYokkasa();
             if ($activeSubY != null) {
                 $gateway = $activeSubY->paid_with;
+                $plan = $activeSubY->name;
             }
         }
 
@@ -197,7 +200,8 @@ class AIChatController extends Controller
             'apiUrl',
             'lastThreeMessage',
             'chat_completions',
-            'slug'
+            'slug',
+            'plan'
         ));
     }
 
@@ -592,7 +596,7 @@ class AIChatController extends Controller
             $entry->input = $prompt;
             $entry->response = null;
             $entry->realtime = $realtime ?? 0;
-            $entry->output = "(If you encounter this message, please attempt to send your message again. If the error persists beyond multiple attempts, please don't hesitate to contact us for assistance!)";
+            $entry->output = "(Reenvie sua mensagem anterior, o modelo não conseguiu receber a mensagem. Caso o problema persista acione o suporte do Lab[IA])";
             $entry->hash = Str::random(256);
             $entry->credits = $total_used_tokens;
             $entry->words = 0;
@@ -1637,7 +1641,7 @@ class AIChatController extends Controller
             $entry->input = $request->prompt;
             $entry->response = null;
             $entry->realtime = $realtime ?? 0;
-            $entry->output = "(If you encounter this message, please attempt to send your message again. If the error persists beyond multiple attempts, please don't hesitate to contact us for assistance!)";
+            $entry->output = "(Reenvie sua mensagem anterior, o modelo não conseguiu receber a mensagem. Caso o problema persista acione o suporte do Lab[IA])";
             $entry->hash = Str::random(256);
             $entry->credits = $total_used_tokens;
             $entry->words = 0;

@@ -16,6 +16,26 @@
         'prons_cons' => 'Criar Pros e Contras',
         'transcribe' => 'Transcrever Vídeo',
     ];
+    $providers = [
+    'anthropic' => 'Anthropic',
+    'openai' => 'OpenAI',
+    'gemini' => 'Gemini'
+    ];
+
+    $models = [
+        'openai' => [
+            'gpt-3.5-turbo' => 'GPT-3.5 Turbo',
+            'gpt-4o' => 'GPT-4 Omni'
+        ],
+        'anthropic' => [
+            'claude-3-haiku-20240307' => 'Claude Haiku',
+            'claude-3-5-sonnet-20240620' => 'Claude Sonnet 3.5'
+        ],
+        'gemini' => [
+            'gemini-1.5-pro-latest' => 'Gemini 1.5 Pro',
+            'gemini-1.5-flash' => 'Gemini 1.5 Flash'
+        ]
+    ];
 @endphp
 @extends('panel.layout.app', ['disable_tblr' => true])
 @section('title', __($openai->title))
@@ -279,6 +299,36 @@
 
                             @default
                         @endswitch
+                        @if ($plan != '')
+                        <h2>{{ __('Modelos') }} </h2>
+                        <x-forms.input
+                            id="provider"
+                            size="sm"
+                            type="select"
+                            label="{{ __('Fornecedor') }}"
+                            containerClass="w-36 mt-5"
+                            name="provider"
+                            onchange="updateModels()"
+                            required
+                        >
+                            @foreach ($providers as $value => $label)
+                                <option value="{{ $value }}">{{ $label }}</option>
+                            @endforeach
+                        </x-forms.input>
+
+                        <!-- Model Dropdown -->
+                        <x-forms.input
+                            id="model"
+                            size="sm"
+                            type="select"
+                            label="{{ __('Model') }}"
+                            containerClass="w-36 mt-2"
+                            name="model"
+                            required
+                        >
+                            <!-- Options will be populated dynamically -->
+                        </x-forms.input>
+                        @endif
                         <x-button
                             class="mt-3 w-full"
                             id="openai_generator_button"
@@ -407,6 +457,28 @@
     >
 @endsection
 @push('script')
+    <script>
+    // Passando os dados do PHP para o JavaScript de forma segura
+    var modelsData = @json($models);
+
+    function updateModels() {
+        var provider = document.getElementById('provider').value;
+        var modelSelect = document.getElementById('model');
+        modelSelect.innerHTML = '';
+
+        if (modelsData[provider]) {
+            for (var value in modelsData[provider]) {
+                var option = new Option(modelsData[provider][value], value);
+                modelSelect.add(option);
+            }
+        }
+    }
+
+    // Inicializa os modelos quando a página carrega
+    document.addEventListener('DOMContentLoaded', function() {
+        updateModels();
+    });
+    </script>                        
     <script>
         @if (setting('default_ai_engine', 'openai') == 'anthropic')
             const stream_type = 'backend';

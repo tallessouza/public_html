@@ -16,14 +16,14 @@ class Anthropic
 
     public ?string $system = null;
 
-    public function stream(): \GuzzleHttp\Promise\PromiseInterface|\Illuminate\Http\Client\Response
+    public function stream($chat_bot): \GuzzleHttp\Promise\PromiseInterface|\Illuminate\Http\Client\Response
     {
         $client = $this->client();
 
         $system = (bool) $this->system;
 
         $body = Helper::arrayMerge($system, [
-            'model' => setting('anthropic_default_model'),
+            'model' => $chat_bot,
             'max_tokens' => (int) setting('anthropic_max_output_length', 1024),
             'messages' => $this->messages,
             'stream' => $this->isStream()

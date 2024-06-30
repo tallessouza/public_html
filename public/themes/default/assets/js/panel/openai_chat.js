@@ -710,7 +710,15 @@ function updateChatButtons() {
 				}
 			}, 20);
 			let inputWithPrompt = "Responda em portugês"+instructions.value +"\n"+promptInputValue
-			console.log(inputWithPrompt)
+			// console.log(inputWithPrompt)
+			let modelElement = document.getElementById('model');
+			let providerElement = document.getElementById('provider');
+			
+			// Verificar se os elementos existem e têm um valor
+			let model = modelElement && modelElement.value ? modelElement.value : '';
+			let provider = providerElement && providerElement.value ? providerElement.value : '';
+		//    console.log(model)
+		//    console.log(provider)
 			if (stream_type == 'backend') {
 				const isChecked = realtime?.checked ? 1 : 0;
 				function implementChat(type, images) {
@@ -724,6 +732,8 @@ function updateChatButtons() {
 					formData.append('pdfpath', pdfPath == undefined ? '' : pdfPath);
 					formData.append('realtime', isChecked ? 1 : 0);
 					formData.append('instructions', instructions.value);
+					formData.append('provider', provider);
+					formData.append('model', model);
 					var receivedMessageId = false;
 					fetchEventSource('/dashboard/user/generator/generate-stream', {
 						method: 'POST',
@@ -1402,7 +1412,7 @@ $(document).ready(function () {
 	}
 
 	function deleteChatItem(chatId, chatTitle) {
-		if (confirm(`Are you sure you want to remove ${chatTitle}?`)) {
+		if (confirm(`Tem certeza que deseja remover a conversa com ${chatTitle}?`)) {
 			var formData = new FormData();
 			formData.append('chat_id', chatId);
 

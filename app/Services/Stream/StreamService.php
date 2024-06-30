@@ -36,8 +36,8 @@ class StreamService
 				break;
 		}
     }
-	public function ChatStream($chat_bot, $history, $main_message, $chat_type , $contain_images){
-		switch (setting('default_ai_engine', 'openai'))
+	public function ChatStream($chat_bot, $history, $main_message, $chat_type , $contain_images, $provider){
+		switch ($provider)
 		{
 			case 'openai':
 				return $this->openaiChatStream($chat_bot, $history, $main_message, $chat_type , $contain_images);
@@ -49,8 +49,8 @@ class StreamService
 				return $this->openaiChatStream($chat_bot, $history, $main_message, $chat_type , $contain_images);
 		}
 	}
-	public function OtherStream(Request $request, $chat_bot){
-		switch (setting('default_ai_engine', 'openai'))
+	public function OtherStream(Request $request, $chat_bot, $provider){
+		switch ($provider)
 		{
 			case 'openai':
 				return $this->openaiOtherStream($request, $chat_bot);
@@ -59,7 +59,7 @@ class StreamService
 			case 'gemini':
 				return $this->geminiOtherStream($request, $chat_bot);
 			default:
-				return $this->openaiOtherStream($request, $chat_bot);
+				return $this->anthropicOtherStream($request, $chat_bot);
 		}
 	}
 	public function reduceTokensWhenIntterruptStream(Request $request, $type) {
@@ -278,7 +278,7 @@ class StreamService
 				$data = $client->setStream(true)
 					->setSystem($system)
 					->setMessages(array_values($historyMessages))
-					->stream()
+					->stream($chat_bot)
 					->body();
 				foreach (explode("\n", $data) as $chunk) {
 					if (strlen($chunk) < 6) {
@@ -395,7 +395,7 @@ class StreamService
 			$data = $client->setStream(true)
 				->setSystem($system)
 				->setMessages(array_values($historyMessages))
-				->stream()
+				->stream($chat_bot)
 				->body();
 			foreach (explode("\n", $data) as $chunk) {
 				if (strlen($chunk) < 6) {

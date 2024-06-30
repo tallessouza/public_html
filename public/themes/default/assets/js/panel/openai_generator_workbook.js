@@ -62,6 +62,14 @@ const generate = async (message_no, creativity, maximum_length, number_of_result
 	if (stream_type == 'backend') {
 		var signal = new AbortController().signal;
 		var formData = new FormData();
+		let modelElement = document.getElementById('model');
+		let providerElement = document.getElementById('provider');
+		
+		// Verificar se os elementos existem e têm um valor
+		let model = modelElement && modelElement.value ? modelElement.value : '';
+		let provider = providerElement && providerElement.value ? providerElement.value : '';
+		console.log(model)
+		console.log(provider)
 		formData.append('template_type', 'writer');
 		formData.append('message_id', message_no);
 		formData.append('prompt', prompt);
@@ -69,6 +77,8 @@ const generate = async (message_no, creativity, maximum_length, number_of_result
 		formData.append('maximum_length', maximum_length);
 		formData.append('number_of_results', number_of_results);
 		formData.append('openai_id', openai_id);
+		formData.append('provider', provider);
+		formData.append('model', model);
 		var receivedMessageId = false;
 		fetchEventSource('/dashboard/user/generator/generate-stream', {
 			method: 'POST',

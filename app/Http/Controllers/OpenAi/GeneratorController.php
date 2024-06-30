@@ -36,30 +36,56 @@ class GeneratorController extends Controller
     }
 	public function buildStreamedOutput(Request $request){
 		$template_type = $request->get('template_type', 'chatbot');
+		$provider = $request->get('provider');
+		if ($provider === null || $provider === 'undefined' || $provider === '') {
+			$provider = setting('default_ai_engine', 'anthropic');
+		}
+		
+		// Tratamento para o model
+		$model = $request->get('model');
+		if ($model === null || $model === 'undefined' || $model === '') {
+			$default_engine = setting('default_ai_engine', 'anthropic');
+			$model = setting($default_engine . '_default_model', 'claude-3-haiku-20240307');
+		}
 		# If the template type is chat, then we will build a chat streamed output or other ai template streamed output
+		switch ($provider)
+		{
+			case 'openai':
+				Helper::setOpenAiKey();
+				break;
+			case 'anthropic':
+				Helper::setAnthropicKey();
+				break;
+			case 'gemini':
+				Helper::setGeminiKey();
+				break;
+			default:
+				Helper::setOpenAiKey();
+				break;
+		}
 		switch ($template_type) {
 			case 'chatbot':
 				// Log::info('Chatbot');
 
 			case 'vision':
 				// Log::info('Vision');
-				return $this->buildChatStreamedOutput($request);
+				return $this->buildChatStreamedOutput($request,$provider,$model);
 
 				break;
 			case 'writer':
 				// Log::info('Writer');
 
-				return $this->buildOtherStreamedOutput($request);
+				return $this->buildOtherStreamedOutput($request,$provider,$model);
 				break;
 			default:
 			// Log::info('Default');
 				
-				return $this->buildOtherStreamedOutput($request);
+				return $this->buildOtherStreamedOutput($request,$provider,$model);
 				break;
 		}
 	}
 	# chat template and etc.
-	public function buildChatStreamedOutput(Request $request){
+	public function buildChatStreamedOutput(Request $request,$provider,$model){
 		$prompt = $request->get('prompt');
 		$realtime = $request->get('realtime', false);
 		$chat_id = $request->get('chat_id');
@@ -100,7 +126,7 @@ class GeneratorController extends Controller
 		$message->input = $prompt;
 		$message->response = null;
 		$message->realtime = $realtime ?? 0;
-		$message->output = __("(If you encounter this message, please attempt to send your message again. If the error persists beyond multiple attempts, please don't hesitate to contact us for assistance!)");
+		$message->output = __("(Reenvie sua mensagem anterior, o modelo não conseguiu receber a mensagem. Caso o problema persista acione o suporte do Lab[IA])");
 		$message->hash = Str::random(256);
 		$message->credits = 0;
 		$message->words = 0;
@@ -255,12 +281,12 @@ class GeneratorController extends Controller
 			$contain_images = true;
 		}
 
-
-		return $this->streamService->ChatStream($chat_bot, $history, $message, $chat_type, $contain_images);
+		$chat_bot = $model;
+		return $this->streamService->ChatStream($chat_bot, $history, $message, $chat_type, $contain_images, $provider);
 	}
 
 	# ai writer template and etc.
-	public function buildOtherStreamedOutput(Request $request)
+	public function buildOtherStreamedOutput(Request $request,$provider,$model)
     {
         if (setting('default_ai_engine') == 'gemini') {
             $chat_bot = setting('gemini_default_model');
@@ -270,8 +296,8 @@ class GeneratorController extends Controller
         else {
             $chat_bot = $this->settings?->openai_default_model == null ? 'gpt-3.5-turbo': $this->settings?->openai_default_model;
         }
-
-		return $this->streamService->OtherStream($request, $chat_bot);
+		$chat_bot = $model;
+		return $this->streamService->OtherStream($request, $chat_bot, $provider );
 	}
 
 	# reduce tokens when the stream is interrupted

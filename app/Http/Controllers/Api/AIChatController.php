@@ -720,7 +720,7 @@ class AIChatController extends Controller
             $entry->user_openai_chat_id = $chat->id;
             $entry->input = $prompt;
             $entry->response = null;
-            $entry->output = "(If you encounter this message, please attempt to send your message again. If the error persists beyond multiple attempts, please don't hesitate to contact us for assistance!)";
+            $entry->output = "(Reenvie sua mensagem anterior, o modelo não conseguiu receber a mensagem. Caso o problema persista acione o suporte do Lab[IA])";
             $entry->hash = Str::random(256);
             $entry->credits = $total_used_tokens;
             $entry->words = 0;
