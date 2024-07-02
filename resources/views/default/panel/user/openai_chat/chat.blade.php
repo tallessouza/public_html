@@ -1,12 +1,12 @@
 @extends('panel.layout.app', ['disable_tblr' => true])
 @section('title',
-$slug == 'lendaria-KMEam'
+isset($slug) && $slug == 'lendaria-KMEam'
 ? __('Lendár[IA]')
-: ($category->slug == 'ai_vision'
+: (isset($category) && $category->slug == 'ai_vision'
 ? __('Vision AI')
-: ($category->slug == 'ai_pdf'
+: (isset($category) && $category->slug == 'ai_pdf'
 ? __('AI File Chat')
-: ($category->slug == 'ai_chat_image'
+: (isset($category) && $category->slug == 'ai_chat_image'
 ? __('Chat Image')
 : __('AI Chat')))))
 @section('titlebar_subtitle')
@@ -25,7 +25,8 @@ $slug == 'lendaria-KMEam'
 <input id="openChatAreaContainerUrl" type="hidden" name="openChatAreaContainerUrl" value="@yield('openChatAreaContainerUrl', '/dashboard/user/openai/chat/open-chat-area-container')" />
 
 <div class="py-10">
-    @if (strpos($slug, 'lendaria-') !== false)
+    @if (isset($slug) && strpos($slug, 'lendaria-') !== false)
+
     <div class="h-[calc(100vh-10rem)] w-full">
         <iframe id="customIframe" src="http://lendario.pro/chatbot/8ezpIIUKB2ShNX8n"  style="width: 100%; height: 100%; min-height: 700px; border-radius: 20px;" frameborder="0" allow="microphone"></iframe>
     </div>

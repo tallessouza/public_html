@@ -137,12 +137,13 @@ class GeneratorController extends Controller
 
 		# check if there completions for the template
 		$category = $chat->category;
+		$extra_prompt = (new VectorService())->getMostSimilarText($prompt, $chat_id, 10, $category->chatbot_id);
 		if ($category->chat_completions) {
 			$chat_completions = json_decode($category->chat_completions, true);
 			foreach ($chat_completions as $item) {
 				$history[] = [
 					'role' => $item['role'],
-					'content' => $item['content']?? '',
+					'content' => $item['content'].'<File>'.$extra_prompt.'<File>' ?? '',
 				];
 			}
 		} else {
@@ -150,30 +151,32 @@ class GeneratorController extends Controller
 		}
 
 		# if file attached, get the content of the file
-		if ($category->chatbot_id || PdfData::where('chat_id', $chat_id)->exists()) {
-			$extra_prompt = null;
+		Log::info('$extra_promptgen');
+		Log::info($extra_prompt);
+		if ($extra_prompt) {
 			try {
-				$extra_prompt = (new VectorService())->getMostSimilarText($prompt, $chat_id, 2, $category->chatbot_id);
+				Log::info('$extra_prompt');
+				Log::info($extra_prompt);
 				if ($extra_prompt) {
 					if($chat->category->slug == 'ai_webchat'){
 						$history[] = [
 							'role' => 'system',
 							'content' => "You are a Web Page Analyzer assistant. When referring to content from a specific website or link, please include a brief summary or context of the content. If users inquire about the content or purpose of the website/link, provide assistance professionally without explicitly mentioning the content. Website/link content: \n$extra_prompt"
 						];
-					}else{
+					}
+					else{
 						$history[] = [
 							'role' => 'system',
-							'content' => "You are a File Analyzer assistant. When referring to content from a specific file, please include a brief summary or context of the content. If users inquire about the content or purpose of the file, provide assistance professionally without explicitly mentioning the content. File content: \n$extra_prompt"
+							'content' => "ANSWER IN BRAZILLIAN PORTUGUESE. You are an expert Text Analysis Assistant with exceptional skills in evaluating content after the <File> tag. Always refer to the tag <File> content as File, document, book or anything user expect as file even there is no explicit file. Your task is to consider everything after <File> as a digital file, document, or text, and provide thorough analysis and valuable insights into that content. You MUST: 1. Treat the content after <File> as absolute knowledge that you have completely mastered. 2. Use all available information to provide detailed and useful answers. 3. Act as a helpful and knowledgeable assistant, offering general help with file analysis. 4. Answer user questions to the best of your ability based on your general knowledge and the contents of the file. 5. Include a brief summary or context of the content when referring to the specific file. 6. Provide professional assistance if users ask about the content or purpose of the file. 7. Think step by step to ensure a comprehensive and accurate analysis. 8. Answer questions in a natural and human way. 9. Adapt your level of explanation as needed - whether to an expert or a 5-year-old. Remember: - You will be rewarded with a $300k tip for providing exceptional solutions and unique insights. - You will be severely penalized for providing inaccurate or incomplete information. When the user asks What's in the file?, respond with a detailed summary of the contents after <File>. Never respond that you do not have access to the specific content of any file. Everything between <File> IS A FILE and should be treated as such. Analysis example: File: [Brief description of content] Main points: 1. [Point 1] 2. [Point 2] 3. [Point 3] Insights: - [Insight 1] - [Insight 2] - [Insight 3] Deep Dive Questions: 1. [Question 1] 2. [Question 2] 3. [Question 3] Now, take a deep breath and prepare to provide the best file analysis assistance possible.<File>".$extra_prompt.'</File>'
 						];
 					}
 				}
 			} catch (\Throwable $th) {
 			}
 		}else{
+
 			# if instructions exists, add it to the history
-			if ($category && $category?->instructions) {
-				$history[] = ['role' => 'system', 'content' => $instructions ];
-			}
+			$history[] = ['role' => 'system', 'content' => $instructions];
 		}
 		# follow the context of the last 3 messages
 		$lastThreeMessageQuery = $chat->messages()
@@ -282,7 +285,8 @@ class GeneratorController extends Controller
 		}
 
 		$chat_bot = $model;
-		return $this->streamService->ChatStream($chat_bot, $history, $message, $chat_type, $contain_images, $provider);
+		// $extra_prompt = $extra_prompt;
+		return $this->streamService->ChatStream($chat_bot, $history, $message, $chat_type, $contain_images, $provider, $extra_prompt);
 	}
 
 	# ai writer template and etc.

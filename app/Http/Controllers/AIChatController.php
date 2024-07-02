@@ -411,20 +411,20 @@ class AIChatController extends Controller
             Log::info($page);
         } elseif ($type == 'csv') {
             $file = file_get_contents(public_path('uploads/temp.' . $type));
+
+            // Verificar se o conteúdo foi lido corretamente
+            if ($file === false) {
+                Log::error("Erro ao ler o arquivo: " . public_path('uploads/temp.' . $type));
+                return;
+            }
+
+            // Explode o conteúdo do arquivo em linhas
             $rows = explode(PHP_EOL, $file);
 
-            $header = str_getcsv(array_shift($rows)); // Get header row
-            Log::info(json_encode($header));
-            $dataAsJson = [];
-            foreach ($rows as $row) {
-                Log::info(count($header));
-                Log::info(json_encode(array_pad(str_getcsv($row), count($header), '')));
-                $data = array_combine($header, array_pad(str_getcsv($row), count($header), '')); // Combine header with data
-                $dataAsJson[] = json_encode($data);
-                Log::info($row);
-            }
-            $page = implode("\n", $dataAsJson);
-            Log::info($page);
+            // Log para verificar o conteúdo lido
+            Log::info('$file content:', $rows);
+
+            $page = $rows[0];
         }
 
         $countwords = strlen($page) / 1001 + 1;

@@ -75,6 +75,39 @@
                     <x-tabler-plus class="size-5" />
                     {{ __('Upload Document') }}
                 </x-button>
+                @if ($plan != '')
+                <h2>{{ __('Modelos') }} </h2>
+                <x-forms.input
+                    id="provider"
+                    size="sm"
+                    type="select"
+                    label="{{ __('Fornecedor') }}"
+                    containerClass="w-36 mt-5"
+                    name="provider"
+                    onchange="updateModels()"
+                    required
+                >
+                    @foreach ($providers as $value => $label)
+                        <option value="{{ $value }}">{{ $label }}</option>
+                    @endforeach
+                </x-forms.input>
+
+                <!-- Model Dropdown -->
+                <x-forms.input
+                    id="model"
+                    size="sm"
+                    type="select"
+                    label="{{ __('Model') }}"
+                    containerClass="w-36 mt-2"
+                    name="model"
+                    required
+                >
+                    <!-- Options will be populated dynamically -->
+                </x-forms.input>
+                @else
+                    <input id="provider" type="hidden" value=" ">
+                    <input id="model" type="hidden" value=" ">
+                @endif
             @else
                 <x-button
                     class="lqd-new-chat-trigger w-full text-xs mb-3"
@@ -126,11 +159,14 @@
 var modelsData = @json($models);
 
 function updateModels() {
+    if ( document.getElementById('provider').value == ' ') {
+        return
+    }
     var provider = document.getElementById('provider').value;
     var modelSelect = document.getElementById('model');
     modelSelect.innerHTML = '';
 
-    if (modelsData[provider]) {
+    if (provider != null && modelSelect != null && modelsData != null && modelsData[provider] != null) {
         for (var value in modelsData[provider]) {
             var option = new Option(modelsData[provider][value], value);
             modelSelect.add(option);

@@ -328,6 +328,9 @@
                         >
                             <!-- Options will be populated dynamically -->
                         </x-forms.input>
+                        @else
+                            <input id="provider" type="hidden" value="">
+                            <input id="model" type="hidden" value="">
                         @endif
                         <x-button
                             class="mt-3 w-full"
@@ -465,8 +468,7 @@
         var provider = document.getElementById('provider').value;
         var modelSelect = document.getElementById('model');
         modelSelect.innerHTML = '';
-
-        if (modelsData[provider]) {
+        if (provider && modelSelect && modelsData[provider]) {
             for (var value in modelsData[provider]) {
                 var option = new Option(modelsData[provider][value], value);
                 modelSelect.add(option);

@@ -36,17 +36,17 @@ class StreamService
 				break;
 		}
     }
-	public function ChatStream($chat_bot, $history, $main_message, $chat_type , $contain_images, $provider){
+	public function ChatStream($chat_bot, $history, $main_message, $chat_type , $contain_images, $provider, $extra_prompt){
 		switch ($provider)
 		{
 			case 'openai':
-				return $this->openaiChatStream($chat_bot, $history, $main_message, $chat_type , $contain_images);
+				return $this->openaiChatStream($chat_bot, $history, $main_message, $chat_type , $contain_images, $extra_prompt);
 			case 'anthropic':
-				return $this->anthropicChatStream($chat_bot, $history, $main_message, $chat_type , $contain_images);
+				return $this->anthropicChatStream($chat_bot, $history, $main_message, $chat_type , $contain_images, $extra_prompt);
 			case 'gemini':
-				return $this->geminiChatStream($chat_bot, $history, $main_message, $chat_type , $contain_images);
+				return $this->geminiChatStream($chat_bot, $history, $main_message, $chat_type , $contain_images, $extra_prompt);
 			default:
-				return $this->openaiChatStream($chat_bot, $history, $main_message, $chat_type , $contain_images);
+				return $this->openaiChatStream($chat_bot, $history, $main_message, $chat_type , $contain_images, $extra_prompt);
 		}
 	}
 	public function OtherStream(Request $request, $chat_bot, $provider){
@@ -108,7 +108,7 @@ class StreamService
 	}
 
 	# OpenAI Stream
-  	private function openaiChatStream($chat_bot, $history, $main_message, $chat_type , $contain_images) {
+  	private function openaiChatStream($chat_bot, $history, $main_message, $chat_type , $contain_images, $extra_prompt) {
 		$total_used_tokens = 0;
 		$output = '';
 		$responsedText = '';
@@ -254,12 +254,12 @@ class StreamService
 	}
 	
 	# Anthropic Stream
-	private function anthropicChatStream($chat_bot, $history, $main_message, $chat_type , $contain_images) {
+	private function anthropicChatStream($chat_bot, $history, $main_message, $chat_type , $contain_images, $extra_prompt) {
 		$total_used_tokens = 0;
 		$output = '';
 		$responsedText = '';
 		$client = app(Anthropic::class);
-        return response()->stream(function () use ($chat_bot,$client ,$history, &$total_used_tokens, &$output, &$responsedText, $main_message, $contain_images) {
+        return response()->stream(function () use ($chat_bot,$client ,$history, &$total_used_tokens, &$output, &$responsedText, $main_message, $contain_images, $extra_prompt) {
 			$chat_id = $main_message->user_openai_chat_id;
 			$chat = UserOpenaiChat::whereId($chat_id)->first();
 
@@ -278,7 +278,7 @@ class StreamService
 				$data = $client->setStream(true)
 					->setSystem($system)
 					->setMessages(array_values($historyMessages))
-					->stream($chat_bot)
+					->stream($chat_bot,$extra_prompt)
 					->body();
 				foreach (explode("\n", $data) as $chunk) {
 					if (strlen($chunk) < 6) {
@@ -442,7 +442,7 @@ class StreamService
 	}
 
 	# Gemini Stream
-	private function geminiChatStream($chat_bot, $history, $main_message, $chat_type , $contain_images){
+	private function geminiChatStream($chat_bot, $history, $main_message, $chat_type , $contain_images, $extra_prompt){
 		$total_used_tokens = 0;
 		$output = '';
 		$responsedText = '';

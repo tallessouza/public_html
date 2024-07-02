@@ -42,7 +42,7 @@
             @if (view()->hasSection('chat_head_actions'))
                 @yield('chat_head_actions')
             @else
-                <x-forms.input
+                <!-- <x-forms.input
                     class="max-md:hidden"
                     id="realtime"
                     container-class="{{ $category->slug == 'ai_pdf' ? 'hidden' : '' }} max-md:size-8 max-md:inline-flex max-md:items-center max-md:justify-center max-md:overflow-hidden max-md:shadow-md max-md:rounded-full max-md:shrink-0 max-md:[&_.lqd-input-label-txt]:hidden"
@@ -51,7 +51,7 @@
                     name="realtime"
                     onchange="const checked = document.querySelector('#realtime').checked; if ( checked ) { toastr.success('Dados em tempo real ativado') } else { toastr.warning('Dados em tempo real desativado') }"
                     switcher
-                >
+                > -->
                     <span
                         class="size-8 inline-flex shrink-0 items-center justify-center rounded-full bg-background indent-0 text-heading-foreground transition-colors peer-checked:bg-primary peer-checked:text-primary-foreground md:hidden"
                     >
@@ -60,7 +60,7 @@
                             stroke-width="1.5"
                         />
                     </span>
-                </x-forms.input>
+                <!-- </x-forms.input> -->
             @endif
 
             <div

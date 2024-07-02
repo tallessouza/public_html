@@ -256,6 +256,7 @@ class UserController extends Controller
                 'lastThreeMessage',
                 'chat_completions',
                 'plan',
+                'slug'
             ));
         }
 
