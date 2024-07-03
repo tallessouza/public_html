@@ -229,27 +229,27 @@ function templateChatSave( template_id ) {
 	}
 
 
-	$.ajax( {
+	$.ajax({
 		type: 'post',
-		url: '/dashboard/admin/openai/chat/save',
+		url: window.location.href.includes('/user/') ? '/dashboard/user/openai/chat/save' : '/dashboard/admin/openai/chat/save',
 		data: formData,
 		contentType: false,
 		processData: false,
-		success: function ( data ) {
-			toastr.success(magicai_localize?.chat_template_saved ||'Chat Template Salvo com Sucesso');
-			location.href = '/dashboard/admin/openai/chat';
-			document.getElementById( 'custom_template_button' ).disabled = false;
-			document.getElementById( 'custom_template_button' ).innerHTML = 'Save';
+		success: function (data) {
+			toastr.success(magicai_localize?.chat_template_saved || 'Chat Template Salvo com Sucesso');
+			location.href = window.location.href.includes('/user/') ? '/dashboard/user/openai/chat' : '/dashboard/admin/openai/chat';
+			document.getElementById('custom_template_button').disabled = false;
+			document.getElementById('custom_template_button').innerHTML = 'Save';
 		},
-		error: function ( data ) {
+		error: function (data) {
 			var err = data.responseJSON.errors;
-			$.each( err, function ( index, value ) {
-				toastr.error( value );
-			} );
-			document.getElementById( 'custom_template_button' ).disabled = false;
-			document.getElementById( 'custom_template_button' ).innerHTML = 'Save';
+			$.each(err, function (index, value) {
+				toastr.error(value);
+			});
+			document.getElementById('custom_template_button').disabled = false;
+			document.getElementById('custom_template_button').innerHTML = 'Save';
 		}
-	} );
+	});
 	return false;
 }
 

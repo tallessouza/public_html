@@ -60,7 +60,7 @@ class AIChatController extends Controller
    	  $aiList = OpenaiGeneratorChatCategory::query()
             ->whereNotIn('slug', [
                 'ai_vision', 'ai_webchat', 'ai_pdf'
-            ])
+            ])->whereNull('user_id')->orWhere('user_id', Auth::id())
             ->when(Auth::user()->isUser(), function ($query) {
                 $query->where(function ($query) {
                     $query->whereNull('user_id')->orWhere('user_id', Auth::id());

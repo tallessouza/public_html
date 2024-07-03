@@ -11,10 +11,12 @@ use App\Http\Controllers\InstallationController;
 use App\Http\Controllers\BlogController;
 use App\Http\Controllers\Chatbot\ChatbotController;
 use App\Http\Controllers\Chatbot\ChatbotTrainingController;
+use App\Http\Controllers\Chatbot\UserChatbotTrainingController;
 use App\Http\Controllers\ChatPdfController;
 use App\Http\Controllers\Common\CommonController;
 use App\Http\Controllers\Common\HealthController;
 use App\Http\Controllers\Dashboard\AdminController;
+use App\Http\Controllers\Dashboard\UserChatController;
 use App\Http\Controllers\Dashboard\BrandController;
 use App\Http\Controllers\Dashboard\SearchController;
 use App\Http\Controllers\Dashboard\SettingsController;
@@ -136,6 +138,7 @@ Route::group(['prefix' => LaravelLocalization::setLocale(), 'middleware' => ['lo
 					Route::get('/', [UserController::class, 'openAIList'])->name('list')->middleware('hasTokens');
 					Route::get('/favorite-openai', [UserController::class, 'openAIFavoritesList'])->name('list.favorites');
 					Route::post('/favorite', [UserController::class, 'openAIFavorite']);
+				
 					//Generators
 					Route::middleware([
 						'hasTokens',
@@ -192,6 +195,26 @@ Route::group(['prefix' => LaravelLocalization::setLocale(), 'middleware' => ['lo
 
 					Route::middleware('hasTokens')->group(function () {
 						Route::prefix('chat')->name('chat.')->group(function () {
+							Route::get('/', [UserChatController::class, 'openAIChatList'])->name('listOwn');
+
+							Route::get('/add-or-update/{id?}', [UserChatController::class, 'openAIChatAddOrUpdate'])->name('addOrUpdate');
+							Route::get('/delete/{id?}', [UserChatController::class, 'openAIChatDelete'])->name('delete');
+							Route::post('/save', [UserChatController::class, 'openAIChatAddOrUpdateSave']);
+							
+							// Route::group([
+							// 	'as' => 'chatbot.',
+							// 	'prefix' => 'chatbot/{chatbot}',
+							// 	'controller' => UserChatbotTrainingController::class,
+							// ], function () {
+							// 	Route::post('text', 'text')->name('text');
+							// 	Route::post('qa', 'qa')->name('qa');
+			
+							// 	Route::post('training', 'training')->name('training');
+							// 	Route::get('web-sites', 'getWebSites')->name('web-sites');
+							// 	Route::post('web-sites', 'postWebSites');
+							// 	Route::post('upload-pdf', 'uploadPdf')->name('upload-pdf');
+							// 	Route::delete('item/{id}', 'deleteItem')->name('item.delete');
+							// });
 							Route::get('/ai-chat-list', [AIChatController::class, 'openAIChatList'])->name('list');
 							Route::get('/ai-chat/{slug}', [AIChatController::class, 'openAIChat'])->name('chat');
 							Route::match (['get', 'post'], '/chat-send', [AIChatController::class, 'chatOutput']);
