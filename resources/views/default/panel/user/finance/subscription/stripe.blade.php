@@ -177,8 +177,8 @@
                                     ></div>
                                     @if ($plan->trial_days != 0 && $plan->frequency != 'lifetime_monthly' && $plan->frequency != 'lifetime_yearly' && $plan->price > 0)
                                         <span id="button-text">
-                                            {{ __('Start free trial') }}
-                                            {{ __('with') }}
+                                            {{ __('Teste Grátis') }}
+                                            {{ __('com') }}
                                             <img
                                                 class="h-auto w-24"
                                                 src="{{ custom_theme_url('/images/payment/stripe.svg') }}"
