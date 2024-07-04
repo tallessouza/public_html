@@ -8,11 +8,10 @@ use App\Models\UserSupportMessage;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Str;
-use Nette\Utils\Image;
+use App\Models\SupportTicket;
 
-class SupportController extends Controller
-{
-    public function list(){
+class SupportController extends Controller {   
+    public function list() {
         $user = Auth::user();
         if ($user->type == 'admin')
             $items = UserSupport::all();
@@ -22,12 +21,11 @@ class SupportController extends Controller
         return view('panel.support.list', compact('items'));
     }
 
-    public function newTicket(){
+    public function newTicket() {
         return view('panel.support.new');
     }
 
-    public function newTicketSend(Request $request){
-
+    public function newTicketSend(Request $request) {
         $support = new UserSupport();
         $support->ticket_id = Str::upper(Str::random(10));
         $support->user_id = Auth::id();
@@ -43,21 +41,21 @@ class SupportController extends Controller
         createActivity(Auth::id(), 'Submitted a Ticket', $support->subject, route('dashboard.support.view', $support->ticket_id));
     }
 
-    public function viewTicket($ticket_id){
+    public function viewTicket($ticket_id) {
         $ticket = UserSupport::where('ticket_id', $ticket_id)->firstOrFail();
 
-        if ($ticket->user_id == Auth::id() or Auth::user()->type == 'admin'){
+        if ($ticket->user_id == Auth::id() or Auth::user()->type == 'admin') {
             return view('panel.support.view', compact('ticket'));
-        }else{
-            return  back()->with(['message' => __('Unauthorized'), 'type' => 'error']);
+        } else {
+            return back()->with(['message' => __('Unauthorized'), 'type' => 'error']);
         }
     }
 
-    public function viewTicketSendMessage(Request $request){
+    public function viewTicketSendMessage(Request $request) {
         $user = Auth::user();
         $ticket = UserSupport::where('ticket_id', $request->ticket_id)->firstOrFail();
-        if ($user->type == 'admin'){
-            $ticket->status = 'Answered';
+        if ($user->type == 'admin') {
+            $ticket->status = 'Respondido';
             $ticket->save();
 
             $message = new UserSupportMessage();
@@ -65,8 +63,8 @@ class SupportController extends Controller
             $message->sender = 'admin';
             $message->message = $request->message;
             $message->save();
-        }else{
-            $ticket->status = 'Waiting for answer';
+        } else {
+            $ticket->status = 'Esperando por Resposta';
             $ticket->save();
 
             $message = new UserSupportMessage();
@@ -74,13 +72,18 @@ class SupportController extends Controller
             $message->sender = 'user';
             $message->message = $request->message;
             $message->save();
-            createActivity(Auth::id(), 'Support request waiting for your answer', null,  route('dashboard.support.view', $ticket->ticket_id));
-
+            createActivity(Auth::id(), 'Support request waiting for your answer', null, route('support.view', $ticket->ticket_id));
         }
-
-
     }
 
-
-
+    public function resolveTicket($ticket_id) {
+        $ticket = UserSupport::where('ticket_id', $ticket_id)->firstOrFail();
+        if ($ticket->user_id == Auth::id() or Auth::user()->type == 'admin') {
+            $ticket->status = 'Solucionado';
+            $ticket->save();
+            return back()->with(['message' => __('Ticket resolved successfully'), 'type' => 'success']);
+        } else {
+            return back()->with(['message' => __('Unauthorized'), 'type' => 'error']);
+        }
+    }
 }
