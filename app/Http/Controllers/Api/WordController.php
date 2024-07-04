@@ -1,5 +1,4 @@
 <?php
-
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
@@ -8,6 +7,10 @@ use App\Models\User;
 use App\Models\UserOpenai;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Str;
+use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Auth;
+use App\Models\PaymentPlans;
+use App\Services\GatewaySelector;
 
 class WordController extends Controller
 {
@@ -31,6 +34,7 @@ class WordController extends Controller
      *          @OA\JsonContent(
      *              type="object",
      *              @OA\Property(property="remaining_words", type="integer", example=1000),
+     *              @OA\Property(property="plan", type="string", example="Basic Plan"),
      *          ),
      *      ),
      *      @OA\Response(
@@ -61,15 +65,38 @@ class WordController extends Controller
             return response()->json(['error' => $validator->errors()], 422);
         }
 
-        $user = User::where('phone', '+'.$request->phone)->first();
+        $user = User::where('phone', '+' . $request->phone)->first();
 
         if (!$user) {
             return response()->json(['error' => 'User not found'], 404);
         }
 
-        return response()->json(['remaining_words' => $user->remaining_words], 200);
+        // Verificar assinaturas ativas
+        $activeSub = getCurrentActiveSubscription($user->id);
+        if ($activeSub != null) {
+            $gateway = $activeSub->paid_with;
+            $plan = $activeSub->name;
+        } else {
+            $activeSubY = getCurrentActiveSubscriptionYokkasa($user->id);
+            if ($activeSubY != null) {
+                $gateway = $activeSubY->paid_with;
+                $plan = $activeSubY->name;
+            } else {
+                $gateway = null;
+                $plan = null;
+            }
+        }
+               
+        Log::info('$activeSub');
+        Log::info($activeSub);
+        $responseData['remaining_words'] = $user->remaining_words;
+        $responseData['plan'] = $plan;
+        $responseData['user'] = $activeSub;
+
+        return response()->json($responseData, 200);
     }
 
+    
     /**
      * @OA\Post(
      *      path="/api/words/decrease",
@@ -122,7 +149,7 @@ class WordController extends Controller
             return response()->json(['error' => $validator->errors()], 422);
         }
 
-        $user = User::where('phone', '+'.$request->phone)->first();
+        $user = User::where('phone', '+' . $request->phone)->first();
 
         if (!$user) {
             return response()->json(['error' => 'User not found'], 404);
@@ -130,23 +157,9 @@ class WordController extends Controller
 
         $wordCount = countWords($request->text);
 
-        // // Salvar o registro da mensagem
-        // $entry = new UserOpenai();
-        // $entry->title = 'Whatsapp Lendario';
-        // $entry->slug = Str::random(20).Str::slug($user->fullName()).'-workbook';
-        // $entry->user_id = $user->id;
-        // $entry->input = $request->text;
-        // $entry->response = $request->text;
-        // $entry->output = $request->text;
-        // $entry->hash = Str::random(256);
-        // $entry->credits = $wordCount;
-        // $entry->words = $wordCount;
-
         if ($user->remaining_words != -1) {
             userCreditDecreaseForWord($user, $wordCount);
         }
-        // $entry->save();
-
 
         return response()->json(['message' => 'Words decreased successfully'], 200);
     }
