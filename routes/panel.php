@@ -59,6 +59,7 @@ Route::group(['prefix' => LaravelLocalization::setLocale(), 'middleware' => ['lo
 		Route::prefix('user')->name('user.')->group(function () {
 			Route::get('/', [UserController::class, 'index'])->name('index');
 			Route::get('/whatsapp', [WhatsappController::class, 'index'])->name('whatsapp');
+			Route::get('/subscribe', [WhatsappController::class, 'index'])->name('subscribe');
 			Route::post('/whatsapp/logout', [WhatsappController::class, 'logout'])->name('whatsapp.logout');
 			Route::post('/regenerate', [WhatsappController::class, 'regenerate'])->name('whatsapp.regenerate');
 			Route::get('/check-connection', [WhatsappController::class, 'checkConnection'])->name('whatsapp.checkConnection');
@@ -673,13 +674,12 @@ Route::group(['prefix' => LaravelLocalization::setLocale(), 'middleware' => ['lo
 
 		//Support Area
 		Route::prefix('support')->name('support.')->group(function () {
-   			Route::get('/my-requests', [SupportController::class, 'list'])->name('list');
-    		Route::get('/new-support-request', [SupportController::class, 'newTicket'])->name('new');
-    		Route::post('/new-support-request/send', [SupportController::class, 'newTicketSend']);
+			Route::get('/my-requests', [SupportController::class, 'list'])->name('list');
+			Route::get('/new-support-request', [SupportController::class, 'newTicket'])->name('new');
+			Route::post('/new-support-request/send', [SupportController::class, 'newTicketSend']);
 
-    		Route::get('/requests/{ticket_id}', [SupportController::class, 'viewTicket'])->name('view');
-    		Route::post('/requests-action/send-message', [SupportController::class, 'viewTicketSendMessage']);
-    		Route::get('/resolve/{ticket_id}', [SupportController::class, 'resolveTicket'])->name('resolve');
+			Route::get('/requests/{ticket_id}', [SupportController::class, 'viewTicket'])->name('view');
+			Route::post('/requests-action/send-message', [SupportController::class, 'viewTicketSendMessage']);
 		});
 
 		//Pages
