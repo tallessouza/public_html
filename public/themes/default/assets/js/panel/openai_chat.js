@@ -339,36 +339,35 @@ function initChat() {
 		openNewImageDlg();
 	});
 
-	$('#selectImageInput').change(function () {
-		if (this.files && this.files[0]) {
-			for (let i = 0; i < this.files.length; i++) {
+	$('#selectImageInput').change(function() {
+		var files = this.files;
+	
+		for (let i = 0; i < files.length; i++) {
+			let file = files[i];
+			let fileType = file.type.split('/')[0];
+	
+			if (fileType === 'image') {
+				// Lógica existente para imagens
 				let reader = new FileReader();
-				// Existing image handling code
-				reader.onload = function (e) {
+				reader.onload = function(e) {
 					var img = new Image();
 					img.src = e.target.result;
-					img.onload = function () {
+					img.onload = function() {
 						var canvas = document.createElement('canvas');
 						var ctx = canvas.getContext('2d');
 						canvas.height = (img.height * 200) / img.width;
 						canvas.width = 200;
-						ctx.drawImage(
-							img,
-							0,
-							0,
-							canvas.width,
-							canvas.height
-						);
+						ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
 						var base64 = canvas.toDataURL('image/png');
 						addImagetoChat(base64);
 					};
 				};
-				reader.readAsDataURL(this.files[i]);
+				reader.readAsDataURL(file);
+			} else {
+				// Usar startNewDocChat para outros tipos de arquivo
+				startNewDocChat(file, file.type);
 			}
 		}
-		document.getElementById('mainupscale_src') &&
-			(document.getElementById('mainupscale_src').style.display =
-				'none');
 	});
 
 	$('#upscale_src').change(function () {
@@ -1169,63 +1168,58 @@ function startNewChat(category_id, local, website_url = null)
 }
 
 function startNewDocChat(file, type) {
-	'use strict';
+    'use strict';
 
-	let category_id = $('#chat_search_word').data('category-id');
+    let category_id = $('#chat_search_word').data('category-id');
+    let chat_id = $('#chat_id').val();
+    var formData = new FormData();
+    formData.append('category_id', category_id);
+    formData.append('doc', file);
+    formData.append('type', type);
+    formData.append('chat_id', chat_id);
 
-	var formData = new FormData();
-	formData.append('category_id', category_id);
-	formData.append('doc', pdf);
-	formData.append('type', type);
+    Alpine.store('appLoadingIndicator').show();
+    $('.lqd-upload-doc-trigger').attr('disabled', true);
 
-	Alpine.store('appLoadingIndicator').show();
-	$('.lqd-upload-doc-trigger').attr('disabled', true);
+    $.ajax({
+        type: 'post',
+        url: '/dashboard/user/openai/chat/start-new-doc-chat',
+        data: formData,
+        contentType: false,
+        processData: false,
+        success: function (data) {
+            Alpine.store('appLoadingIndicator').hide();
+            $('.lqd-upload-doc-trigger').attr('disabled', false);
+            $('#selectImageInput').val('');
 
-	$.ajax({
-		type: 'post',
-		url: '/dashboard/user/openai/chat/start-new-doc-chat',
-		data: formData,
-		contentType: false,
-		processData: false,
-		success: function (data) {
-			Alpine.store('appLoadingIndicator').hide();
-			$('.lqd-upload-doc-trigger').attr('disabled', false);
-			$('#selectDocInput').val('');
-			chatid = data.chat.id;
-			$('#load_chat_area_container').html(data.html);
-			$('#chat_sidebar_container').html(data.html2);
+            // if (data.chat && data.chat.id) {
+            //     addFiletoChat(data.chat.reference_url, file.name);
+            // }
 
-			initChat();
-			messages = [
-				{
-					role: 'assistant',
-					content: prompt_prefix,
-				},
-			];
-			makeDocumentReadyAgain();
-			setTimeout(function () {
-				$('.conversation-area').stop().animate({ scrollTop: $('.conversation-area').outerHeight() }, 200);
-			}, 750);
-
-			toastr.success(magicai_localize.analyze_file_finish);
-		},
-		error: function (data) {
-			Alpine.store('appLoadingIndicator').hide();
-			$('.lqd-upload-doc-trigger').attr('disabled', false);
-			$('#selectDocInput').val('');
-			var err = data.responseJSON.errors;
-			if (err) {
-				$.each(err, function (index, value) {
-					toastr.error(value);
-				});
-			} else {
-				toastr.error(data.responseJSON.message);
-			}
-		},
-	});
-	return false;
+            toastr.success(magicai_localize.analyze_file_finish);
+        },
+        error: function (data) {
+            Alpine.store('appLoadingIndicator').hide();
+            $('.lqd-upload-doc-trigger').attr('disabled', false);
+            $('#selectImageInput').val('');
+            var err = data.responseJSON.errors;
+            if (err) {
+                $.each(err, function (index, value) {
+                    toastr.error(value);
+                });
+            } else {
+                toastr.error(data.responseJSON.message);
+            }
+        },
+    });
+    return false;
 }
-
+function addFiletoChat(path, fileName) {
+    if (prompt_images.filter(item => item == path).length == 0) {
+        prompt_images.push(path);
+        updatePromptImages(fileName);
+    }
+}
 function searchChatFunction() {
 	'use strict';
 

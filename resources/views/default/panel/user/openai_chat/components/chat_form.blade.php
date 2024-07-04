@@ -53,7 +53,7 @@
                     id="selectImageInput"
                     type="file"
                     style="display: none;"
-                    @if ($category->slug != 'ai_vision' && $category->slug != 'ai_pdf') accept="image/*" @endif
+                    @if ($category->slug != 'ai_vision' && $category->slug != 'ai_pdf') accept="image/*,.pdf,.csv,.doc,.docx" @endif
                 />
 
                 <x-button

@@ -223,6 +223,7 @@ Route::group(['prefix' => LaravelLocalization::setLocale(), 'middleware' => ['lo
 							Route::post('/open-chatbot-area', [AIChatController::class, 'openChatBotArea'])->name('open-chatbot-area');
 							Route::post('/start-new-chat', [AIChatController::class, 'startNewChat']);
 							Route::post('/start-new-doc-chat', [AIChatController::class, 'startNewDocChat']);
+							Route::post('/upload-doc', [AIChatController::class, 'uploadDocument']);
 							Route::post('/start-new-chatbot', [AIChatController::class, 'startNewChatBot']);
 							Route::post('/search', [AIChatController::class, 'search']);
 							Route::post('/delete-chat', [AIChatController::class, 'deleteChat']);

@@ -151,12 +151,12 @@ class GeneratorController extends Controller
 		}
 
 		# if file attached, get the content of the file
-		Log::info('$extra_promptgen');
-		Log::info($extra_prompt);
+		// Log::info('$extra_promptgen');
+		// Log::info($extra_prompt);
 		if ($extra_prompt) {
 			try {
-				Log::info('$extra_prompt');
-				Log::info($extra_prompt);
+				// Log::info('$extra_prompt');
+				// Log::info($extra_prompt);
 				if ($extra_prompt) {
 					if($chat->category->slug == 'ai_webchat'){
 						$history[] = [

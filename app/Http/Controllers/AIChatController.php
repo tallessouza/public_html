@@ -60,7 +60,7 @@ class AIChatController extends Controller
    	  $aiList = OpenaiGeneratorChatCategory::query()
             ->whereNotIn('slug', [
                 'ai_vision', 'ai_webchat', 'ai_pdf'
-            ])->whereNull('user_id')->orWhere('user_id', Auth::id())
+            ])
             ->when(Auth::user()->isUser(), function ($query) {
                 $query->where(function ($query) {
                     $query->whereNull('user_id')->orWhere('user_id', Auth::id());
@@ -478,9 +478,25 @@ class AIChatController extends Controller
     }
 
     public function startNewDocChat(Request $request)
+{
+    $chat_id = $request->input('chat_id');
+    $chat = UserOpenaiChat::findOrFail($chat_id);
+    
+    try {
+        $filePath = $this->uploadDoc($request, $chat_id, $request->type);
+        $chat->reference_url = $filePath;
+        $chat->doc_name = $request->file('doc')->getClientOriginalName();
+        $chat->save();
+
+        return response()->json(['chat' => $chat]);
+    } catch (Exception $e) {
+        return response()->json(['error' => $e->getMessage()], 500);
+    }
+}
+    public function uploadDocument(Request $request)
     {
         $category = OpenaiGeneratorChatCategory::where('id', $request->category_id)->firstOrFail();
-        $chat = new UserOpenaiChat();
+        // $chat = new UserOpenaiChat();
         $chat->user_id = Auth::id();
         $chat->team_id = Auth::user()->team_id;
         $chat->openai_chat_category_id = $category->id;
@@ -525,7 +541,6 @@ class AIChatController extends Controller
             return response()->json(['message' => $e->getMessage()], 500);
         }
     }
-
     public function startNewChatBot(Request $request)
     {
         $settings_two = SettingTwo::first();

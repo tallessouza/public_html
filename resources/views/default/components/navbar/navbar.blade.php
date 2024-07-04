@@ -255,25 +255,27 @@
                         <x-navbar.dropdown.item>
                             <x-navbar.link label="{{ __('Documents') }}" href="dashboard.user.openai.documents.all" active-condition="{{ activeRoute('dashboard.user.openai.documents.*') }}" icon="tabler-archive" />
                         </x-navbar.dropdown.item>
-
                         <x-navbar.dropdown.item>
                             <x-navbar.link label="{{ __('Brand Voice') }}" href="dashboard.user.brand.index" icon="tabler-brand-trello" />
                         </x-navbar.dropdown.item>
                         <x-navbar.item has-dropdown>
-                        <x-navbar.link label="{{ __('Meus GPTS') }}" href="" icon="tabler-message-circle" dropdown-trigger />
-                        <x-navbar.dropdown.dropdown>
-                            <x-navbar.item>
-                                <x-navbar.link label="Acessar GPTS" href="dashboard.user.openai.chat.list" slug="filter=User" icon="tabler-robot-face" />
+                            <x-navbar.link label="{{ __('Meus GPTS') }}" href="" icon="tabler-message-circle" dropdown-trigger />
+                            <x-navbar.dropdown.dropdown>
+                                <x-navbar.item>
+                                    <x-navbar.link label="Acessar GPTS" href="dashboard.user.openai.chat.list" slug="filter=User" icon="tabler-robot-face" />
+                                </x-navbar.item>
+                                <x-navbar.dropdown.item>
+                                    <x-navbar.dropdown.link label="{{ __('Gerenciar GPTS') }}" href="dashboard.user.openai.chat.listOwn" icon="tabler-pencil">
+                                        </x-navbar.dropdown.link>
+                                    </x-navbar.dropdown.item>
+                                    
+                                </x-navbar.dropdown.dropdown>
                             </x-navbar.item>
-                            <x-navbar.dropdown.item>
-                                <x-navbar.dropdown.link label="{{ __('Gerenciar GPTS') }}" href="dashboard.user.openai.chat.listOwn" icon="tabler-pencil">
-                                </x-navbar.dropdown.link>
-                            </x-navbar.dropdown.item>
-    
                         </x-navbar.dropdown.dropdown>
                     </x-navbar.item>
-                    </x-navbar.dropdown.dropdown>
-                </x-navbar.item>
+                    <x-navbar.dropdown.item>
+                        <x-navbar.link label="{{ __('Whatsapp Lendário') }}" href="dashboard.user.whatsapp" icon="tabler-brand-whatsapp" />
+                    </x-navbar.dropdown.item>
 
 
 
