@@ -193,7 +193,7 @@ class YokassaService
                 return redirect()->route('dashboard.'.auth()->user()->type.'.index')->with(['message' => __('You are failed your purchase. If you paid for this, please cantact us'), 'type' => 'failed']);
             }
 
-            return redirect()->route('dashboard.user.payment.succesful')->with(['message' => __('Thank you for your purchase. Enjoy your remaining words and images.'), 'type' => 'success']);
+            return redirect()->route('dashboard.user.payment.succesful')->with(['message' => __('Obrigado por sua compra. Aproveite suas palavras e imagens.'), 'type' => 'success']);
         } catch (\Exception $ex) {
             DB::rollBack();
             Log::error(self::$GATEWAY_CODE.'-> subscribe(): '.$ex->getMessage());
@@ -392,7 +392,7 @@ class YokassaService
                 createActivity($user->id, __('Purchased'), $plan->name.' '.__('Token Pack'), null);
                 DB::commit();
 				\App\Models\Usage::getSingle()->updateSalesCount($total);
-                return redirect()->route('dashboard.user.payment.succesful')->with(['message' => __('Thank you for your purchase. Enjoy your remaining words and images.'), 'type' => 'success']);
+                return redirect()->route('dashboard.user.payment.succesful')->with(['message' => __('Obrigado por sua compra. Aproveite suas palavras e imagens.'), 'type' => 'success']);
             }
 
             return redirect()->route('dashboard.'.auth()->user()->type.'.index')->with(['message' => __('You are failed your purchase. If you paid for this, please cantact us'), 'type' => 'failed']);

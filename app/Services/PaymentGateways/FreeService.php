@@ -185,7 +185,7 @@ class FreeService
         DB::commit();
 
         return redirect()->route('dashboard.user.payment.succesful')->with([
-            'message' => __('Thank you for your purchase. Enjoy your remaining words and images.'),
+            'message' => __('Obrigado por sua compra. Aproveite suas palavras e imagens.'),
             'type' => 'success',
         ]);
     }
@@ -267,7 +267,7 @@ class FreeService
         DB::commit();
 
         return redirect()->route('dashboard.user.payment.succesful')->with([
-            'message' => __('Thank you for your purchase. Enjoy your remaining words and images.'),
+            'message' => __('Obrigado por sua compra. Aproveite suas palavras e imagens.'),
             'type' => 'success',
         ]);
     }

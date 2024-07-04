@@ -346,7 +346,7 @@ class PaystackService
                     event(new \App\Events\AffiliateEvent($total, $gateway->currency));
                 }
 
-                return redirect()->route('dashboard.'.auth()->user()->type.'.index')->with(['message' => __('Thank you for your purchase. Enjoy your remaining words and images.'), 'type' => 'success']);
+                return redirect()->route('dashboard.'.auth()->user()->type.'.index')->with(['message' => __('Obrigado por sua compra. Aproveite suas palavras e imagens.'), 'type' => 'success']);
 
             } else {
                 DB::rollBack();
@@ -473,7 +473,7 @@ class PaystackService
 			\App\Models\Usage::getSingle()->updateSalesCount($newDiscountedPrice);
             DB::commit();
 
-            return redirect()->route('dashboard.'.auth()->user()->type.'.index')->with(['message' => __('Thank you for your purchase. Enjoy your remaining words and images.'), 'type' => 'success']);
+            return redirect()->route('dashboard.'.auth()->user()->type.'.index')->with(['message' => __('Obrigado por sua compra. Aproveite suas palavras e imagens.'), 'type' => 'success']);
         } catch (\Exception $th) {
             DB::rollBack();
             Log::error('PaystackController::subscribePay(): '.$th->getMessage());

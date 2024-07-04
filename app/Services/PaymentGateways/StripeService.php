@@ -525,7 +525,7 @@ class StripeService
             }
 
             return redirect()->route('dashboard.user.payment.succesful')->with([
-                'message' => __('Thank you for your purchase. Enjoy your remaining words and images.'),
+                'message' => __('Obrigado por sua compra. Aproveite suas palavras e imagens.'),
                 'type' => 'success',
             ]);
         } catch (\Exception $ex) {
@@ -718,7 +718,7 @@ class StripeService
         DB::commit();
 
         return redirect()->route('dashboard.user.payment.succesful')->with([
-            'message' => __('Thank you for your purchase. Enjoy your remaining words and images.'),
+            'message' => __('Obrigado por sua compra. Aproveite suas palavras e imagens.'),
             'type' => 'success',
         ]);
     }
