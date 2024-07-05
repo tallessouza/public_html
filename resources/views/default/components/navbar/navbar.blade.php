@@ -273,9 +273,9 @@
                             </x-navbar.item>
                         </x-navbar.dropdown.dropdown>
                     </x-navbar.item>
-                    <x-navbar.dropdown.item>
+                    <x-navbar.item>
                         <x-navbar.link label="{{ __('Whatsapp Lendário') }}" href="dashboard.user.whatsapp" icon="tabler-brand-whatsapp" />
-                    </x-navbar.dropdown.item>
+                    </x-navbar.item>
 
 
 
