@@ -124,14 +124,16 @@
             </div>
         </div>
 
-        <p class="mb-4">
+        <p class="mb-4 text-center">
             <a
-                class="text-heading-foreground underline"
+                class="text-heading-foreground underline px-8 py-4 text-xl border border-heading-foreground rounded-md inline-block"
                 href="{{ LaravelLocalization::localizeUrl(route('dashboard.user.payment.subscription')) }}"
             >
                 @lang('Faça um upgrade no seu plano')
             </a>
-            @lang('para gerar mais conteúdo.')
+            <span class="block mt-2">
+                @lang('para gerar mais conteúdo.')
+            </span>
         </p>
 
         <div class="flex w-full flex-wrap items-center justify-center gap-4 text-center">

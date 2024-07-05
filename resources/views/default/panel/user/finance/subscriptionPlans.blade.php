@@ -225,11 +225,11 @@
         </div>
 
         <div class="w-full">
-            @if ($prepaidplans->count() > 0)
+            <!-- @if ($prepaidplans->count() > 0)
             <h2 class="mb-5">
                 {{ __('Token Packs') }}:
             </h2>
-            @endif
+            @endif -->
             <div class="grid grid-cols-4 gap-3 max-lg:grid-cols-2 max-md:grid-cols-1">
                 @foreach ($prepaidplans as $plan)
                 @if (strpos($plan->name, 'Bônus') === false)

@@ -153,7 +153,6 @@ class AuthenticationController extends Controller
 
     public function registerStore(Request $request)
     {
-
         $request->validate([
             'name' => ['required', 'string', 'max:255'],
             'surname' => ['required', 'string', 'max:255'],
@@ -232,12 +231,19 @@ class AuthenticationController extends Controller
             return response()->json($data, 401);
         }
 
+        // Adiciona verificação do parâmetro 'plan'
+        if ($plan = $request->get('plan')) {
+            return response()->json([
+                'link' => '/dashboard/user/payment?plan=' . $plan
+            ]);
+        }
 
         return response()
             ->json([
                 'status' => 'OK'
             ], 200);
     }
+
 
     public function PasswordResetCreate()
     {

@@ -31,16 +31,15 @@ class AuthenticatedSessionController extends Controller
      */
     public function store(LoginRequest $request)
     {
-
         $settings = Setting::first();
         if ((bool)$settings->login_without_confirmation == false) {
             $user = User::where('email', $request->email)->first();
-			if (!$user) {
-				$data = array(
-					'errors' => [trans('auth.failed')],
-				);
-				return response()->json($data, 401);
-			}
+            if (!$user) {
+                $data = array(
+                    'errors' => [trans('auth.failed')],
+                );
+                return response()->json($data, 401);
+            }
             if ($user and $user->email_confirmed != 1 and $user->type != 'admin') {
                 dispatch(new SendConfirmationEmail($user));
                 $data = array(
@@ -49,13 +48,11 @@ class AuthenticatedSessionController extends Controller
                 );
                 return response()->json($data, 401);
             }
-			
         }
 
         $request->authenticate();
 
         $request->session()->regenerate();
-
 
         if (Auth::check()) {
             if (Google2FA::isActivated()) {
@@ -72,10 +69,10 @@ class AuthenticatedSessionController extends Controller
             }
         }
 
-        if ($plan = $request->get('plan'))
-        {
+        // Adiciona verificação do parâmetro 'plan'
+        if ($plan = $request->get('plan')) {
             return response()->json([
-                'link' => '/dashboard/user/payment?plan='. $plan
+                'link' => '/dashboard/user/payment?plan=' . $plan
             ]);
         }
 
@@ -83,6 +80,7 @@ class AuthenticatedSessionController extends Controller
             'link' => '/dashboard'
         ]);
     }
+
 
     /**
      * Destroy an authenticated session.

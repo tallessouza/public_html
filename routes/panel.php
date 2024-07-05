@@ -139,7 +139,6 @@ Route::group(['prefix' => LaravelLocalization::setLocale(), 'middleware' => ['lo
 					Route::get('/', [UserController::class, 'openAIList'])->name('list')->middleware('hasTokens');
 					Route::get('/favorite-openai', [UserController::class, 'openAIFavoritesList'])->name('list.favorites');
 					Route::post('/favorite', [UserController::class, 'openAIFavorite']);
-				
 					//Generators
 					Route::middleware([
 						'hasTokens',
@@ -672,14 +671,15 @@ Route::group(['prefix' => LaravelLocalization::setLocale(), 'middleware' => ['lo
 			Route::post('/validate-coupon', [AdminController::class, 'couponsValidate'])->name('validate');
 		});
 
-		//Support Area
+		// Support Area
 		Route::prefix('support')->name('support.')->group(function () {
-			Route::get('/my-requests', [SupportController::class, 'list'])->name('list');
-			Route::get('/new-support-request', [SupportController::class, 'newTicket'])->name('new');
-			Route::post('/new-support-request/send', [SupportController::class, 'newTicketSend']);
+   			Route::get('/my-requests', [SupportController::class, 'list'])->name('list');
+    		Route::get('/new-support-request', [SupportController::class, 'newTicket'])->name('new');
+    		Route::post('/new-support-request/send', [SupportController::class, 'newTicketSend']);
 
-			Route::get('/requests/{ticket_id}', [SupportController::class, 'viewTicket'])->name('view');
-			Route::post('/requests-action/send-message', [SupportController::class, 'viewTicketSendMessage']);
+    		Route::get('/requests/{ticket_id}', [SupportController::class, 'viewTicket'])->name('view');
+    		Route::post('/requests-action/send-message', [SupportController::class, 'viewTicketSendMessage']);
+    		Route::get('/resolve/{ticket_id}', [SupportController::class, 'resolveTicket'])->name('resolve');
 		});
 
 		//Pages
