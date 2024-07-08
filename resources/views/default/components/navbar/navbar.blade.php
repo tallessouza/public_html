@@ -288,6 +288,9 @@
                 <x-navbar.item>
                     <x-navbar.link label="{{ __('Support') }}" href="dashboard.support.list" active-condition="{{ activeRoute('dashboard.support.*') }}" icon="tabler-lifebuoy" />
                 </x-navbar.item>
+                <a class="nav-link" href="https://hotmart.com/pt-br/club/formacao-lendaria/products/3922448/" icon="tabler-brand-whatsapp" target="_blank">
+                        <i class="fas fa-external-link-alt"></i> Tutoriais
+                    </a>
 
                 @if (App\Models\Integration\Integration::query()->whereHas('hasExtension')->count())
                 <x-navbar.item>

@@ -262,9 +262,9 @@
                     type="textarea"
                     size="lg"
                     rows="3"
-                    placeholder="{{ __('Explain the features of your Product/Service.') }}"
+                    placeholder="{{ __('Descreva as principais características do seus serviços separando por vírgula.') }}"
                     label="{{ __('Key Features') }}"
-                    tooltip="{{ __('Describe the key services your company offers to its clients or customers.') }}"
+                    tooltip="{{ __('Descreva as principais características do seus serviços separando por vírgula.') }}"
                 ></x-forms.input>
 
                 <x-button
@@ -334,9 +334,9 @@
                 type="textarea"
                 size="lg"
                 rows="3"
-                placeholder="{{ __('Explain the features of your Product/Service.') }}"
+                placeholder="{{ __('Descreva as principais características do seus serviços separando por vírgula.') }}"
                 label="{{ __('Key Features') }}"
-                tooltip="{{ __('Describe the key services your company offers to its clients or customers.') }}"
+                tooltip="{{ __('Descreva as principais características do seus serviços separando por vírgula.') }}"
             ></x-forms.input>
 
             <x-button
