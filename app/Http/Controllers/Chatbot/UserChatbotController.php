@@ -145,14 +145,14 @@ class UserChatbotController extends Controller
 
         if ($request->ajax()) {
             return response()->json([
-                'message' => trans('Chatbot Updated Successfully'),
+                'message' => trans('Chatbot Atualizado'),
                 'status' => 'success'
             ]);
         }
 
         return back()->with([
             'type' => 'success',
-            'message' => trans('Chatbot Updated Successfully'),
+            'message' => trans('Chatbot Atualizado'),
         ]);
 
     }

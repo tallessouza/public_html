@@ -41,7 +41,7 @@ class UserChatbotTrainingController extends Controller
             $chatBotData->update([
                 'type_value' => $request->get('question'),
                 'content' => $request->get('answer'),
-                'status' => 'waiting'
+                'status' => 'aguardando'
             ]);
 
             ChatbotDataVector::query()->where('chatbot_data_id', $id)->delete();
@@ -52,7 +52,7 @@ class UserChatbotTrainingController extends Controller
                 'type_value' => $request->get('question')
             ], [
                 'content' => $request->get('answer'),
-                'status' => 'waiting'
+                'status' => 'aguardando'
             ]);
         }
 
@@ -60,7 +60,7 @@ class UserChatbotTrainingController extends Controller
             'content' => view('panel.user.chatbot.particles.qa.list', [
                 'items' => $chatbot->data()->where('type', 'qa')->get()
             ])->render(),
-            'message' => trans('Qa uploaded successfully.'),
+            'message' => trans('Qa incluído com sucesso.'),
             'count' => $chatbot->data()->where('type', 'qa')->count()
         ]);
     }
@@ -90,7 +90,7 @@ class UserChatbotTrainingController extends Controller
             $chatBotData->update([
                 'type_value' => $request->get('title'),
                 'content' => $request->get('text'),
-                'status' => 'waiting'
+                'status' => 'aguardando'
             ]);
 
             ChatbotDataVector::query()->where('chatbot_data_id', $id)->delete();
@@ -101,7 +101,7 @@ class UserChatbotTrainingController extends Controller
                 'type_value' => $request->get('title')
             ], [
                 'content' => $request->get('text'),
-                'status' => 'waiting'
+                'status' => 'aguardando'
             ]);
         }
 
@@ -109,7 +109,7 @@ class UserChatbotTrainingController extends Controller
             'content' => view('panel.user.chatbot.particles.text.list', [
                 'items' => $chatbot->data()->where('type', 'text')->get()
             ])->render(),
-            'message' => trans('Text uploaded successfully.'),
+            'message' => trans('Texto incluído com sucesso.'),
             'count' => $chatbot->data()->where('type', 'text')->count()
         ]);
     }
@@ -160,7 +160,7 @@ class UserChatbotTrainingController extends Controller
             'type_value' => $name,
         ], [
             'content' => $parser->getText(),
-            'status' => 'waiting',
+            'status' => 'aguardando',
             'path' => $path
         ]);
 
@@ -168,7 +168,7 @@ class UserChatbotTrainingController extends Controller
             'content' => view('panel.user.chatbot.particles.pdf.list', [
                 'items' => $chatbot->data()->where('type', 'pdf')->get()
             ])->render(),
-            'message' => trans('Pdf file uploaded successfully.')
+            'message' => trans('Pdf incluído com sucesso.')
         ]);
     }
     public function getWebSites(Request $request, Chatbot $chatbot)
@@ -214,7 +214,7 @@ class UserChatbotTrainingController extends Controller
                 'type_value' => $url
             ], [
                 'content' => $data,
-                'status' => 'waiting'
+                'status' => 'aguardando'
             ]);
         }
 
@@ -222,7 +222,7 @@ class UserChatbotTrainingController extends Controller
             'content' => view('panel.user.chatbot.particles.web-site.crawler', [
                 'items' => $chatbot->data()->where('type', 'url')->get()
             ])->render(),
-            'message' => trans('Web sites added successfully.')
+            'message' => trans('Web sites adicionados.')
         ]);
     }
 
@@ -257,14 +257,14 @@ class UserChatbotTrainingController extends Controller
         };
 
         $chatbot->update([
-            'status' => 'trained'
+            'status' => 'treinado'
         ]);
 
         return response()->json([
             'content' => view($matchView, [
                 'items' => $chatbot->data()->where('type', $request->get('type'))->get(),
             ])->render(),
-            'message' => trans('Training Completed Successfully.')
+            'message' => trans('Treinamento concluído com Sucesso.')
         ]);
     }
 
@@ -282,7 +282,7 @@ class UserChatbotTrainingController extends Controller
         ChatbotDataVector::query()->where('chatbot_data_id', $id)->delete();
 
         return response()->json([
-            'message' => trans('Item deleted successfully.')
+            'message' => trans('Item deletado.')
         ]);
     }
 

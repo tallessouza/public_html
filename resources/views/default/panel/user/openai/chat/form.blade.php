@@ -167,7 +167,7 @@
                 rows="3"
             >{{ $template != null ? $template->helps_with : null }}</x-forms.input>
 
-            <!-- <div class="mb-[20px]">
+            <div class="mb-[20px]">
                 <label class="form-label" for="chatbot_id">
                     {{__('Chatbot Training')}}
                     <x-info-tooltip text="{{__('Choose any trained chatbot. If you need to train a new chatbot, visit the Chatbot Training')}}" />
@@ -178,7 +178,7 @@
                         <option {{ $template?->chatbot_id == $chatbot->id ? 'selected': '' }} value="{{ $chatbot->id }}" > {{ $chatbot->title }} </option>
                     @endforeach
                 </select>
-            </div> -->
+            </div>
 
             <div class="flex flex-col gap-3">
                 <div class="flex flex-wrap items-center gap-3">

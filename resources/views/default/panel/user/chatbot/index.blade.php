@@ -31,9 +31,9 @@
                     <th>
                         {{ __('Created') }}
                     </th>
-                    <th>
+                    <!-- <th>
                         {{ __('Model') }}
-                    </th>
+                    </th> -->
                     <th class="text-end">
                         {{ __('Actions') }}
                     </th>
@@ -73,11 +73,11 @@
                                 </span>
                             </p>
                         </td>
-                        <td>
+                        <!-- <td>
                             <span class="uppercase text-primary">
                                 {{ $item->model }}
                             </span>
-                        </td>
+                        </td> -->
                         <td class="text-end">
                             <x-button
                                 class="size-9"

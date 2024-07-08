@@ -2,15 +2,15 @@
     $statusArr = [
         'not-trained' => [
             'class' => 'default',
-            'text' => 'Not Trained',
+            'text' => 'Não Treinado',
         ],
         'trained' => [
             'class' => 'success',
-            'text' => 'Trained',
+            'text' => 'Treinado',
         ],
         'training' => [
             'class' => 'info',
-            'text' => 'Training',
+            'text' => 'Treinando',
         ],
     ];
 @endphp

@@ -409,7 +409,7 @@ class UserChatController extends Controller
 
         $categoryList = ChatCategory::all();
 
-        $chatbots = Chatbot::query()->get();
+        $chatbots = Chatbot::where('user_id', '=', auth()->user()->id)->get();
 
         return view('panel.user.openai.chat.form', compact('template', 'categoryList', 'chatbots'));
     }
