@@ -10,6 +10,7 @@ use App\Http\Controllers\Auth\Google2FAController;
 use App\Http\Controllers\InstallationController;
 use App\Http\Controllers\BlogController;
 use App\Http\Controllers\Chatbot\ChatbotController;
+use App\Http\Controllers\Chatbot\UserChatbotController;
 use App\Http\Controllers\Chatbot\ChatbotTrainingController;
 use App\Http\Controllers\Chatbot\UserChatbotTrainingController;
 use App\Http\Controllers\ChatPdfController;
@@ -63,6 +64,33 @@ Route::group(['prefix' => LaravelLocalization::setLocale(), 'middleware' => ['lo
 			Route::post('/whatsapp/logout', [WhatsappController::class, 'logout'])->name('whatsapp.logout');
 			Route::post('/regenerate', [WhatsappController::class, 'regenerate'])->name('whatsapp.regenerate');
 			Route::get('/check-connection', [WhatsappController::class, 'checkConnection'])->name('whatsapp.checkConnection');
+
+			Route::group([
+				'as' => 'chatbot.',
+				'prefix' => 'chatbot/{chatbot}',
+				'controller' => UserChatbotTrainingController::class,
+			], function () {
+				Route::post('text', 'text')->name('text');
+				Route::post('qa', 'qa')->name('qa');
+
+				Route::post('training', 'training')->name('training');
+				Route::get('web-sites', 'getWebSites')->name('web-sites');
+				Route::post('web-sites', 'postWebSites');
+				Route::post('upload-pdf', 'uploadPdf')->name('upload-pdf');
+				Route::delete('item/{id}', 'deleteItem')->name('item.delete');
+			});
+
+			Route::group([
+				'as' => 'chatbot.',
+				'prefix' => 'chatbot',
+				'controller' => UserChatbotController::class,
+			], function () {
+				Route::get('setting', 'setting')->name('setting');
+				Route::post('setting', 'putSetting');
+			});
+
+			Route::resource('chatbot', UserChatbotController::class);
+
 			# premium support
             Route::group([
                 'controller' => Google2FAController::class,
@@ -201,20 +229,7 @@ Route::group(['prefix' => LaravelLocalization::setLocale(), 'middleware' => ['lo
 							Route::get('/delete/{id?}', [UserChatController::class, 'openAIChatDelete'])->name('delete');
 							Route::post('/save', [UserChatController::class, 'openAIChatAddOrUpdateSave']);
 							
-							// Route::group([
-							// 	'as' => 'chatbot.',
-							// 	'prefix' => 'chatbot/{chatbot}',
-							// 	'controller' => UserChatbotTrainingController::class,
-							// ], function () {
-							// 	Route::post('text', 'text')->name('text');
-							// 	Route::post('qa', 'qa')->name('qa');
-			
-							// 	Route::post('training', 'training')->name('training');
-							// 	Route::get('web-sites', 'getWebSites')->name('web-sites');
-							// 	Route::post('web-sites', 'postWebSites');
-							// 	Route::post('upload-pdf', 'uploadPdf')->name('upload-pdf');
-							// 	Route::delete('item/{id}', 'deleteItem')->name('item.delete');
-							// });
+							
 							Route::get('/ai-chat-list', [AIChatController::class, 'openAIChatList'])->name('list');
 							Route::get('/ai-chat/{slug}', [AIChatController::class, 'openAIChat'])->name('chat');
 							Route::match (['get', 'post'], '/chat-send', [AIChatController::class, 'chatOutput']);
