@@ -4,7 +4,6 @@ namespace App\Http\Controllers;
 
 use App\Services\WhatsappService;
 use Illuminate\Support\Facades\Auth;
-use App\Services\GatewaySelector;
 
 class WhatsappController extends Controller
 {
@@ -33,31 +32,7 @@ class WhatsappController extends Controller
             $serverError = true;
             return view('default.panel.user.whatsapp.index', compact('qrCodeBase64', 'invalidphone', 'serverError', 'connected'));
         }
-        $isPaid = false;
-        $userId = Auth::user()->id;
-        $plan = '';
-        // Get current active subscription
-        $activeSub = getCurrentActiveSubscription();
-        if ($activeSub != null) {
-            $gateway = $activeSub->paid_with;
-            $plan = $activeSub->name;
-        } else {
-            $activeSubY = getCurrentActiveSubscriptionYokkasa();
-            if ($activeSubY != null) {
-                $gateway = $activeSubY->paid_with;
-                $plan = $activeSubY->name;
-            }
-        }
 
-        try {
-            $isPaid = GatewaySelector::selectGateway($gateway)::getSubscriptionStatus();
-        } catch (\Exception $e) {
-            $isPaid = false;
-        }
-
-        if (!$isPaid){
-            return view('default.panel.user.whatsapp.subscribe', compact('qrCodeBase64', 'invalidphone', 'serverError', 'connected'));
-        }
         if ($validphone) {
             // Remover o caractere '+' do número de telefone
             $phoneWithoutPlus = str_replace('+', '', $phone);

@@ -112,15 +112,18 @@
     </div>
 </x-card>
 @else
-<div class="flex flex-wrap justify-between gap-8 pt-10 ">
-    <div class="py-10 mx-auto">
+<div class="flex flex-wrap justify-center gap-8 pt-10 ">
+    <div class="py-10 mx-auto text-center">
         @if ($qrCodeBase64)
         <div class="[&_.tox-edit-area__iframe]:!bg-transparent">
             <figure>
-                <img id="qrCodeImage" class="rounded-xl shadow-xl" src="{{ $qrCodeBase64 }}" alt="QR Code" />
+                <img id="qrCodeImage" class="rounded-xl shadow-xl mx-auto" src="{{ $qrCodeBase64 }}" alt="QR Code" />
             </figure>
             <p id="qrCodeMessage" class="mb-3 mt-4 text-center">
                 Leia o QR Code para ativar o serviço.
+            </p> 
+            <p id="qrCodeMessage2" class="mb-3 mt-4 text-center">
+                Ao conectar seu Whatsapp, você entende que: <br>1 - as palavras transcritas serão debitados do seu saldo; <br>2 - o uso de serviços não oficiais pode gerar banimento da sua conta no Whatsapp e você se responsabiliza por isso.
             </p>
         </div>
         <div class="flex justify-center">
@@ -162,6 +165,7 @@
         </div>
     </div>
 </div>
+
 @endif
 
 <script>
